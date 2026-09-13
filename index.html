@@ -2,119 +2,181 @@
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamer's Hub - Pro Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gamer's Hub - Premium</title>
     <style>
         /* =========================================
-           CSS STYLING - PREMIUM DARK GAMER THEME 
+           PREMIUM GAMING UI - CSS STYLING
            ========================================= */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;800&display=swap');
         
         :root {
-            --bg-dark: #09090b;
-            --panel-bg: #18181b;
-            --primary-red: #ff3333;
-            --primary-glow: rgba(255, 51, 51, 0.4);
-            --text-light: #f4f4f5;
-            --text-muted: #a1a1aa;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --gold: #fbbf24;
+            --bg-dark: #0a0a0c;
+            --panel-bg: #121216;
+            --primary-red: #ff2a2a;
+            --primary-glow: rgba(255, 42, 42, 0.5);
+            --text-light: #ffffff;
+            --text-muted: #8b8b99;
+            --success: #00e676;
+            --warning: #ffb300;
+            --info: #00b0ff;
+            --gold: #ffcf33;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-light); display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-light); 
+            font-family: 'Poppins', sans-serif; 
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a24 0%, transparent 50%);
+        }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 10px; }
-        
-        .screen { display: none; width: 100%; max-width: 900px; padding: 20px; margin-top: 20px; animation: fadeIn 0.4s ease-in-out; }
-        .active-screen { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
 
-        .box { background: var(--panel-bg); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; border: 1px solid #27272a; }
-        h1, h2 { color: var(--primary-red); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px var(--primary-glow); }
-        h3 { color: var(--gold); }
+        /* Screens */
+        .screen { display: none; width: 100%; max-width: 600px; padding: 15px; margin-top: 10px; animation: slideUp 0.4s ease-out forwards; opacity: 0; }
+        .active-screen { display: block; opacity: 1; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Premium Box (Glassmorphism) */
+        .box { 
+            background: var(--glass-bg); 
+            padding: 35px 25px; 
+            border-radius: 20px; 
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+            text-align: center; 
+        }
+        
+        .box h2 { color: var(--primary-red); margin-bottom: 25px; text-shadow: 0 0 15px var(--primary-glow); font-size: 26px; }
 
         /* Inputs & Buttons */
-        input, select { width: 100%; padding: 15px; margin: 12px 0; border-radius: 10px; border: 1px solid #3f3f46; font-size: 16px; background: #27272a; color: white; transition: 0.3s; outline: none; }
-        input:focus { border-color: var(--primary-red); box-shadow: 0 0 10px var(--primary-glow); }
+        input, select { 
+            width: 100%; padding: 16px; margin: 10px 0; border-radius: 12px; 
+            border: 1px solid #2a2a35; font-size: 15px; 
+            background: rgba(0,0,0,0.5); color: white; transition: 0.3s; outline: none; 
+        }
+        input:focus { border-color: var(--primary-red); box-shadow: 0 0 15px rgba(255, 42, 42, 0.3); background: #000; }
         
-        button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: none; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; background: var(--primary-red); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
-        button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 51, 51, 0.6); }
-        button:active { transform: translateY(1px); }
+        button { 
+            width: 100%; padding: 16px; margin: 12px 0; border-radius: 12px; border: none; 
+            font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; 
+            cursor: pointer; transition: all 0.2s; 
+            background: linear-gradient(45deg, #d31027, #ea384d); color: white; 
+            box-shadow: 0 8px 20px var(--primary-glow); 
+            font-family: 'Orbitron', sans-serif;
+        }
+        button:active { transform: scale(0.96); box-shadow: 0 4px 10px var(--primary-glow); }
         
-        button.sec { background: var(--info); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
-        button.sec:hover { box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6); }
-        button.danger { background: #52525b; box-shadow: none; }
-        button.danger:hover { background: #3f3f46; }
-        button.green { background: var(--success); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+        button.sec { background: linear-gradient(45deg, #005c97, #363795); box-shadow: 0 8px 20px rgba(0, 176, 255, 0.3); }
+        button.danger { background: #2a2a35; box-shadow: none; border: 1px solid #3f3f4e; color: #a1a1aa; }
+        button.green { background: linear-gradient(45deg, #11998e, #38ef7d); box-shadow: 0 8px 20px rgba(0, 230, 118, 0.3); }
 
-        /* Navbar & Stats */
-        .navbar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(90deg, #18181b, #27272a); padding: 20px 30px; border-radius: 12px; margin-bottom: 25px; border-left: 5px solid var(--primary-red); }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-box { background: #27272a; padding: 20px; border-radius: 12px; font-size: 18px; font-weight: bold; border-top: 3px solid var(--gold); box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center; }
-        .stat-box span { display: block; font-size: 24px; color: var(--gold); margin-top: 5px; }
+        /* Top Navbar */
+        .navbar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(255,255,255,0.02); padding: 15px 20px; 
+            border-radius: 16px; margin-bottom: 20px; 
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .navbar h3 { font-size: 18px; color: white; margin: 0; }
+        .navbar .username-highlight { color: var(--primary-red); text-shadow: 0 0 10px var(--primary-glow); }
 
-        /* Menu / Games Grid */
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .menu-card { background: #18181b; padding: 30px; border-radius: 15px; cursor: pointer; transition: 0.4s; border: 2px solid #27272a; text-align: center; }
-        .menu-card:hover { border-color: var(--primary-red); transform: translateY(-5px); box-shadow: 0 10px 25px var(--primary-glow); }
-        .menu-card h2 { margin-bottom: 10px; font-size: 22px; }
-
-        /* Admin Section (Bottom of Dashboard) */
-        #admin-section { margin-top: 40px; padding: 30px; background: rgba(255, 51, 51, 0.05); border: 2px dashed var(--primary-red); border-radius: 15px; text-align: left; }
-        #admin-section h2 { color: white; text-shadow: none; border-bottom: 1px solid var(--primary-red); padding-bottom: 10px; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-
-        /* Shop System */
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
-        .shop-item { background: #27272a; padding: 20px; border-radius: 12px; text-align: center; border-bottom: 3px solid var(--success); }
-        .shop-item h3 { color: white; font-size: 18px; margin-bottom: 10px; }
+        /* Stats Grid (Level, Rank, Coins) */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .stat-box { 
+            background: linear-gradient(180deg, #1a1a24, #121216); 
+            padding: 15px 10px; border-radius: 14px; 
+            font-size: 13px; font-weight: 600; color: var(--text-muted);
+            border: 1px solid #2a2a35; text-align: center; 
+            position: relative; overflow: hidden;
+        }
+        .stat-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
+        .stat-box:nth-child(1)::before { background: var(--info); }
+        .stat-box:nth-child(2)::before { background: var(--success); }
+        .stat-box:nth-child(3)::before { background: var(--gold); }
         
-        /* Inventory Section */
-        #inventory-list { background: #18181b; padding: 20px; border-radius: 12px; margin-top: 20px; text-align: left; border: 1px solid #3f3f46; }
-        .inv-item { display: inline-block; background: var(--info); padding: 5px 15px; border-radius: 20px; margin: 5px; font-size: 14px; font-weight: bold; }
+        .stat-box span { display: block; font-size: 20px; color: white; margin-top: 8px; font-family: 'Orbitron', sans-serif; font-weight: 900; }
+        .stat-box .coin-text { color: var(--gold); text-shadow: 0 0 15px rgba(255, 207, 51, 0.4); }
 
-        /* MINES GAME STYLES */
-        #mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px auto; max-width: 400px; }
-        .mine-tile { background: #3f3f46; height: 70px; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .mine-tile:hover { background: #52525b; }
-        .mine-safe { background: var(--success); box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); pointer-events: none; }
-        .mine-bomb { background: var(--primary-red); box-shadow: 0 0 15px rgba(255, 51, 51, 0.5); pointer-events: none; }
+        /* Menu Game Cards (The Fix for Design) */
+        .menu-title { text-align: left; font-size: 16px; color: var(--text-muted); margin-bottom: 15px; padding-left: 5px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .menu-card { 
+            background: rgba(255,255,255,0.02); 
+            padding: 25px 20px; border-radius: 16px; cursor: pointer; 
+            border: 1px solid var(--glass-border); text-align: left; 
+            display: flex; flex-direction: column; justify-content: center;
+            position: relative; overflow: hidden; transition: 0.3s;
+        }
+        .menu-card:active { transform: scale(0.98); }
+        .menu-card h2 { font-size: 20px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; text-shadow: none; color: white; }
+        .menu-card p { font-size: 13px; color: var(--text-muted); font-family: 'Poppins', sans-serif; }
+        
+        /* Card specific accents */
+        .card-mines { border-left: 4px solid var(--primary-red); }
+        .card-flip { border-left: 4px solid var(--gold); }
+        .card-shop { border-left: 4px solid var(--success); }
+        .card-inv { border-left: 4px solid var(--info); }
 
-        /* COIN FLIP GAME STYLES */
-        .coin-container { perspective: 1000px; margin: 30px auto; width: 150px; height: 150px; }
-        .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .coin.flip-heads { transform: rotateY(1800deg); } /* 5 spins */
-        .coin.flip-tails { transform: rotateY(1980deg); } /* 5.5 spins */
-        .coin-face { position: absolute; width: 100%; height: 100%; border-radius: 50%; backface-visibility: hidden; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; border: 8px solid #b8860b; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-        .coin-heads { background: radial-gradient(#ffd700, #daa520); color: #8b6508; }
-        .coin-tails { background: radial-gradient(#c0c0c0, #a9a9a9); color: #4f4f4f; transform: rotateY(180deg); }
+        /* 👑 ADMIN PANEL (Owner Zone) */
+        #admin-section { 
+            margin-top: 40px; padding: 25px; 
+            background: linear-gradient(135deg, rgba(255,42,42,0.1), rgba(0,0,0,0.8)); 
+            border: 2px solid var(--primary-red); 
+            border-radius: 20px; text-align: left; 
+            box-shadow: 0 0 30px rgba(255, 42, 42, 0.2);
+        }
+        #admin-section h2 { color: var(--gold); font-size: 20px; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .admin-block { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #2a2a35; }
+        .admin-block h3 { font-size: 14px; color: var(--info); margin-bottom: 10px; }
 
-        /* Chat Widget (Gemini AI) */
-        #chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
-        #chat-btn { width: 65px; height: 65px; border-radius: 50%; font-size: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; margin: 0; }
-        #chat-window { display: none; width: 350px; height: 500px; background: var(--panel-bg); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); flex-direction: column; position: absolute; bottom: 85px; right: 0; overflow: hidden; border: 1px solid #3f3f46; animation: fadeIn 0.3s; }
-        .chat-header { background: linear-gradient(90deg, var(--primary-red), #991b1b); padding: 15px; font-weight: 800; text-align: center; color: white; display: flex; justify-content: space-between; align-items: center; }
-        #chat-msgs { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #0f0f13; }
-        .msg { padding: 12px 16px; border-radius: 12px; max-width: 85%; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
-        .msg.user { background: var(--info); align-self: flex-end; border-bottom-right-radius: 2px; }
-        .msg.ai { background: #27272a; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #3f3f46; color: #e4e4e7; }
-        #chat-input-area { display: flex; padding: 10px; background: #18181b; border-top: 1px solid #3f3f46; }
-        #chat-input { margin: 0; border-radius: 8px 0 0 8px; border-right: none; }
-        #send-btn { width: 60px; margin: 0; border-radius: 0 8px 8px 0; background: var(--primary-red); }
+        /* Mines Game UI */
+        #mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 25px auto; max-width: 350px; }
+        .mine-tile { 
+            background: #1e1e26; height: 65px; border-radius: 12px; 
+            cursor: pointer; display: flex; justify-content: center; align-items: center; 
+            font-size: 28px; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); 
+            border: 1px solid #2a2a35; transition: 0.2s;
+        }
+        .mine-safe { background: var(--success); box-shadow: 0 0 20px rgba(0, 230, 118, 0.4); border-color: var(--success); pointer-events: none; }
+        .mine-bomb { background: var(--primary-red); box-shadow: 0 0 20px rgba(255, 42, 42, 0.4); border-color: var(--primary-red); pointer-events: none; }
 
-        /* Custom Toast Notification System */
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { min-width: 250px; padding: 15px 20px; border-radius: 8px; color: white; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.5); animation: slideIn 0.3s forwards, fadeOut 0.5s 3s forwards; display: flex; align-items: center; gap: 10px; }
-        .toast.success { background: var(--success); border-left: 5px solid #065f46; }
-        .toast.error { background: var(--primary-red); border-left: 5px solid #7f1d1d; }
-        .toast.info { background: var(--info); border-left: 5px solid #1e3a8a; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        /* Chat Widget */
+        #chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        #chat-btn { 
+            width: 60px; height: 60px; border-radius: 50%; font-size: 26px; 
+            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
+        }
+        #chat-window { 
+            display: none; width: 320px; height: 450px; 
+            background: #121216; border-radius: 16px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8); flex-direction: column; 
+            position: absolute; bottom: 75px; right: 0; overflow: hidden; 
+            border: 1px solid #2a2a35; 
+        }
+        .chat-header { background: #1a1a24; padding: 15px; font-weight: bold; border-bottom: 1px solid #2a2a35; display: flex; justify-content: space-between; }
+        #chat-msgs { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+        .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.4; }
+        .msg.user { background: var(--info); align-self: flex-end; color: white; border-bottom-right-radius: 2px; }
+        .msg.ai { background: #1e1e26; align-self: flex-start; color: #e4e4e7; border: 1px solid #2a2a35; border-bottom-left-radius: 2px; }
+        #chat-input-area { display: flex; padding: 10px; background: #0a0a0c; border-top: 1px solid #2a2a35; }
+        #chat-input { margin: 0; border-radius: 8px 0 0 8px; border-right: none; padding: 12px; }
+        #send-btn { width: 50px; margin: 0; border-radius: 0 8px 8px 0; background: var(--primary-red); padding: 0; }
+
+        /* Toast Notifications */
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; }
+        .toast { padding: 16px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); animation: dropDown 0.3s forwards, fadeOut 0.5s 3s forwards; display: flex; align-items: center; gap: 12px; backdrop-filter: blur(5px); }
+        .toast.success { background: rgba(0, 230, 118, 0.9); border: 1px solid #00e676; }
+        .toast.error { background: rgba(255, 42, 42, 0.9); border: 1px solid #ff2a2a; }
+        .toast.info { background: rgba(0, 176, 255, 0.9); border: 1px solid #00b0ff; }
+        @keyframes dropDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
         .hidden { display: none !important; }
@@ -122,21 +184,22 @@
 </head>
 <body>
 
-    <!-- Toast Notifications Container -->
+    <!-- Toast Notifications -->
     <div id="toast-container"></div>
 
     <!-- 1. LOGIN SCREEN -->
     <div id="login-screen" class="screen active-screen">
         <div class="box">
-            <h1>Gamer's Hub</h1>
-            <p style="color:var(--text-muted); margin-bottom:20px;">Enter your credentials to enter the arena.</p>
-            <input type="text" id="login-user" placeholder="Username (e.g., Player1)">
-            <input type="password" id="login-pass" placeholder="Password">
-            <button onclick="login()">Login to Account</button>
+            <h1 style="font-size: 32px; color: white; text-shadow: 0 0 20px rgba(255,255,255,0.2); margin-bottom: 5px;">GAMER'S <span style="color:var(--primary-red);">HUB</span></h1>
+            <p style="color:var(--text-muted); margin-bottom:30px; font-size:14px;">Login to access the arena</p>
             
-            <div style="margin-top:25px; border-top:1px solid #3f3f46; padding-top:20px;">
-                <p style="margin-bottom:10px; color:var(--text-muted);">New to the Hub?</p>
-                <button class="sec" onclick="switchScreen('register-screen')">Create New Account</button>
+            <input type="text" id="login-user" placeholder="Enter Username">
+            <input type="password" id="login-pass" placeholder="Enter Password">
+            <button onclick="login()">ENTER ARENA</button>
+            
+            <div style="margin-top:25px; border-top:1px solid var(--glass-border); padding-top:20px;">
+                <p style="margin-bottom:12px; font-size:13px; color:var(--text-muted);">Don't have an account?</p>
+                <button class="sec" onclick="switchScreen('register-screen')">CREATE NEW ACCOUNT</button>
             </div>
         </div>
     </div>
@@ -144,89 +207,83 @@
     <!-- 2. REGISTER SCREEN -->
     <div id="register-screen" class="screen">
         <div class="box">
-            <h2>Sign Up</h2>
+            <h2>SIGN UP</h2>
             <input type="text" id="reg-user" placeholder="Choose Unique Username">
             <input type="password" id="reg-pass" placeholder="Create Strong Password">
-            <button class="sec" onclick="startMathQuiz()">Next Step (Verification)</button>
-            <button class="danger" onclick="switchScreen('login-screen')">Cancel</button>
+            <button class="sec" onclick="startMathQuiz()">VERIFY & CONTINUE</button>
+            <button class="danger" onclick="switchScreen('login-screen')">CANCEL</button>
         </div>
     </div>
 
-    <!-- 3. MATH QUIZ SCREEN (Anti-Bot) -->
+    <!-- 3. MATH QUIZ -->
     <div id="quiz-screen" class="screen">
         <div class="box">
-            <h2>Bot Check (Math Test)</h2>
-            <p style="font-size:18px;">Time Remaining: <span id="timer" style="color:var(--primary-red); font-weight:900; font-size:24px;">60</span>s</p>
-            <p style="color:var(--text-muted); margin-bottom:20px;">Answer at least 2 correctly to create your account.</p>
+            <h2>ANTI-BOT TEST</h2>
+            <p style="font-size:16px;">Time Left: <span id="timer" style="color:var(--primary-red); font-weight:900; font-size:22px; font-family:'Orbitron', sans-serif;">60</span>s</p>
+            <p style="color:var(--text-muted); margin-bottom:20px; font-size:13px;">Solve 2 out of 3 to create account.</p>
             
-            <div id="quiz-questions" style="text-align: left; background:#27272a; padding:20px; border-radius:10px;">
-                <!-- Quiz inputs generated by JS -->
+            <div id="quiz-questions" style="text-align: left; background:rgba(0,0,0,0.4); padding:15px; border-radius:12px; border:1px solid #2a2a35;">
+                <!-- Generated by JS -->
             </div>
-            <button onclick="submitQuiz()" style="margin-top:20px;">Submit Answers</button>
+            <button onclick="submitQuiz()" style="margin-top:20px;">SUBMIT TEST</button>
         </div>
     </div>
 
     <!-- 4. MAIN DASHBOARD SCREEN -->
     <div id="dashboard-screen" class="screen">
         <div class="navbar">
-            <div>
-                <h3 style="color:white; font-size:24px;">Welcome, <span id="nav-username" style="color:var(--primary-red);"></span>!</h3>
-            </div>
-            <button class="danger" style="width: auto; padding: 10px 20px; margin:0;" onclick="logout()">Logout</button>
+            <h3>Hi, <span id="nav-username" class="username-highlight">Player</span>!</h3>
+            <button class="danger" style="width:auto; padding:8px 15px; margin:0; font-size:12px;" onclick="logout()">LOGOUT</button>
         </div>
 
         <div class="stats-grid">
-            <div class="stat-box">Level<br><span id="dash-level">1</span> <small style="font-size:12px; color:#a1a1aa;">(Max 100)</small></div>
-            <div class="stat-box">Rank<br><span id="dash-rank" style="color:var(--info);">Bronze</span></div>
-            <div class="stat-box">Coins 🪙<br><span id="dash-coins">0</span></div>
+            <div class="stat-box">LEVEL<span id="dash-level">1</span></div>
+            <div class="stat-box">RANK<span id="dash-rank" style="color:var(--info);">BRONZE</span></div>
+            <div class="stat-box">COINS<span id="dash-coins" class="coin-text">0</span></div>
         </div>
         
-        <h2 style="text-align:left; font-size:20px; margin-bottom:15px; color:white;">🎮 Select Game to Play</h2>
+        <h3 class="menu-title">SELECT GAME TO PLAY</h3>
         <div class="menu-grid">
-            <div class="menu-card" onclick="switchScreen('game-mines-screen')">
-                <h2 style="color:var(--primary-red);">💣 Mines Sweeper</h2>
-                <p style="color:var(--text-muted);">Dodge the bombs, multiply your coins!</p>
+            <div class="menu-card card-mines" onclick="switchScreen('game-mines-screen')">
+                <h2>💣 Mines Sweeper</h2>
+                <p>Dodge the bombs, multiply your coins.</p>
             </div>
-            <div class="menu-card" onclick="switchScreen('game-flip-screen')">
-                <h2 style="color:var(--gold);">🪙 Coin Flip</h2>
-                <p style="color:var(--text-muted);">Heads or Tails? Double your bet instantly.</p>
+            <div class="menu-card card-flip" onclick="switchScreen('game-flip-screen')">
+                <h2>🪙 Coin Flip</h2>
+                <p>Heads or Tails? Double your bet instantly.</p>
             </div>
-            <div class="menu-card" style="border-color:var(--success);" onclick="openShop()">
-                <h2 style="color:var(--success);">🛒 Item Shop</h2>
-                <p style="color:var(--text-muted);">Spend coins, buy exclusive game items.</p>
+            <div class="menu-card card-shop" onclick="openShop()">
+                <h2>🛒 Item Shop</h2>
+                <p>Spend coins, buy exclusive game items.</p>
             </div>
-            <div class="menu-card" style="border-color:var(--info);" onclick="openInventory()">
-                <h2 style="color:var(--info);">🎒 My Inventory</h2>
-                <p style="color:var(--text-muted);">Check the items you have purchased.</p>
+            <div class="menu-card card-inv" onclick="openInventory()">
+                <h2>🎒 My Inventory</h2>
+                <p>Check the items you have purchased.</p>
             </div>
         </div>
 
-        <!-- INVENTORY SECTION (Hidden by default) -->
-        <div id="inventory-section" class="hidden">
-            <h2 style="text-align:left; font-size:20px; margin-top:30px; color:white;">Your Items</h2>
-            <div id="inventory-list">Loading inventory...</div>
+        <!-- Inventory Dropdown -->
+        <div id="inventory-section" class="hidden" style="margin-top:20px; background:var(--glass-bg); padding:15px; border-radius:12px; border:1px solid #2a2a35;">
+            <h3 style="color:white; font-size:14px; margin-bottom:10px;">YOUR ITEMS</h3>
+            <div id="inventory-list" style="font-size:13px; color:var(--text-muted);">Loading...</div>
         </div>
 
-        <!-- 👑 ADMIN PANEL (Appears at bottom ONLY for 'kumarkor') -->
+        <!-- 👑 ADMIN PANEL (Appears ONLY for 'kumarkor') -->
         <div id="admin-section" class="hidden">
-            <h2>👑 Admin Dashboard (Owner Only)</h2>
-            <p style="color:var(--text-muted);">Manage AI Support and Shop Items.</p>
+            <h2>👑 OWNER ZONE (Admin)</h2>
+            <p style="color:#ffb300; font-size:12px; margin-bottom:15px;">Welcome kumarkor. This section is only visible to you.</p>
             
-            <div class="admin-grid">
-                <!-- AI Config -->
-                <div style="background:#18181b; padding:20px; border-radius:10px; border:1px solid #3f3f46;">
-                    <h3>🤖 Gemini AI Setup</h3>
-                    <input type="text" id="admin-api-key" placeholder="Paste Gemini API Key Here">
-                    <button class="sec" onclick="saveApiKey()">Activate AI Support</button>
-                    <p style="font-size:12px; color:var(--text-muted); margin-top:5px;">*Key saves in local storage safely.</p>
-                </div>
-                <!-- Shop Config -->
-                <div style="background:#18181b; padding:20px; border-radius:10px; border:1px solid #3f3f46;">
-                    <h3>🛍️ Add Shop Item</h3>
-                    <input type="text" id="shop-item-name" placeholder="Item Name (e.g., MP40 Skin)">
-                    <input type="number" id="shop-item-price" placeholder="Price (Coins)">
-                    <button class="green" onclick="addShopItemAdmin()">Add to Server Shop</button>
-                </div>
+            <div class="admin-block">
+                <h3>🤖 Activate AI Chatbot</h3>
+                <input type="text" id="admin-api-key" placeholder="Paste Gemini API Key">
+                <button class="sec" style="padding:12px; font-size:14px;" onclick="saveApiKey()">SAVE KEY</button>
+            </div>
+            
+            <div class="admin-block">
+                <h3>🛍️ Add Item to Server Shop</h3>
+                <input type="text" id="shop-item-name" placeholder="Item Name (e.g., Gun Skin)">
+                <input type="number" id="shop-item-price" placeholder="Price in Coins">
+                <button class="green" style="padding:12px; font-size:14px;" onclick="addShopItemAdmin()">ADD TO SHOP</button>
             </div>
         </div>
     </div>
@@ -234,93 +291,85 @@
     <!-- 5. SHOP SCREEN -->
     <div id="shop-screen" class="screen">
         <div class="navbar">
-            <h2 style="margin:0; color:white;">Exclusive Shop</h2>
-            <button class="sec" style="width: auto; padding: 10px 20px; margin:0;" onclick="switchScreen('dashboard-screen')">Back to Menu</button>
+            <h3 style="color:white;">STORE</h3>
+            <button class="danger" style="width:auto; padding:8px 15px; margin:0; font-size:12px;" onclick="switchScreen('dashboard-screen')">BACK</button>
         </div>
-        <div class="stat-box" style="margin-bottom:20px; text-align:left; padding:15px;">Your Balance: <span style="display:inline; color:var(--gold);">🪙 <span id="shop-coins-display"></span></span></div>
-        <div class="shop-grid" id="shop-items-container">
-            <!-- Items load dynamically -->
+        <div style="background:var(--glass-bg); padding:15px; border-radius:12px; margin-bottom:20px; text-align:center; border:1px solid var(--glass-border);">
+            <p style="color:var(--text-muted); font-size:14px;">Your Balance</p>
+            <h2 style="color:var(--gold); font-size:24px;">🪙 <span id="shop-coins-display"></span></h2>
+        </div>
+        <div class="menu-grid" id="shop-items-container">
+            <!-- Items Load Here -->
         </div>
     </div>
 
-    <!-- 6. MINES GAME SCREEN -->
+    <!-- 6. MINES SCREEN -->
     <div id="game-mines-screen" class="screen">
         <div class="navbar">
-            <h2 style="margin:0; color:white;">Mines</h2>
-            <button class="danger" style="width: auto; padding: 8px 15px; margin:0;" onclick="forceEndGame('game-mines-screen')">Quit</button>
+            <h3 style="color:white;">MINES</h3>
+            <button class="danger" style="width:auto; padding:8px 15px; margin:0; font-size:12px;" onclick="forceEndGame()">QUIT</button>
         </div>
         <div class="box">
             <div id="mines-setup">
-                <h3 style="margin-bottom:15px;">Place Your Bet</h3>
-                <input type="number" id="mines-bet" placeholder="Bet Amount (Min 10 Coins)">
-                <button class="green" onclick="startMines()">Play Game</button>
+                <h3 style="margin-bottom:15px; font-size:16px;">PLACE YOUR BET</h3>
+                <input type="number" id="mines-bet" placeholder="Bet Amount (Min 10)">
+                <button class="green" onclick="startMines()">START GAME</button>
             </div>
             
             <div id="mines-play" class="hidden">
-                <div style="display:flex; justify-content:space-between; background:#27272a; padding:15px; border-radius:10px; margin-bottom:15px;">
-                    <div>Current Multiplier: <b style="color:var(--info);" id="mine-multiplier">1.0x</b></div>
-                    <div>Win Amount: <b style="color:var(--gold);">🪙 <span id="mine-current-win">0</span></b></div>
+                <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.5); padding:15px; border-radius:12px; border:1px solid #2a2a35; font-size:14px;">
+                    <div>Mult: <b style="color:var(--info); font-size:16px;" id="mine-multiplier">1.0x</b></div>
+                    <div>Win: <b style="color:var(--gold); font-size:16px;">🪙 <span id="mine-current-win">0</span></b></div>
                 </div>
-                
                 <div id="mines-grid"></div>
-                
-                <button class="sec" style="margin-top:20px;" onclick="cashOutMines()">Cash Out & Save</button>
+                <button class="sec" onclick="cashOutMines()">CASH OUT</button>
             </div>
         </div>
     </div>
 
-    <!-- 7. COIN FLIP GAME SCREEN -->
+    <!-- 7. COIN FLIP SCREEN -->
     <div id="game-flip-screen" class="screen">
         <div class="navbar">
-            <h2 style="margin:0; color:white;">Coin Flip</h2>
-            <button class="danger" style="width: auto; padding: 8px 15px; margin:0;" onclick="switchScreen('dashboard-screen')">Back</button>
+            <h3 style="color:white;">COIN FLIP</h3>
+            <button class="danger" style="width:auto; padding:8px 15px; margin:0; font-size:12px;" onclick="switchScreen('dashboard-screen')">BACK</button>
         </div>
         <div class="box">
-            <h3 style="margin-bottom:15px;">Double your coins!</h3>
-            <input type="number" id="flip-bet" placeholder="Bet Amount (Min 10 Coins)">
+            <h3 style="margin-bottom:15px; font-size:16px;">DOUBLE YOUR COINS</h3>
+            <input type="number" id="flip-bet" placeholder="Bet Amount (Min 10)">
+            <select id="flip-choice" style="margin-bottom:20px;">
+                <option value="heads">Pick: HEADS (Gold)</option>
+                <option value="tails">Pick: TAILS (Silver)</option>
+            </select>
+            <button class="green" id="flip-btn" onclick="startCoinFlip()">FLIP COIN</button>
             
-            <div style="display:flex; gap:10px; margin:15px 0;">
-                <select id="flip-choice">
-                    <option value="heads">Pick: HEADS (Gold)</option>
-                    <option value="tails">Pick: TAILS (Silver)</option>
-                </select>
-            </div>
-
-            <button class="green" onclick="startCoinFlip()" id="flip-btn">Flip Coin</button>
-
-            <!-- 3D Coin -->
-            <div class="coin-container hidden" id="coin-area">
-                <div class="coin" id="the-coin">
-                    <div class="coin-face coin-heads">H</div>
-                    <div class="coin-face coin-tails">T</div>
-                </div>
+            <!-- Simple result display for performance -->
+            <div id="flip-result-area" class="hidden" style="margin-top:25px; padding:20px; background:#1e1e26; border-radius:12px; border:1px solid #2a2a35;">
+                <h2 id="flip-result-text" style="font-size:30px; margin:0;">🤔</h2>
             </div>
         </div>
     </div>
 
-    <!-- 8. CHAT WIDGET (Gemini AI Support) -->
+    <!-- 8. CHAT WIDGET -->
     <div id="chat-widget" class="hidden">
         <button id="chat-btn" onclick="toggleChat()">💬</button>
         <div id="chat-window">
             <div class="chat-header">
-                <span>AI Assistant</span>
+                <span>AI ASSISTANT</span>
                 <span style="cursor:pointer; font-size:20px;" onclick="toggleChat()">×</span>
             </div>
             <div id="chat-msgs"></div>
             <div id="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Type message...">
+                <input type="text" id="chat-input" placeholder="Type a message...">
                 <button id="send-btn" onclick="sendMessage()">➤</button>
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE & LOGIC JAVASCRIPT -->
+    <!-- FIREBASE LOGIC -->
     <script type="module">
-        // Import Firebase modules safely (Using CDN for standalone HTML)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // Your Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyC2Fokyta-OqM1xQKmsoFyMsJcAfsJtftw",
             authDomain: "coming-886f7.firebaseapp.com",
@@ -335,226 +384,138 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Global State
         window.currentUser = null;
         window.userData = null;
         let quizAnswers = [];
         let timerInterval;
 
-        // Custom Toast Function instead of alert()
         window.showToast = (message, type = 'info') => {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            
-            let icon = 'ℹ️';
-            if(type === 'success') icon = '✅';
-            if(type === 'error') icon = '❌';
-            
+            let icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
             toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
             container.appendChild(toast);
-            
-            // Remove from DOM after animation ends (3.5s total)
             setTimeout(() => { toast.remove(); }, 3500);
         };
 
-        // Navigation Function
         window.switchScreen = (screenId) => {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(screenId).classList.add('active-screen');
-            // Hide inventory explicitly when leaving dashboard
-            if(screenId !== 'dashboard-screen') {
-                document.getElementById('inventory-section').classList.add('hidden');
-            }
+            if(screenId !== 'dashboard-screen') document.getElementById('inventory-section').classList.add('hidden');
         };
 
-        // ---------------- AUTHENTICATION ---------------- //
-
+        // --- AUTH ---
         window.onload = async () => {
             const savedUser = localStorage.getItem("loggedInUser");
-            if (savedUser) {
-                await loadUserData(savedUser);
-            }
+            if (savedUser) await loadUserData(savedUser);
         };
 
         window.login = async () => {
             const user = document.getElementById('login-user').value.trim();
             const pass = document.getElementById('login-pass').value.trim();
             
-            if (!user || !pass) return showToast("Please enter Username and Password", "error");
+            if (!user || !pass) return showToast("Enter Username and Password", "error");
 
             try {
                 const dbRef = ref(db);
-                // Special check for Owner/Admin creation
                 if (user === "kumarkor" && pass === "2010") {
                     const adminSnap = await get(child(dbRef, `users/kumarkor`));
                     if (!adminSnap.exists()) {
-                        // Auto-create Admin in DB if it doesn't exist
-                        await set(ref(db, 'users/kumarkor'), {
-                            password: "2010", coins: 999999, level: 100, xp: 99000, 
-                            rank: "Grandmaster", rankStartDate: Date.now(), inventory: {}
-                        });
+                        await set(ref(db, 'users/kumarkor'), { password: "2010", coins: 999999, level: 100, xp: 99000, rank: "Owner", rankStartDate: Date.now(), inventory: {} });
                     }
                     localStorage.setItem("loggedInUser", "kumarkor");
                     await loadUserData("kumarkor");
-                    showToast("Owner Admin Login Successful!", "success");
+                    showToast("Owner Login Successful!", "success");
                     return;
                 }
 
-                // Normal User Login
                 const snapshot = await get(child(dbRef, `users/${user}`));
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    if (data.password === pass) {
-                        localStorage.setItem("loggedInUser", user);
-                        await loadUserData(user);
-                        showToast(`Welcome back, ${user}!`, "success");
-                    } else {
-                        showToast("Incorrect Password!", "error");
-                    }
+                if (snapshot.exists() && snapshot.val().password === pass) {
+                    localStorage.setItem("loggedInUser", user);
+                    await loadUserData(user);
+                    showToast(`Welcome, ${user}!`, "success");
                 } else {
-                    showToast("Account not found. Please register.", "error");
+                    showToast("Wrong Username or Password!", "error");
                 }
-            } catch (error) {
-                showToast("Server connection error.", "error");
-            }
+            } catch (error) { showToast("Server error.", "error"); }
         };
 
         window.logout = () => {
             localStorage.removeItem("loggedInUser");
-            window.currentUser = null;
-            window.userData = null;
+            window.currentUser = null; window.userData = null;
             document.getElementById('chat-widget').classList.add('hidden');
-            document.getElementById('login-user').value = '';
-            document.getElementById('login-pass').value = '';
+            document.getElementById('login-user').value = ''; document.getElementById('login-pass').value = '';
             window.switchScreen('login-screen');
-            showToast("Logged out successfully.", "info");
         };
 
-        // ---------------- REGISTRATION & MATH QUIZ ---------------- //
-
+        // --- REGISTRATION ---
         window.startMathQuiz = async () => {
             const user = document.getElementById('reg-user').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
 
-            if (!user || !pass) return showToast("Fill all registration fields.", "error");
-            if (user === "kumarkor") return showToast("This username is reserved by owner.", "error");
-            if (pass.length < 4) return showToast("Password too short.", "error");
+            if (!user || !pass) return showToast("Fill all fields.", "error");
+            if (user === "kumarkor") return showToast("Username reserved.", "error");
 
-            const dbRef = ref(db);
-            const snapshot = await get(child(dbRef, `users/${user}`));
-            if (snapshot.exists()) {
-                return showToast("Username taken! Choose another.", "error");
-            }
+            const snapshot = await get(child(ref(db), `users/${user}`));
+            if (snapshot.exists()) return showToast("Username taken!", "error");
 
-            // Generate Quiz
             const quizDiv = document.getElementById('quiz-questions');
-            quizDiv.innerHTML = "";
-            quizAnswers = [];
-
+            quizDiv.innerHTML = ""; quizAnswers = [];
             for (let i = 0; i < 3; i++) {
-                const num1 = Math.floor(Math.random() * 30) + 1;
-                const num2 = Math.floor(Math.random() * 20) + 1;
-                quizAnswers.push(num1 + num2);
+                const n1 = Math.floor(Math.random() * 20) + 1, n2 = Math.floor(Math.random() * 20) + 1;
+                quizAnswers.push(n1 + n2);
                 quizDiv.innerHTML += `
-                    <div style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
-                        <label style="font-size:18px;">${num1} + ${num2} = </label>
-                        <input type="number" id="ans-${i}" style="width:100px; padding:10px; margin:0; text-align:center;" required>
-                    </div>
-                `;
+                    <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                        <label style="font-size:16px; color:white;">${n1} + ${n2} = </label>
+                        <input type="number" id="ans-${i}" style="width:80px; padding:8px; margin:0;" required>
+                    </div>`;
             }
-
             window.switchScreen('quiz-screen');
-            startTimer();
-        };
-
-        function startTimer() {
-            let timeLeft = 60;
-            const timerEl = document.getElementById('timer');
-            timerEl.innerText = timeLeft;
-            
+            let timeLeft = 60; const timerEl = document.getElementById('timer'); timerEl.innerText = timeLeft;
             if(timerInterval) clearInterval(timerInterval);
-            
             timerInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    showToast("Time is up! Registration failed.", "error");
-                    window.switchScreen('register-screen');
-                }
+                timeLeft--; timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) { clearInterval(timerInterval); showToast("Time up!", "error"); window.switchScreen('register-screen'); }
             }, 1000);
-        }
+        };
 
         window.submitQuiz = async () => {
             clearInterval(timerInterval);
-            let correctCount = 0;
-            for (let i = 0; i < 3; i++) {
-                const userAns = parseInt(document.getElementById(`ans-${i}`).value);
-                if (userAns === quizAnswers[i]) correctCount++;
-            }
+            let correct = 0;
+            for (let i = 0; i < 3; i++) if (parseInt(document.getElementById(`ans-${i}`).value) === quizAnswers[i]) correct++;
 
-            if (correctCount >= 2) {
+            if (correct >= 2) {
                 const user = document.getElementById('reg-user').value.trim();
                 const pass = document.getElementById('reg-pass').value.trim();
-                
-                // Create user data
-                const newUserData = {
-                    password: pass,
-                    coins: 1000, // starting coins bonus
-                    level: 1,
-                    xp: 0,
-                    rank: "Bronze",
-                    rankStartDate: Date.now(),
-                    inventory: {}
-                };
-                
-                await set(ref(db, 'users/' + user), newUserData);
+                await set(ref(db, 'users/' + user), { password: pass, coins: 1000, level: 1, xp: 0, rank: "Bronze", rankStartDate: Date.now(), inventory: {} });
                 localStorage.setItem("loggedInUser", user);
-                showToast("Account Created! You got 1000 Welcome Coins.", "success");
+                showToast("Account Created! +1000 Coins.", "success");
                 await loadUserData(user);
             } else {
-                showToast(`You only got ${correctCount}/3 right. Try again.`, "error");
-                window.switchScreen('register-screen');
+                showToast("Failed Math Test.", "error"); window.switchScreen('register-screen');
             }
         };
 
-        // ---------------- DASHBOARD & SYSTEM ---------------- //
-
+        // --- DASHBOARD ---
         async function loadUserData(username) {
             window.currentUser = username;
-            const dbRef = ref(db);
-            const snapshot = await get(child(dbRef, `users/${username}`));
-            
+            const snapshot = await get(child(ref(db), `users/${username}`));
             if (snapshot.exists()) {
                 let data = snapshot.val();
-                
-                // 30-Day Rank Reset Logic (Free Fire Style)
-                const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-                if (Date.now() - data.rankStartDate > thirtyDaysMs && username !== "kumarkor") {
-                    data.rank = "Bronze";
-                    data.rankStartDate = Date.now();
+                if (Date.now() - data.rankStartDate > 2592000000 && username !== "kumarkor") {
+                    data.rank = "Bronze"; data.rankStartDate = Date.now();
                     await update(ref(db, 'users/' + username), { rank: "Bronze", rankStartDate: data.rankStartDate });
-                    showToast("Season reset! Your rank dropped to Bronze.", "info");
                 }
-
-                // Level Update Logic
-                let calculatedLevel = Math.floor(data.xp / 200) + 1;
-                if (calculatedLevel > 100) calculatedLevel = 100;
-                if (calculatedLevel > data.level && username !== "kumarkor") {
-                    data.level = calculatedLevel;
-                    await update(ref(db, 'users/' + username), { level: data.level });
-                    showToast(`Level Up! You are now Level ${data.level}`, "success");
+                let calcLevel = Math.min(Math.floor(data.xp / 200) + 1, 100);
+                if (calcLevel > data.level && username !== "kumarkor") {
+                    data.level = calcLevel; await update(ref(db, 'users/' + username), { level: data.level });
                 }
-
                 window.userData = data;
                 updateDashboardUI();
-                
                 document.getElementById('chat-widget').classList.remove('hidden');
                 window.switchScreen('dashboard-screen');
-            } else {
-                logout(); // DB missing user
-            }
+            } else logout();
         }
 
         function updateDashboardUI() {
@@ -563,361 +524,188 @@
             document.getElementById('dash-rank').innerText = window.userData.rank;
             document.getElementById('dash-coins').innerText = window.userData.coins;
 
-            // Admin Panel display check (Bottom of Dashboard)
+            // 👑 STRICT ADMIN PANEL CHECK
+            const adminSection = document.getElementById('admin-section');
             if(window.currentUser === 'kumarkor') {
-                document.getElementById('admin-section').classList.remove('hidden');
-                // Auto load saved key to input
+                adminSection.classList.remove('hidden');
                 const savedKey = localStorage.getItem('geminiApiKey');
                 if(savedKey) document.getElementById('admin-api-key').value = savedKey;
             } else {
-                document.getElementById('admin-section').classList.add('hidden');
+                adminSection.classList.add('hidden');
             }
         }
 
-        // ---------------- ADMIN LOGIC ---------------- //
-
+        // --- ADMIN FUNCS ---
         window.saveApiKey = () => {
             const key = document.getElementById('admin-api-key').value.trim();
-            if(key) {
-                localStorage.setItem('geminiApiKey', key);
-                showToast("Gemini AI API Key Saved!", "success");
-            } else {
-                showToast("API Key cannot be empty", "error");
-            }
+            if(key) { localStorage.setItem('geminiApiKey', key); showToast("API Key Saved!", "success"); }
         };
-
         window.addShopItemAdmin = async () => {
             const name = document.getElementById('shop-item-name').value.trim();
             const price = parseInt(document.getElementById('shop-item-price').value);
             if(name && price > 0) {
-                const itemId = "item_" + Date.now();
-                await set(ref(db, 'shop/' + itemId), { name: name, price: price });
-                showToast("Item added to Global Shop!", "success");
-                document.getElementById('shop-item-name').value = '';
-                document.getElementById('shop-item-price').value = '';
-            } else {
-                showToast("Enter valid name and price.", "error");
+                await set(ref(db, 'shop/item_' + Date.now()), { name: name, price: price });
+                showToast("Item Added!", "success");
+                document.getElementById('shop-item-name').value = ''; document.getElementById('shop-item-price').value = '';
             }
         };
 
-        // ---------------- SHOP & INVENTORY ---------------- //
-
+        // --- SHOP & INV ---
         window.openShop = async () => {
             window.switchScreen('shop-screen');
             document.getElementById('shop-coins-display').innerText = window.userData.coins;
             const container = document.getElementById('shop-items-container');
-            container.innerHTML = "<p>Connecting to server...</p>";
-            
-            const snapshot = await get(child(ref(db), `shop`));
+            container.innerHTML = "<p>Loading...</p>";
+            const snap = await get(child(ref(db), `shop`));
             container.innerHTML = "";
-            
-            if (snapshot.exists()) {
-                const items = snapshot.val();
+            if (snap.exists()) {
+                const items = snap.val();
                 for (let key in items) {
-                    const item = items[key];
                     container.innerHTML += `
-                        <div class="shop-item">
-                            <h3>${item.name}</h3>
-                            <p style="color:var(--gold); font-weight:bold; margin-bottom:10px;">🪙 ${item.price}</p>
-                            <button onclick="buyItem('${key}', '${item.name}', ${item.price})">Purchase</button>
-                        </div>
-                    `;
+                        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; margin-bottom:10px; border:1px solid #2a2a35; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <h3 style="color:white; font-size:16px;">${items[key].name}</h3>
+                                <p style="color:var(--gold); font-size:14px; font-weight:bold;">🪙 ${items[key].price}</p>
+                            </div>
+                            <button onclick="buyItem('${key}', '${items[key].name}', ${items[key].price})" style="width:auto; padding:8px 15px; margin:0; font-size:12px;">BUY</button>
+                        </div>`;
                 }
-            } else {
-                container.innerHTML = "<p>Admin has not added any items yet.</p>";
             }
         };
 
-        window.buyItem = async (itemId, name, price) => {
+        window.buyItem = async (id, name, price) => {
             if (window.userData.coins >= price) {
                 window.userData.coins -= price;
                 if(!window.userData.inventory) window.userData.inventory = {};
-                window.userData.inventory[itemId] = name; // Save item
-                
-                await update(ref(db, 'users/' + window.currentUser), { 
-                    coins: window.userData.coins,
-                    inventory: window.userData.inventory
-                });
-                
+                window.userData.inventory[id] = name;
+                await update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins, inventory: window.userData.inventory });
                 document.getElementById('shop-coins-display').innerText = window.userData.coins;
-                updateDashboardUI();
-                showToast(`Bought ${name} successfully!`, "success");
-            } else {
-                showToast("Not enough coins to buy this item.", "error");
-            }
+                updateDashboardUI(); showToast(`Bought ${name}!`, "success");
+            } else showToast("Not enough coins.", "error");
         };
 
         window.openInventory = () => {
-            const invSection = document.getElementById('inventory-section');
-            invSection.classList.toggle('hidden');
-            const invList = document.getElementById('inventory-list');
-            
+            const inv = document.getElementById('inventory-section');
+            inv.classList.toggle('hidden');
+            const list = document.getElementById('inventory-list');
             if(!window.userData.inventory || Object.keys(window.userData.inventory).length === 0) {
-                invList.innerHTML = "<p style='color:var(--text-muted);'>Your inventory is empty. Buy items from the shop!</p>";
-                return;
+                list.innerHTML = "Inventory empty."; return;
             }
-
-            invList.innerHTML = "";
-            for (let key in window.userData.inventory) {
-                invList.innerHTML += `<span class="inv-item">${window.userData.inventory[key]}</span>`;
+            list.innerHTML = "";
+            for (let k in window.userData.inventory) {
+                list.innerHTML += `<span style="display:inline-block; background:var(--info); color:white; padding:5px 12px; border-radius:20px; margin:3px; font-size:12px; font-weight:bold;">${window.userData.inventory[k]}</span>`;
             }
         };
 
-        // ---------------- GAME 1: MINES ---------------- //
-
-        let gameMinesActive = false;
-        let mineBet = 0;
-        let mineMult = 1.0;
-        let minesArray = [];
-
-        window.forceEndGame = (screen) => {
-            if(gameMinesActive) {
-                showToast("Game abandoned. Bet lost.", "error");
-                gameMinesActive = false;
-            }
-            window.switchScreen('dashboard-screen');
-        };
-
+        // --- MINES ---
+        let gameActive = false, mineBet = 0, mineMult = 1.0, minesArr = [];
+        window.forceEndGame = () => { if(gameActive) { gameActive = false; showToast("Game Quit. Bet lost.", "error"); } window.switchScreen('dashboard-screen'); };
+        
         window.startMines = () => {
             const bet = parseInt(document.getElementById('mines-bet').value);
-            if (isNaN(bet) || bet < 10) return showToast("Minimum bet is 10 coins.", "error");
-            if (bet > window.userData.coins) return showToast("Not enough coins!", "error");
+            if(isNaN(bet) || bet < 10) return showToast("Min bet 10", "error");
+            if(bet > window.userData.coins) return showToast("Not enough coins", "error");
 
-            // Deduct
-            window.userData.coins -= bet;
-            update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins });
-            updateDashboardUI();
-
-            mineBet = bet;
-            gameMinesActive = true;
-            mineMult = 1.0;
-            
+            window.userData.coins -= bet; update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins }); updateDashboardUI();
+            mineBet = bet; gameActive = true; mineMult = 1.0;
             document.getElementById('mines-setup').classList.add('hidden');
             document.getElementById('mines-play').classList.remove('hidden');
-            updateMinesDisplay();
-            generateMinesGrid();
-        };
-
-        function updateMinesDisplay() {
-            document.getElementById('mine-multiplier').innerText = mineMult.toFixed(1) + "x";
-            document.getElementById('mine-current-win').innerText = Math.floor(mineBet * mineMult);
-        }
-
-        function generateMinesGrid() {
-            const grid = document.getElementById('mines-grid');
-            grid.innerHTML = "";
-            minesArray = Array(25).fill('safe');
             
-            let bombs = 0;
-            while(bombs < 5) {
-                let r = Math.floor(Math.random() * 25);
-                if(minesArray[r] === 'safe') { minesArray[r] = 'bomb'; bombs++; }
-            }
-
+            document.getElementById('mine-multiplier').innerText = "1.0x"; document.getElementById('mine-current-win').innerText = bet;
+            
+            const grid = document.getElementById('mines-grid'); grid.innerHTML = "";
+            minesArr = Array(25).fill('safe');
+            let b = 0; while(b < 5) { let r = Math.floor(Math.random()*25); if(minesArr[r]==='safe'){ minesArr[r]='bomb'; b++; } }
             for(let i=0; i<25; i++) {
-                const tile = document.createElement('div');
-                tile.className = 'mine-tile';
-                tile.onclick = () => clickMineTile(i, tile);
-                grid.appendChild(tile);
-            }
-        }
-
-        function clickMineTile(index, tileElement) {
-            if (!gameMinesActive || tileElement.classList.contains('mine-safe')) return;
-
-            if (minesArray[index] === 'bomb') {
-                tileElement.classList.add('mine-bomb');
-                tileElement.innerText = "💣";
-                gameMinesActive = false;
-                
-                // Show all bombs
-                const tiles = document.querySelectorAll('.mine-tile');
-                minesArray.forEach((val, idx) => {
-                    if(val === 'bomb') {
-                        tiles[idx].classList.add('mine-bomb');
-                        tiles[idx].innerText = "💣";
+                const t = document.createElement('div'); t.className = 'mine-tile'; t.onclick = () => {
+                    if(!gameActive || t.classList.contains('mine-safe')) return;
+                    if(minesArr[i] === 'bomb') {
+                        t.classList.add('mine-bomb'); t.innerText = "💣"; gameActive = false;
+                        showToast("BOOM! Bet lost.", "error"); setTimeout(() => { document.getElementById('mines-setup').classList.remove('hidden'); document.getElementById('mines-play').classList.add('hidden'); }, 1500);
+                    } else {
+                        t.classList.add('mine-safe'); t.innerText = "💎"; mineMult += 0.3;
+                        window.userData.xp += 10; update(ref(db, 'users/' + window.currentUser), { xp: window.userData.xp });
+                        document.getElementById('mine-multiplier').innerText = mineMult.toFixed(1) + "x";
+                        document.getElementById('mine-current-win').innerText = Math.floor(mineBet * mineMult);
                     }
-                });
-
-                showToast("BOOM! You hit a mine. Bet lost.", "error");
-                setTimeout(() => resetMinesGame(), 2000);
-            } else {
-                tileElement.classList.add('mine-safe');
-                tileElement.innerText = "💎";
-                mineMult += 0.3; // increase multiplier
-                
-                window.userData.xp += 10; // add XP
-                update(ref(db, 'users/' + window.currentUser), { xp: window.userData.xp });
-                
-                updateMinesDisplay();
+                };
+                grid.appendChild(t);
             }
-        }
-
+        };
         window.cashOutMines = async () => {
-            if(!gameMinesActive) return;
-            gameMinesActive = false;
-            let win = Math.floor(mineBet * mineMult);
-            window.userData.coins += win;
-            
-            checkRankUpgrade(); // check if rank goes up
-
-            await update(ref(db, 'users/' + window.currentUser), { 
-                coins: window.userData.coins, rank: window.userData.rank 
-            });
-            updateDashboardUI();
-            
-            showToast(`Cashed out! You won ${win} coins.`, "success");
-            resetMinesGame();
+            if(!gameActive) return; gameActive = false;
+            let win = Math.floor(mineBet * mineMult); window.userData.coins += win;
+            await update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins });
+            updateDashboardUI(); showToast(`Won ${win} coins!`, "success");
+            document.getElementById('mines-setup').classList.remove('hidden'); document.getElementById('mines-play').classList.add('hidden');
         };
 
-        function resetMinesGame() {
-            document.getElementById('mines-setup').classList.remove('hidden');
-            document.getElementById('mines-play').classList.add('hidden');
-        }
-
-        function checkRankUpgrade() {
-            if(window.userData.coins >= 5000) window.userData.rank = "Silver";
-            if(window.userData.coins >= 15000) window.userData.rank = "Gold";
-            if(window.userData.coins >= 50000) window.userData.rank = "Heroic";
-            if(window.userData.coins >= 100000) window.userData.rank = "Grandmaster";
-        }
-
-        // ---------------- GAME 2: COIN FLIP ---------------- //
-
-        let isFlipping = false;
-
+        // --- FLIP ---
+        let flipping = false;
         window.startCoinFlip = () => {
-            if(isFlipping) return;
-
+            if(flipping) return;
             const bet = parseInt(document.getElementById('flip-bet').value);
             const choice = document.getElementById('flip-choice').value;
+            if (isNaN(bet) || bet < 10) return showToast("Min bet 10.", "error");
+            if (bet > window.userData.coins) return showToast("Not enough coins", "error");
 
-            if (isNaN(bet) || bet < 10) return showToast("Minimum bet is 10 coins.", "error");
-            if (bet > window.userData.coins) return showToast("Not enough coins!", "error");
-
-            // Deduct bet
-            window.userData.coins -= bet;
-            update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins });
-            updateDashboardUI();
-
-            isFlipping = true;
-            document.getElementById('flip-btn').disabled = true;
-            document.getElementById('coin-area').classList.remove('hidden');
+            window.userData.coins -= bet; update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins }); updateDashboardUI();
+            flipping = true; document.getElementById('flip-btn').disabled = true;
             
-            const coin = document.getElementById('the-coin');
-            // Reset animation
-            coin.style.transition = 'none';
-            coin.style.transform = 'rotateY(0deg)';
-            
+            const resArea = document.getElementById('flip-result-area');
+            const resText = document.getElementById('flip-result-text');
+            resArea.classList.remove('hidden'); resText.innerText = "Flipping...";
+
             setTimeout(() => {
-                // Random outcome (50/50)
+                flipping = false; document.getElementById('flip-btn').disabled = false;
                 const result = Math.random() < 0.5 ? 'heads' : 'tails';
-                
-                coin.style.transition = 'transform 3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                coin.className = 'coin ' + (result === 'heads' ? 'flip-heads' : 'flip-tails');
-
-                // Wait for animation
-                setTimeout(() => {
-                    isFlipping = false;
-                    document.getElementById('flip-btn').disabled = false;
-                    
-                    window.userData.xp += 5; // Add playing XP
-
-                    if(choice === result) {
-                        const winAmount = bet * 2;
-                        window.userData.coins += winAmount;
-                        checkRankUpgrade();
-                        update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins, xp: window.userData.xp, rank: window.userData.rank });
-                        updateDashboardUI();
-                        showToast(`It's ${result.toUpperCase()}! You won ${winAmount} coins!`, "success");
-                    } else {
-                        update(ref(db, 'users/' + window.currentUser), { xp: window.userData.xp });
-                        showToast(`It's ${result.toUpperCase()}. You lost the bet.`, "error");
-                    }
-                }, 3100);
-            }, 50);
-        };
-
-        // ---------------- AI SUPPORT (GEMINI) ---------------- //
-
-        let chatHistory = [];
-        let isChatOpen = false;
-
-        window.toggleChat = () => {
-            isChatOpen = !isChatOpen;
-            document.getElementById('chat-window').style.display = isChatOpen ? 'flex' : 'none';
-            if(isChatOpen && chatHistory.length === 0) {
-                appendMsg("AI", "Hi! I am the Hub Support Assistant. How can I help you today?");
-            }
-        };
-
-        window.sendMessage = async () => {
-            const inputEl = document.getElementById('chat-input');
-            const text = inputEl.value.trim();
-            if(!text) return;
-
-            appendMsg("User", text);
-            inputEl.value = "";
-
-            const apiKey = localStorage.getItem('geminiApiKey');
-            if(!apiKey) {
-                appendMsg("AI", "Support is currently offline. (Admin needs to add API Key in Dashboard settings)");
-                return;
-            }
-
-            // Provide context to AI
-            if (chatHistory.length === 0) {
-                const sysPrompt = `You are a friendly support assistant for 'Gamer's Hub'. The current user is named '${window.currentUser}'. You must remember this name if asked. The platform has: Level system (Max 100), Rank system (Bronze to Grandmaster, 30 day reset), Coins, Shop, Mines game, and Coin Flip game. Answer shortly, be helpful, use emojis. Speak Marathi if user speaks Marathi, else English.`;
-                chatHistory.push({ "role": "user", "parts": [{"text": sysPrompt}] });
-                chatHistory.push({ "role": "model", "parts": [{"text": "Understood. I'm ready."}] });
-            }
-
-            chatHistory.push({ "role": "user", "parts": [{"text": text}] });
-            appendMsg("AI", "Typing..."); // typing indicator
-
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ contents: chatHistory })
-                });
-
-                const data = await response.json();
-                
-                // Remove 'typing...' message
-                const msgsDiv = document.getElementById('chat-msgs');
-                msgsDiv.removeChild(msgsDiv.lastChild);
-
-                if (data.error) {
-                    appendMsg("AI", "API Error: " + data.error.message);
-                    return;
+                window.userData.xp += 5;
+                if(choice === result) {
+                    window.userData.coins += (bet * 2);
+                    resText.innerHTML = `<span style="color:var(--success)">WON! It was ${result.toUpperCase()}</span>`;
+                    showToast(`Won ${bet*2} coins!`, "success");
+                } else {
+                    resText.innerHTML = `<span style="color:var(--primary-red)">LOST! It was ${result.toUpperCase()}</span>`;
+                    showToast("You lost.", "error");
                 }
-
-                const aiText = data.candidates[0].content.parts[0].text;
-                appendMsg("AI", aiText);
-                chatHistory.push({ "role": "model", "parts": [{"text": aiText}] });
-
-            } catch (err) {
-                const msgsDiv = document.getElementById('chat-msgs');
-                msgsDiv.removeChild(msgsDiv.lastChild);
-                appendMsg("AI", "Connection error. Try again later.");
-            }
+                update(ref(db, 'users/' + window.currentUser), { coins: window.userData.coins, xp: window.userData.xp });
+                updateDashboardUI();
+            }, 1500);
         };
 
-        function appendMsg(sender, text) {
-            const msgsDiv = document.getElementById('chat-msgs');
-            const div = document.createElement('div');
-            div.className = sender === "User" ? "msg user" : "msg ai";
-            
-            // Format bold text simple parser
-            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            div.innerHTML = formattedText;
-            
-            msgsDiv.appendChild(div);
-            msgsDiv.scrollTop = msgsDiv.scrollHeight; // Scroll to bottom
-        }
+        // --- AI ---
+        let chatHist = [], chatOpen = false;
+        window.toggleChat = () => {
+            chatOpen = !chatOpen; document.getElementById('chat-window').style.display = chatOpen ? 'flex' : 'none';
+            if(chatOpen && chatHist.length === 0) appendMsg("AI", "Hi! I am the Hub Support. How can I help?");
+        };
+        window.sendMessage = async () => {
+            const input = document.getElementById('chat-input'); const text = input.value.trim(); if(!text) return;
+            appendMsg("User", text); input.value = "";
+            const key = localStorage.getItem('geminiApiKey');
+            if(!key) return appendMsg("AI", "Support offline. (Admin key missing)");
 
+            if(chatHist.length === 0) {
+                chatHist.push({ "role": "user", "parts": [{"text": `You are Gamer's Hub AI. User is '${window.currentUser}'. Be short & friendly.`}] });
+                chatHist.push({ "role": "model", "parts": [{"text": "OK"}] });
+            }
+            chatHist.push({ "role": "user", "parts": [{"text": text}] });
+            
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: chatHist })
+                });
+                const data = await res.json();
+                if(data.error) return appendMsg("AI", "Error: " + data.error.message);
+                const aiText = data.candidates[0].content.parts[0].text;
+                appendMsg("AI", aiText); chatHist.push({ "role": "model", "parts": [{"text": aiText}] });
+            } catch(e) { appendMsg("AI", "Connection error."); }
+        };
+        function appendMsg(sender, text) {
+            const div = document.createElement('div'); div.className = sender === "User" ? "msg user" : "msg ai";
+            div.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            const msgs = document.getElementById('chat-msgs'); msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+        }
     </script>
 </body>
 </html>
