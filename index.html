@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OX & Boss Raid | Free Fire Style</title>
+    <title>Galaxy Arena | Multiplayer</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         /* =========================================================
@@ -13,7 +13,7 @@
             --bg-dark: #07090f; --panel-bg: #151922;
             --neon-blue: #00f0ff; --neon-pink: #ff0055;
             --neon-green: #00ff88; --neon-gold: #ffcc00;
-            --neon-purple: #b026ff;
+            --neon-purple: #b026ff; --neon-red: #ff0000;
             --text-light: #ffffff; --text-muted: #8b92a5;
             --font-game: 'Rajdhani', sans-serif;
         }
@@ -33,7 +33,12 @@
         .nav-profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--neon-blue); object-fit: cover; }
         .nav-info h3 { margin: 0; color: var(--neon-blue); text-transform: uppercase; letter-spacing: 1px;}
         .nav-info p { margin: 0; font-size: 0.9rem; color: var(--neon-gold); font-weight: bold;}
-        .logout-btn { background: var(--neon-pink); color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        /* Audio Controls */
+        .audio-controls { display: flex; gap: 10px; align-items: center; }
+        .icon-btn { background: #000; color: #fff; border: 1px solid #333; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
+        .icon-btn:hover { border-color: var(--neon-gold); box-shadow: 0 0 10px var(--neon-gold); }
+        .icon-btn.off { color: var(--text-muted); opacity: 0.5; }
 
         /* Cards & Inputs */
         .card { background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); text-align: center; }
@@ -44,14 +49,15 @@
         /* Buttons */
         .btn { width: 100%; background: transparent; color: var(--neon-blue); border: 2px solid var(--neon-blue); padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; margin-bottom: 10px; }
         .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
+        .btn:active { transform: scale(0.95); }
         .btn-pink { border-color: var(--neon-pink); color: var(--neon-pink); }
         .btn-pink:hover { background: var(--neon-pink); color: #fff; box-shadow: 0 0 15px var(--neon-pink); }
         .btn-gold { border-color: var(--neon-gold); color: var(--neon-gold); }
         .btn-gold:hover { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px var(--neon-gold); }
         .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
         .btn-green:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
-        .btn-purple { border-color: var(--neon-purple); color: var(--neon-purple); }
-        .btn-purple:hover { background: var(--neon-purple); color: #fff; box-shadow: 0 0 20px var(--neon-purple); }
+        .btn-danger { border-color: var(--neon-red); color: var(--neon-red); }
+        .btn-danger:hover { background: var(--neon-red); color: #fff; box-shadow: 0 0 15px var(--neon-red); }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
@@ -76,42 +82,24 @@
 
         /* OX GAME BOARD (FIXED) */
         .game-status { font-size: 1.5rem; text-align: center; color: var(--neon-gold); margin: 15px 0; font-weight: bold;}
-        .ox-board { 
-            display: grid; 
-            grid-template-columns: repeat(3, 100px); /* FIXED WIDTH FOR BOXES */
-            grid-template-rows: repeat(3, 100px);    /* FIXED HEIGHT FOR BOXES */
-            gap: 10px; 
-            justify-content: center; /* CENTER THE GRID */
-            margin: 20px auto; 
-        }
-        .ox-cell { 
-            background: #0b0c10; 
-            border: 2px solid var(--neon-blue); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 4rem; 
-            cursor: pointer; 
-            border-radius: 10px; 
-            color: #fff; 
-            font-weight: bold;
-            box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.1);
-        }
-        .ox-cell:active { transform: scale(0.95); }
+        .ox-board { display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px); gap: 10px; justify-content: center; margin: 20px auto; }
+        .ox-cell { background: #0b0c10; border: 2px solid var(--neon-blue); display: flex; align-items: center; justify-content: center; font-size: 4rem; cursor: pointer; border-radius: 10px; color: #fff; font-weight: bold; box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.1); }
         .ox-cell.x { color: var(--neon-pink); text-shadow: 0 0 20px var(--neon-pink); }
         .ox-cell.o { color: var(--neon-green); text-shadow: 0 0 20px var(--neon-green); }
 
-        /* WORLD BOSS RAID UI */
-        .boss-img-container { font-size: 8rem; text-align: center; animation: float 2s infinite ease-in-out; text-shadow: 0 0 50px var(--neon-purple); margin: 20px 0;}
-        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
-        .hp-bar-container { background: #333; height: 30px; border-radius: 15px; border: 2px solid #fff; overflow: hidden; margin-bottom: 10px; position: relative;}
-        .hp-bar-fill { background: linear-gradient(90deg, #ff0000, #ff0055); height: 100%; width: 100%; transition: width 0.2s; }
-        .hp-text { position: absolute; width: 100%; text-align: center; top: 2px; font-weight: bold; font-size: 1.2rem; color: #fff; text-shadow: 1px 1px 2px #000; }
-        .damage-number { position: absolute; color: var(--neon-gold); font-size: 2rem; font-weight: bold; pointer-events: none; animation: floatUp 1s forwards; text-shadow: 0 0 10px #000;}
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(1.5); } }
+        /* RED LIGHT GREEN LIGHT */
+        .rlgl-arena { height: 300px; border-radius: 15px; border: 5px solid #333; margin: 20px 0; position: relative; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
+        .rlgl-arena.green { background: rgba(0, 255, 136, 0.2); border-color: var(--neon-green); box-shadow: inset 0 0 50px var(--neon-green); }
+        .rlgl-arena.red { background: rgba(255, 0, 85, 0.2); border-color: var(--neon-pink); box-shadow: inset 0 0 50px var(--neon-pink); }
+        .rlgl-status-text { font-size: 3rem; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 20px #000; }
         
-        .dmg-leaderboard { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; border: 1px solid var(--neon-purple); max-height: 200px; overflow-y: auto; text-align: left;}
-        .dmg-player { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 5px 0; }
+        .progress-bar-container { background: #000; border: 2px solid #fff; border-radius: 10px; height: 30px; margin: 20px 0; overflow: hidden; position: relative;}
+        .progress-fill { background: linear-gradient(90deg, var(--neon-blue), var(--neon-green)); height: 100%; width: 0%; transition: 0.2s; }
+        .progress-text { position: absolute; top:2px; width:100%; text-align:center; font-weight:bold; text-shadow: 1px 1px 2px #000;}
+        
+        .rlgl-player-list { max-height: 150px; overflow-y: auto; text-align: left; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px;}
+        .rlgl-player { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 5px 0;}
+        .rlgl-player.eliminated { color: var(--neon-pink); text-decoration: line-through; }
 
         /* Notifications */
         #toast, #invitePopup { position: fixed; z-index: 9999; display: none; background: var(--neon-blue); color: #000; padding: 15px 25px; border-radius: 8px; font-weight: bold; text-align: center;}
@@ -120,6 +108,13 @@
     </style>
 </head>
 <body>
+
+    <!-- AUDIO SYSTEM -->
+    <audio id="bgmAudio" loop preload="auto"></audio>
+    <audio id="sfxClick" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3" preload="auto"></audio>
+    <audio id="sfxWin" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3" preload="auto"></audio>
+    <audio id="sfxLose" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3" preload="auto"></audio>
+    <audio id="sfxShot" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3" preload="auto"></audio> <!-- Squid Game Elim Sound -->
 
     <!-- NOTIFICATIONS -->
     <div id="toast">Notification</div>
@@ -131,21 +126,16 @@
         </div>
     </div>
 
-    <!-- MODAL: SELECT ROUNDS -->
-    <div class="modal-overlay" id="roundModal">
+    <!-- MODAL: SELECT OX ROUNDS -->
+    <div class="modal-overlay" id="roundModalOX">
         <div class="modal-box">
-            <h2>Select OX Rounds</h2>
-            <p style="color:var(--text-muted); margin-bottom: 15px;">Best of format (e.g. 7 Rounds = Win 4)</p>
+            <h2>OX Battle Settings</h2>
             <select id="roundSelectInput">
                 <option value="3">3 Rounds (Win 2)</option>
                 <option value="5">5 Rounds (Win 3)</option>
                 <option value="7" selected>7 Rounds (Win 4)</option>
-                <option value="9">9 Rounds (Win 5)</option>
-                <option value="11">11 Rounds (Win 6)</option>
-                <option value="13">13 Rounds (Win 7)</option>
-                <option value="15">15 Rounds (Win 8)</option>
             </select>
-            <button class="btn btn-pink" onclick="confirmCreateRoom()">Create Room</button>
+            <button class="btn btn-pink" onclick="confirmCreateRoom('OX')">Create OX Room</button>
             <button class="btn" style="color: #fff; border: none;" onclick="closeModals()">Cancel</button>
         </div>
     </div>
@@ -154,9 +144,7 @@
     <div class="modal-overlay" id="inviteFriendModal">
         <div class="modal-box">
             <h2>Invite Friends</h2>
-            <div id="inviteFriendsListContainer" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px; text-align: left;">
-                <!-- Friends will load here -->
-            </div>
+            <div id="inviteFriendsListContainer" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px; text-align: left;"></div>
             <button class="btn btn-pink" onclick="closeModals()">Close</button>
         </div>
     </div>
@@ -196,24 +184,33 @@
                     <p>UID: <span id="myUid">00000</span></p>
                 </div>
             </div>
-            <button class="logout-btn" onclick="logoutUser()">LOGOUT</button>
-        </div>
-
-        <!-- NEW GAME: BOSS RAID -->
-        <div class="card" style="border-color: var(--neon-purple); background: linear-gradient(180deg, #151922 0%, #2c1a2e 100%);">
-            <h2 style="color: var(--neon-purple);">🐲 WORLD BOSS RAID</h2>
-            <p style="color: var(--text-muted); margin-bottom: 15px;">Global Event: Unlimited Players can join and attack together!</p>
-            <button class="btn btn-purple" onclick="enterBossRaid()" style="font-size: 1.5rem; padding: 20px;">⚔️ JOIN RAID NOW</button>
-        </div>
-
-        <div class="card" style="margin-top: 10px;">
-            <h2>🎮 OX Game (1v1)</h2>
-            <button class="btn btn-pink" onclick="startBotMatch()">🤖 Play VS Bot</button>
-            <button class="btn" onclick="openRoundModal()">⚔️ Create Custom Room</button>
-            <div style="border-top: 1px dashed #333; margin: 20px 0; padding-top: 20px;">
-                <input type="text" id="joinRoomId" placeholder="Enter Room ID to Join">
-                <button class="btn btn-green" onclick="joinRoomBtn()">Join Room</button>
+            
+            <div class="audio-controls">
+                <button class="icon-btn" id="btnToggleBGM" onclick="toggleBGM()">🎵</button>
+                <button class="icon-btn" id="btnToggleSFX" onclick="toggleSFX()">🔊</button>
+                <button class="logout-btn" onclick="logoutUser()">LOGOUT</button>
             </div>
+        </div>
+
+        <!-- ADMIN PANEL BUTTON (Only visible to UID 12345) -->
+        <button class="btn btn-gold" id="btnAdminPanel" style="display: none; font-size: 1.5rem;" onclick="showScreen('admin')">👑 ADMIN PANEL</button>
+
+        <div class="card" style="border-color: var(--neon-green);">
+            <h2 style="color: var(--neon-green);">🚦 RED LIGHT, GREEN LIGHT</h2>
+            <p style="color: var(--text-muted); margin-bottom: 15px;">Squid Game Mode! Survive and reach 100%.</p>
+            <button class="btn btn-green" onclick="confirmCreateRoom('RLGL')">⚔️ Create RLGL Room</button>
+        </div>
+
+        <div class="card" style="border-color: var(--neon-pink);">
+            <h2 style="color: var(--neon-pink);">❌⭕ OX BATTLE (1V1)</h2>
+            <button class="btn btn-pink" onclick="startBotMatch()">🤖 Play VS Bot</button>
+            <button class="btn" onclick="openRoundModalOX()">⚔️ Create OX Room</button>
+        </div>
+
+        <div class="card" style="padding: 15px;">
+            <p>Join any room (OX or RLGL):</p>
+            <input type="text" id="joinRoomId" placeholder="Enter 5-Letter Room ID">
+            <button class="btn btn-gold" onclick="joinRoomBtn()">Join Room</button>
         </div>
 
         <div class="grid-2">
@@ -225,7 +222,7 @@
             </div>
         </div>
 
-        <button class="btn btn-gold" onclick="openGlobalChat()">🌍 GLOBAL CHAT</button>
+        <button class="btn" style="color: #fff; border-color: #fff;" onclick="openGlobalChat()">🌍 GLOBAL CHAT</button>
 
         <div class="card">
             <h2>🔍 Search User</h2>
@@ -235,7 +232,26 @@
     </div>
 
     <!-- ==========================================
-         SCREEN 3: GLOBAL CHAT
+         SCREEN 3: ADMIN PANEL (UID 12345 ONLY)
+    =========================================== -->
+    <div id="screen-admin" class="screen">
+        <div class="top-nav">
+            <button class="back-btn" onclick="showScreen('dashboard')">🔙</button>
+            <h3 style="color: var(--neon-gold);">👑 ADMIN SETTINGS</h3>
+            <div style="width: 30px;"></div>
+        </div>
+        
+        <div class="card" style="margin-top: 20px;">
+            <h2>🎵 Manage Server BGM</h2>
+            <p style="color: var(--text-muted); margin-bottom: 15px;">Paste an MP3 link to set background music for ALL users.</p>
+            <input type="text" id="adminBgmInput" placeholder="https://example.com/music.mp3">
+            <button class="btn btn-gold" onclick="updateServerBGM()">Save Music URL</button>
+            <button class="btn btn-danger" onclick="stopServerBGM()">Stop / Clear Music</button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SCREEN 4: GLOBAL CHAT
     =========================================== -->
     <div id="screen-chat" class="screen">
         <div class="top-nav">
@@ -252,7 +268,7 @@
     </div>
 
     <!-- ==========================================
-         SCREEN 4: PROFILE VIEWER / EDIT
+         SCREEN 5: PROFILE VIEWER / EDIT
     =========================================== -->
     <div id="screen-profile" class="screen">
         <div class="top-nav">
@@ -262,39 +278,27 @@
         </div>
         <div class="card" style="margin-top: 20px;">
             <div class="profile-header">
-                <!-- HIDDEN FILE INPUT -->
                 <input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
-                
-                <!-- AVATAR CONTAINER (CLICKABLE) -->
                 <div class="profile-img-container" id="avatarClickBox" onclick="document.getElementById('avatarUpload').click()">
                     <img src="" id="profAvatar" class="profile-large-img">
                     <div class="cam-icon" id="camIconBadge">📸</div>
                 </div>
-                
                 <h1 id="profName" style="margin-top: 15px;">Player Name</h1>
                 <p style="color: var(--neon-gold); font-size: 1.2rem;">UID: <span id="profUid">00000</span></p>
-                
-                <!-- LIKE BUTTON -->
                 <button class="btn btn-pink" id="btnLikeProfile" style="margin-top:10px; width: auto; padding: 10px 20px;" onclick="likeUserProfile()">❤️ Likes (<span id="profLikesCount">0</span>)</button>
             </div>
-            
             <div class="grid-2" style="margin-top: 20px;">
                 <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px dashed var(--neon-gold);">
                     <h3 id="profWins" style="font-size: 2rem; color: var(--neon-gold); margin:0;">0</h3>
-                    <p>OX Wins</p>
-                </div>
-                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px dashed var(--neon-purple);">
-                    <h3 id="profBossDmg" style="font-size: 2rem; color: var(--neon-purple); margin:0;">0</h3>
-                    <p>Boss DMG</p>
+                    <p>Total Wins</p>
                 </div>
             </div>
-            
             <button class="btn btn-green" id="btnAddFriend" style="margin-top: 20px;" onclick="sendFriendRequest()">➕ Add Friend</button>
         </div>
     </div>
 
     <!-- ==========================================
-         SCREEN 5: LEADERBOARD & FRIENDS LIST
+         SCREEN 6: LEADERBOARD & FRIENDS LIST
     =========================================== -->
     <div id="screen-list" class="screen">
         <div class="top-nav">
@@ -307,33 +311,30 @@
     </div>
 
     <!-- ==========================================
-         SCREEN 6: WAITING ROOM (OX GAME)
+         SCREEN 7: WAITING ROOM (SHARED)
     =========================================== -->
     <div id="screen-waiting" class="screen">
         <div class="card" style="margin-top: 10vh; border-color: #333; padding: 40px 20px;">
-            <h1 style="color: var(--neon-pink); font-size: 2.5rem; letter-spacing: 3px;">WAITING ROOM</h1>
+            <h1 style="color: var(--neon-pink); font-size: 2.5rem; letter-spacing: 3px;" id="waitRoomTitle">WAITING ROOM</h1>
             <p style="color: #fff; font-size: 1.2rem; margin: 15px 0;">Room ID: <span id="waitRoomIdText" style="color: var(--neon-blue); font-weight: bold; font-size: 1.5rem;">XYZ12</span></p>
-            <p style="color: var(--neon-gold); margin-bottom: 25px; font-weight: bold;" id="waitRoomSettings">Rounds: 7 (Win 4)</p>
+            <p style="color: var(--neon-gold); margin-bottom: 25px; font-weight: bold;" id="waitRoomSettings">Mode: Loading...</p>
             
-            <p style="color: #ccc; font-size: 0.9rem;">Share this link to invite friend:</p>
             <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px dashed var(--neon-gold); word-break: break-all; color: var(--neon-gold); margin-bottom: 10px;" id="shareLinkURL">https://...</div>
-            
             <button class="btn" style="color: var(--neon-blue); border-color: var(--neon-blue);" onclick="copyShareLink()">📋 COPY LINK</button>
             <button class="btn btn-gold" id="btnInviteFriendModal" style="display: none;" onclick="openInviteFriendModal()">➕ INVITE FRIEND</button>
             
             <div id="waitingPlayersList" style="text-align: left; background: #0b0c10; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #222;"></div>
             
             <button class="btn btn-pink" id="btnStartGame" style="display: none; font-size: 1.5rem; padding: 20px;" onclick="startGameHost()">🔥 START MATCH 🔥</button>
-            <p id="waitingTextHost" style="color:var(--text-muted);">Waiting for opponent to join...</p>
-            
+            <p id="waitingTextHost" style="color:var(--text-muted);">Waiting for players to join...</p>
             <button class="btn" style="color: var(--neon-pink); border-color: var(--neon-pink); margin-top: 20px;" onclick="leaveRoom()">❌ LEAVE ROOM</button>
         </div>
     </div>
 
     <!-- ==========================================
-         SCREEN 7: GAME ARENA (TIC-TAC-TOE)
+         SCREEN 8: GAME ARENA (OX TIC-TAC-TOE)
     =========================================== -->
-    <div id="screen-game" class="screen">
+    <div id="screen-game-ox" class="screen">
         <div class="card" style="padding: 15px; margin-bottom: 10px;">
             <h2 id="gameStatusDisplay" style="color: var(--neon-gold); margin:0;">Round 1 / 7</h2>
             <p style="color: var(--text-muted); font-size: 0.9rem;">Target: <span id="winTargetDisplay">4</span> Wins</p>
@@ -353,7 +354,6 @@
 
         <div class="game-status" id="turnIndicator">X's Turn!</div>
 
-        <!-- FIXED OX BOARD CSS CLASSES -->
         <div class="ox-board" id="oxBoard">
             <div class="ox-cell" onclick="cellClick(0)" id="cell-0"></div>
             <div class="ox-cell" onclick="cellClick(1)" id="cell-1"></div>
@@ -368,50 +368,40 @@
     </div>
 
     <!-- ==========================================
-         SCREEN 8: WORLD BOSS RAID (UNLIMITED)
+         SCREEN 9: GAME ARENA (RED LIGHT GREEN LIGHT)
     =========================================== -->
-    <div id="screen-boss" class="screen">
-        <div class="top-nav">
-            <button class="back-btn" onclick="leaveBossRaid()">🔙 LEAVE</button>
-            <h3 style="color: var(--neon-purple);">GLOBAL RAID</h3>
-            <div style="width: 30px;"></div>
+    <div id="screen-game-rlgl" class="screen">
+        <div class="card" style="padding: 15px; margin-bottom: 10px; border-color: var(--neon-green);">
+            <h2 style="color: var(--neon-green); margin:0;">🚦 SURVIVAL RUN</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Reach 100% to Win! Don't move on RED.</p>
+        </div>
+
+        <div class="rlgl-arena green" id="rlglArena" onclick="rlglTap()">
+            <div class="rlgl-status-text" id="rlglStatusText">GREEN LIGHT</div>
         </div>
         
-        <div class="card" style="margin-top: 20px; position: relative; overflow: hidden; border-color: var(--neon-purple);" id="bossArena">
-            <h2 style="color: var(--neon-pink);">GALACTIC DRAGON</h2>
-            
-            <div class="hp-bar-container">
-                <div class="hp-bar-fill" id="bossHpFill" style="width: 100%;"></div>
-                <div class="hp-text"><span id="bossHpText">1000000</span> / 1000000</div>
-            </div>
+        <p style="text-align:center; color:var(--text-muted);">TAP THE BOX ABOVE TO RUN</p>
 
-            <div class="boss-img-container" id="bossImage">👹</div>
-            
-            <button class="btn btn-purple" style="font-size: 2rem; padding: 20px; border-width: 4px; border-radius: 15px;" onclick="attackBoss()">⚔️ TAP TO ATTACK ⚔️</button>
+        <div class="progress-bar-container">
+            <div class="progress-fill" id="rlglMyProgress"></div>
+            <div class="progress-text">Your Progress: <span id="rlglMyProgressText">0</span>%</div>
         </div>
 
-        <div class="card">
-            <h3 style="color: var(--neon-gold); border-bottom: 1px solid #333; padding-bottom: 10px;">🏆 TOP DAMAGE DEALERS</h3>
-            <div class="dmg-leaderboard" id="bossLeaderboard">
-                <!-- Live DMG ranking will show here -->
+        <div class="card" style="padding:15px;">
+            <h3 style="color: var(--neon-gold); text-align:left; border-bottom:1px solid #333; padding-bottom:5px;">Players Alive</h3>
+            <div class="rlgl-player-list" id="rlglLeaderboard">
+                <!-- Live player progress shows here -->
             </div>
         </div>
     </div>
 
     <!-- ==========================================
-         SCREEN 9: RESULT BOOYAH
+         SCREEN 10: RESULT BOOYAH
     =========================================== -->
     <div id="screen-result" class="screen" style="justify-content: center;">
         <div class="card" style="border-color: var(--neon-gold);">
             <h1 style="color: var(--neon-gold); font-size: 4rem; text-shadow: 0 0 20px var(--neon-gold);" id="resultTitle">BOOYAH!</h1>
             <h2 id="winnerNameDisplay" style="margin: 20px 0; color: #fff;">Winner Name</h2>
-            
-            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                <h3 style="color:var(--text-muted);">Final Score</h3>
-                <p style="font-size: 1.5rem;">You: <span id="resMyScore" style="color:var(--neon-blue); font-weight:bold;">0</span></p>
-                <p style="font-size: 1.5rem;">Opponent: <span id="resOppScore" style="color:var(--neon-pink); font-weight:bold;">0</span></p>
-            </div>
-
             <button class="btn btn-green" onclick="leaveRoom()">🏠 Return to Lobby</button>
         </div>
     </div>
@@ -445,20 +435,61 @@
         let gameActive = false;
         let currentProfileView = null; 
         let pendingInviteRoom = null;
-        let bossListenerUnsubscribe = null;
-        let myTotalDamage = 0;
+        let roomMode = null; // 'OX' or 'RLGL'
 
-        // OX GAME STATE
-        let maxRounds = 7;
-        let winsNeeded = 4;
-        let currentRoundNumber = 1;
-        let myScore = 0;
-        let oppScore = 0;
-        let mySymbol = 'X';
-        let oppSymbol = 'O';
-        let currentTurn = 'X'; 
-        let boardState = ["", "", "", "", "", "", "", "", ""];
-        const winCombos = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        // AUDIO SYSTEM
+        let isSfxOn = true;
+        let isBgmOn = true;
+        
+        window.playSound = (type) => {
+            if(!isSfxOn) return;
+            const sfxC = document.getElementById('sfxClick');
+            const sfxW = document.getElementById('sfxWin');
+            const sfxL = document.getElementById('sfxLose');
+            const sfxS = document.getElementById('sfxShot');
+            
+            if(type === 'click') { sfxC.currentTime = 0; sfxC.play().catch(e=>{}); }
+            if(type === 'win') { sfxW.currentTime = 0; sfxW.play().catch(e=>{}); }
+            if(type === 'lose') { sfxL.currentTime = 0; sfxL.play().catch(e=>{}); }
+            if(type === 'shot') { sfxS.currentTime = 0; sfxS.play().catch(e=>{}); }
+        }
+
+        window.toggleSFX = () => {
+            isSfxOn = !isSfxOn;
+            const btn = document.getElementById('btnToggleSFX');
+            btn.className = isSfxOn ? 'icon-btn' : 'icon-btn off';
+            btn.innerText = isSfxOn ? '🔊' : '🔇';
+            playSound('click');
+        }
+
+        window.toggleBGM = () => {
+            isBgmOn = !isBgmOn;
+            const btn = document.getElementById('btnToggleBGM');
+            const bgm = document.getElementById('bgmAudio');
+            btn.className = isBgmOn ? 'icon-btn' : 'icon-btn off';
+            if(isBgmOn) bgm.play().catch(e=>{});
+            else bgm.pause();
+            playSound('click');
+        }
+
+        // Listen for Admin BGM changes globally
+        onValue(ref(db, 'server_settings/bgm'), (snapshot) => {
+            const url = snapshot.val();
+            const bgm = document.getElementById('bgmAudio');
+            if(url) {
+                bgm.src = url;
+                if(isBgmOn && currentUser) bgm.play().catch(e=>{});
+            } else {
+                bgm.pause(); bgm.src = "";
+            }
+        });
+
+        // Add click listener to all buttons for SFX
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON' || e.target.classList.contains('ox-cell') || e.target.id === 'rlglArena') {
+                playSound('click');
+            }
+        });
 
         // UTILITIES
         window.showToast = (msg) => {
@@ -482,13 +513,13 @@
         // AUTHENTICATION & INITIALIZATION
         // ==========================================
         window.onload = async () => {
-            const savedUid = localStorage.getItem('oxBattleUID');
+            const savedUid = localStorage.getItem('galaxyArenaUID');
             if (savedUid) {
                 const snap = await get(ref(db, 'users/' + savedUid));
                 if (snap.exists()) {
                     currentUser = snap.val(); currentUser.uid = savedUid;
                     initDashboard(); checkUrlForInvite(); listenForFriendInvites();
-                } else { localStorage.removeItem('oxBattleUID'); showScreen('auth'); }
+                } else { localStorage.removeItem('galaxyArenaUID'); showScreen('auth'); }
             } else { showScreen('auth'); }
         }
 
@@ -497,19 +528,21 @@
             const uid = document.getElementById('regUid').value.trim();
             const pass = document.getElementById('regPass').value.trim();
             
-            if(name.length < 3 || uid.length !== 5 || pass.length < 4) return showToast("Invalid inputs! UID must be 5 digits.");
+            if(name.length < 3 || uid.length !== 5 || pass.length < 4) return showToast("Invalid inputs! UID must be exactly 5 digits.");
             
+            // UNIQUE ID CHECK (No duplicates allowed)
             const snap = await get(ref(db, 'users/' + uid));
-            if(snap.exists()) return showToast("UID already exists. Choose different 5 digits.");
+            if(snap.exists()) return showToast("❌ This UID is already taken! Try another 5-digit number.");
 
             const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
-            const userData = { name, password: pass, avatar, wins: 0, bossDmg: 0, likes: 0, friends: {} };
+            const userData = { name, password: pass, avatar, wins: 0, likes: 0, friends: {} };
             
             await set(ref(db, 'users/' + uid), userData);
             currentUser = userData; currentUser.uid = uid;
-            localStorage.setItem('oxBattleUID', uid);
+            localStorage.setItem('galaxyArenaUID', uid);
             
             showToast("Account Created!"); initDashboard(); listenForFriendInvites();
+            if(isBgmOn) document.getElementById('bgmAudio').play().catch(e=>{});
         }
 
         window.loginUser = async () => {
@@ -524,17 +557,38 @@
             if(data.password !== pass) return showToast("Wrong Password!");
 
             currentUser = data; currentUser.uid = uid;
-            localStorage.setItem('oxBattleUID', uid);
+            localStorage.setItem('galaxyArenaUID', uid);
             showToast("Login Success!"); initDashboard(); checkUrlForInvite(); listenForFriendInvites();
+            if(isBgmOn) document.getElementById('bgmAudio').play().catch(e=>{});
         }
 
-        window.logoutUser = () => { localStorage.removeItem('oxBattleUID'); window.location.reload(); }
+        window.logoutUser = () => { localStorage.removeItem('galaxyArenaUID'); window.location.reload(); }
 
         function initDashboard() {
             document.getElementById('myName').innerText = currentUser.name;
             document.getElementById('myUid').innerText = currentUser.uid;
             document.getElementById('myAvatar').src = currentUser.avatar;
+            
+            // Show Admin Panel Button for ID 12345
+            if(currentUser.uid === '12345') document.getElementById('btnAdminPanel').style.display = 'block';
+            
             showScreen('dashboard');
+        }
+
+        // ==========================================
+        // ADMIN PANEL (BGM CONTROL)
+        // ==========================================
+        window.updateServerBGM = async () => {
+            if(currentUser.uid !== '12345') return;
+            const url = document.getElementById('adminBgmInput').value.trim();
+            if(!url) return showToast("Enter valid URL");
+            await set(ref(db, 'server_settings/bgm'), url);
+            showToast("Server BGM Updated!");
+        }
+        window.stopServerBGM = async () => {
+            if(currentUser.uid !== '12345') return;
+            await remove(ref(db, 'server_settings/bgm'));
+            showToast("BGM Stopped Globally.");
         }
 
         // ==========================================
@@ -543,10 +597,7 @@
         window.showScreen = (id) => {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById('screen-' + id).classList.add('active-screen');
-            if (id === 'profile-edit') {
-                currentProfileView = currentUser.uid;
-                renderProfile(currentUser, true);
-            }
+            if (id === 'profile-edit') { currentProfileView = currentUser.uid; renderProfile(currentUser, true); }
         }
 
         window.viewUserProfile = async (uid) => {
@@ -554,8 +605,7 @@
             const snap = await get(ref(db, 'users/' + uid));
             if(snap.exists()) {
                 renderProfile(snap.val(), uid === currentUser.uid);
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-                document.getElementById('screen-profile').classList.add('active-screen');
+                showScreen('profile');
             }
         }
 
@@ -570,7 +620,6 @@
             document.getElementById('profUid').innerText = currentProfileView;
             document.getElementById('profAvatar').src = data.avatar;
             document.getElementById('profWins').innerText = data.wins || 0;
-            document.getElementById('profBossDmg').innerText = data.bossDmg || 0;
             document.getElementById('profLikesCount').innerText = data.likes || 0;
             
             const btnAdd = document.getElementById('btnAddFriend');
@@ -579,23 +628,15 @@
             const btnLike = document.getElementById('btnLikeProfile');
             
             if(isMe) {
-                camIcon.style.display = 'block'; // Show camera icon
-                clickBox.style.pointerEvents = 'auto'; // Make clickable
+                camIcon.style.display = 'block'; clickBox.style.pointerEvents = 'auto'; 
                 btnAdd.style.display = 'none';
-                btnLike.innerText = `❤️ Likes (${data.likes || 0})`;
-                btnLike.disabled = true;
+                btnLike.innerText = `❤️ Likes (${data.likes || 0})`; btnLike.disabled = true;
             } else {
-                camIcon.style.display = 'none'; // Hide camera icon
-                clickBox.style.pointerEvents = 'none'; // Not clickable
+                camIcon.style.display = 'none'; clickBox.style.pointerEvents = 'none'; 
                 btnAdd.style.display = 'block';
-                btnLike.innerText = `❤️ Like Profile (${data.likes || 0})`;
-                btnLike.disabled = false;
-                
-                if(currentUser.friends && currentUser.friends[currentProfileView]) {
-                    btnAdd.innerText = "✅ Friends"; btnAdd.disabled = true;
-                } else {
-                    btnAdd.innerText = "➕ Add Friend"; btnAdd.disabled = false;
-                }
+                btnLike.innerText = `❤️ Like Profile (${data.likes || 0})`; btnLike.disabled = false;
+                if(currentUser.friends && currentUser.friends[currentProfileView]) { btnAdd.innerText = "✅ Friends"; btnAdd.disabled = true; } 
+                else { btnAdd.innerText = "➕ Add Friend"; btnAdd.disabled = false; }
             }
         }
 
@@ -618,15 +659,12 @@
 
         window.likeUserProfile = async () => {
             if(currentProfileView === currentUser.uid) return;
-            
-            // Check if already liked
             const likedSnap = await get(ref(db, `users/${currentProfileView}/likedBy/${currentUser.uid}`));
             if(likedSnap.exists()) return showToast("You already liked this profile!");
 
             await update(ref(db, `users/${currentProfileView}`), { likes: increment(1) });
             await set(ref(db, `users/${currentProfileView}/likedBy/${currentUser.uid}`), true);
             
-            // Update UI instantly
             let currLikes = parseInt(document.getElementById('profLikesCount').innerText);
             document.getElementById('profLikesCount').innerText = currLikes + 1;
             document.getElementById('btnLikeProfile').innerText = `❤️ Liked (${currLikes + 1})`;
@@ -635,7 +673,7 @@
         }
 
         // ==========================================
-        // FRIENDS & LEADERBOARD (CLICK TO VIEW PROFILE)
+        // FRIENDS & LEADERBOARD
         // ==========================================
         window.sendFriendRequest = async () => {
             if(!currentProfileView) return;
@@ -649,9 +687,9 @@
         window.fetchFriendsList = async () => {
             document.getElementById('listTitle').innerText = "MY FRIENDS";
             const container = document.getElementById('listContainer');
-            container.innerHTML = '<div style="text-align:center;">Loading...</div>'; showScreen('list');
+            container.innerHTML = 'Loading...'; showScreen('list');
             const snap = await get(ref(db, `users/${currentUser.uid}/friends`));
-            if(!snap.exists()) { container.innerHTML = '<p>No friends yet. Search 5-Digit UID to add!</p>'; return; }
+            if(!snap.exists()) { container.innerHTML = '<p>No friends yet. Search UID to add!</p>'; return; }
             
             container.innerHTML = '';
             for(let fUid of Object.keys(snap.val())) {
@@ -696,101 +734,6 @@
         }
 
         // ==========================================
-        // UNLIMITED PLAYERS: WORLD BOSS RAID
-        // ==========================================
-        const BOSS_MAX_HP = 1000000;
-
-        window.enterBossRaid = async () => {
-            showScreen('boss');
-            myTotalDamage = 0;
-            
-            // Check if boss exists, if not create
-            const bossSnap = await get(ref(db, 'world_boss'));
-            if(!bossSnap.exists() || bossSnap.val().hp <= 0) {
-                await set(ref(db, 'world_boss'), { hp: BOSS_MAX_HP, maxHp: BOSS_MAX_HP, players: {} });
-            }
-            
-            // Listen to Live Raid
-            if(bossListenerUnsubscribe) return; // Prevent double triggers
-            bossListenerUnsubscribe = onValue(ref(db, 'world_boss'), (snapshot) => {
-                const data = snapshot.val();
-                if(!data) return;
-                
-                // If boss dies
-                if(data.hp <= 0) {
-                    showToast("🐲 BOSS DEFEATED! NEW BOSS SPAWNING...");
-                    if(data.players && data.players[currentUser.uid]) {
-                        // Save total damage to user profile
-                        let sessionDmg = data.players[currentUser.uid].dmg;
-                        update(ref(db, `users/${currentUser.uid}`), { bossDmg: increment(sessionDmg) });
-                        currentUser.bossDmg = (currentUser.bossDmg || 0) + sessionDmg;
-                    }
-                    setTimeout(() => {
-                        set(ref(db, 'world_boss'), { hp: BOSS_MAX_HP, maxHp: BOSS_MAX_HP, players: {} });
-                    }, 3000);
-                    return;
-                }
-
-                // Update HP Bar
-                document.getElementById('bossHpText').innerText = `${Math.max(0, data.hp)} / ${data.maxHp}`;
-                let hpPercent = Math.max(0, (data.hp / data.maxHp) * 100);
-                document.getElementById('bossHpFill').style.width = hpPercent + '%';
-
-                // Update Live DMG Leaderboard
-                if(data.players) {
-                    const lbBox = document.getElementById('bossLeaderboard');
-                    let pArray = [];
-                    Object.keys(data.players).forEach(uid => pArray.push({uid, ...data.players[uid]}));
-                    pArray.sort((a,b) => b.dmg - a.dmg); // Highest dmg first
-                    
-                    lbBox.innerHTML = '';
-                    pArray.slice(0, 10).forEach(p => { // Show top 10
-                        lbBox.innerHTML += `
-                            <div class="dmg-player">
-                                <span>${p.uid === currentUser.uid ? '⭐ ' : ''}${p.name}</span>
-                                <span style="color:var(--neon-gold); font-weight:bold;">⚔️ ${p.dmg}</span>
-                            </div>`;
-                    });
-                }
-            });
-        }
-
-        window.attackBoss = () => {
-            // Visual Effect
-            const arena = document.getElementById('bossArena');
-            const dmgText = document.createElement('div');
-            const dmgAmt = Math.floor(Math.random() * 50) + 10; // Random dmg between 10 and 60
-            
-            dmgText.innerText = `-${dmgAmt}`;
-            dmgText.className = 'damage-number';
-            dmgText.style.left = (50 + (Math.random() * 20 - 10)) + '%';
-            dmgText.style.top = '50%';
-            arena.appendChild(dmgText);
-            setTimeout(() => dmgText.remove(), 1000); // Remove after animation
-            
-            // Jiggle Boss
-            document.getElementById('bossImage').style.transform = 'scale(0.9) rotate(5deg)';
-            setTimeout(() => { document.getElementById('bossImage').style.transform = 'scale(1) rotate(0deg)'; }, 100);
-
-            // Send Damage to Firebase using increment for concurrency (1000s of players can click at once safely)
-            update(ref(db, 'world_boss'), { 
-                hp: increment(-dmgAmt)
-            });
-            update(ref(db, `world_boss/players/${currentUser.uid}`), {
-                name: currentUser.name,
-                dmg: increment(dmgAmt)
-            });
-        }
-
-        window.leaveBossRaid = () => {
-            // We keep the listener running in background or kill it. Let's kill it to save bandwidth.
-            // But Realtime DB unsub requires the reference. We will just leave it active for simplicity, 
-            // or we could use `off()`.
-            showScreen('dashboard');
-        }
-
-
-        // ==========================================
         // GLOBAL CHAT (24 HOURS AUTO-DELETE)
         // ==========================================
         let chatListener = null;
@@ -804,15 +747,13 @@
                 chatBox.innerHTML = '';
                 const data = snapshot.val();
                 if(!data) return;
-                
                 const now = Date.now();
                 const oneDay = 24 * 60 * 60 * 1000;
                 
                 Object.keys(data).forEach(key => {
                     const msg = data[key];
-                    if(now - msg.timestamp > oneDay) {
-                        remove(ref(db, 'global_chat/' + key));
-                    } else {
+                    if(now - msg.timestamp > oneDay) { remove(ref(db, 'global_chat/' + key)); } 
+                    else {
                         const isMe = msg.uid === currentUser.uid;
                         chatBox.innerHTML += `
                             <div class="chat-msg ${isMe ? 'me' : ''}">
@@ -829,37 +770,35 @@
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             if(!text) return;
-            
             input.value = '';
-            const newMsgRef = push(ref(db, 'global_chat'));
-            await set(newMsgRef, {
-                uid: currentUser.uid, name: currentUser.name, text: text, timestamp: Date.now()
-            });
+            await set(push(ref(db, 'global_chat')), { uid: currentUser.uid, name: currentUser.name, text: text, timestamp: Date.now() });
         }
 
         // ==========================================
-        // OX MULTIPLAYER ROOM CREATION & INVITES
+        // MULTIPLAYER ROOM CREATION & INVITES
         // ==========================================
-        window.openRoundModal = () => { document.getElementById('roundModal').style.display = 'flex'; }
+        window.openRoundModalOX = () => { document.getElementById('roundModalOX').style.display = 'flex'; }
         function generateRoomID() { return Math.random().toString(36).substring(2, 7).toUpperCase(); }
 
-        window.confirmCreateRoom = async () => {
+        window.confirmCreateRoom = async (mode) => {
             closeModals();
-            maxRounds = parseInt(document.getElementById('roundSelectInput').value);
-            winsNeeded = Math.floor(maxRounds / 2) + 1;
+            currentRoomId = generateRoomID(); isHost = true; isBotMatch = false; roomMode = mode;
+            let roomData = { hostUid: currentUser.uid, status: 'waiting', mode: mode, players: { [currentUser.uid]: { name: currentUser.name, avatar: currentUser.avatar, score: 0, elim: false } } };
             
-            currentRoomId = generateRoomID(); isHost = true; isBotMatch = false;
-            const roomRef = ref(db, 'rooms/' + currentRoomId);
-            await set(roomRef, {
-                hostUid: currentUser.uid, status: 'waiting', maxRounds: maxRounds, winsNeeded: winsNeeded,
-                players: { [currentUser.uid]: { name: currentUser.name, avatar: currentUser.avatar, score: 0 } }
-            });
-            onDisconnect(roomRef).remove();
+            if(mode === 'OX') {
+                maxRounds = parseInt(document.getElementById('roundSelectInput').value);
+                winsNeeded = Math.floor(maxRounds / 2) + 1;
+                roomData.maxRounds = maxRounds; roomData.winsNeeded = winsNeeded;
+                document.getElementById('waitRoomSettings').innerText = `OX Rounds: ${maxRounds} (Win ${winsNeeded})`;
+            } else if (mode === 'RLGL') {
+                document.getElementById('waitRoomSettings').innerText = `Red Light, Green Light (Survival Mode)`;
+            }
+            
+            await set(ref(db, 'rooms/' + currentRoomId), roomData);
+            onDisconnect(ref(db, 'rooms/' + currentRoomId)).remove();
             
             document.getElementById('waitRoomIdText').innerText = currentRoomId;
-            document.getElementById('waitRoomSettings').innerText = `Rounds: ${maxRounds} (First to ${winsNeeded} Wins)`;
-            const shareUrl = `${window.location.origin}${window.location.pathname}?room=${currentRoomId}`;
-            document.getElementById('shareLinkURL').innerText = shareUrl;
+            document.getElementById('shareLinkURL').innerText = `${window.location.origin}${window.location.pathname}?room=${currentRoomId}`;
             document.getElementById('btnInviteFriendModal').style.display = 'inline-block';
             
             showScreen('waiting'); listenToRoom();
@@ -869,34 +808,21 @@
 
         window.openInviteFriendModal = async () => {
             const container = document.getElementById('inviteFriendsListContainer');
-            container.innerHTML = 'Loading...';
-            document.getElementById('inviteFriendModal').style.display = 'flex';
-            
-            if(!currentUser.friends || Object.keys(currentUser.friends).length === 0) {
-                container.innerHTML = "No friends added. Search users to add friends!"; return;
-            }
+            container.innerHTML = 'Loading...'; document.getElementById('inviteFriendModal').style.display = 'flex';
+            if(!currentUser.friends || Object.keys(currentUser.friends).length === 0) { container.innerHTML = "No friends added."; return; }
             container.innerHTML = '';
             for(let fUid of Object.keys(currentUser.friends)) {
                 const snap = await get(ref(db, 'users/' + fUid));
                 if(snap.exists()) {
                     container.innerHTML += `
                         <div class="list-item" style="padding: 10px;">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <img src="${snap.val().avatar}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
-                                <span style="font-weight:bold;">${snap.val().name}</span>
-                            </div>
+                            <div style="display:flex; align-items:center; gap:10px;"><img src="${snap.val().avatar}" style="width:30px; height:30px; border-radius:50%;"><span style="font-weight:bold;">${snap.val().name}</span></div>
                             <button class="btn btn-gold" style="width:auto; padding:5px 10px; margin:0; font-size:0.9rem;" onclick="sendInviteToUser('${fUid}')">INVITE</button>
                         </div>`;
                 }
             }
         }
-
-        window.sendInviteToUser = async (friendUid) => {
-            await set(ref(db, `users/${friendUid}/invites/${currentRoomId}`), {
-                senderName: currentUser.name, roomId: currentRoomId, timestamp: Date.now()
-            });
-            showToast("Invite Sent!"); closeModals();
-        }
+        window.sendInviteToUser = async (friendUid) => { await set(ref(db, `users/${friendUid}/invites/${currentRoomId}`), { senderName: currentUser.name, roomId: currentRoomId, timestamp: Date.now() }); showToast("Invite Sent!"); closeModals(); }
 
         function listenForFriendInvites() {
             onValue(ref(db, `users/${currentUser.uid}/invites`), (snapshot) => {
@@ -905,9 +831,8 @@
                     const latestKey = Object.keys(invites)[Object.keys(invites).length - 1];
                     const inv = invites[latestKey];
                     if(Date.now() - inv.timestamp > 10 * 60 * 1000) { remove(ref(db, `users/${currentUser.uid}/invites/${latestKey}`)); return; }
-                    
                     pendingInviteRoom = inv.roomId;
-                    document.getElementById('invitePopupMsg').innerText = `${inv.senderName} invited you to play!`;
+                    document.getElementById('invitePopupMsg').innerText = `${inv.senderName} invited you!`;
                     document.getElementById('invitePopup').style.display = 'block';
                     setTimeout(() => { closeInvitePopup(); }, 10000);
                 }
@@ -917,30 +842,23 @@
         window.acceptInvite = () => { if(pendingInviteRoom) { joinRoomDatabase(pendingInviteRoom); closeInvitePopup(); } }
         window.closeInvitePopup = () => { document.getElementById('invitePopup').style.display = 'none'; if(pendingInviteRoom) { remove(ref(db, `users/${currentUser.uid}/invites/${pendingInviteRoom}`)); pendingInviteRoom = null;} }
 
-        // Join Room Handling
-        window.joinRoomBtn = () => {
-            const rId = document.getElementById('joinRoomId').value.trim().toUpperCase();
-            if(rId.length === 5) joinRoomDatabase(rId);
-        }
-        function checkUrlForInvite() {
-            const rId = new URLSearchParams(window.location.search).get('room');
-            if (rId && rId.length === 5) {
-                window.history.pushState({}, document.title, window.location.pathname);
-                joinRoomDatabase(rId.toUpperCase());
-            }
-        }
+        // Join Room
+        window.joinRoomBtn = () => { const rId = document.getElementById('joinRoomId').value.trim().toUpperCase(); if(rId.length === 5) joinRoomDatabase(rId); }
+        function checkUrlForInvite() { const rId = new URLSearchParams(window.location.search).get('room'); if (rId && rId.length === 5) { window.history.pushState({}, document.title, window.location.pathname); joinRoomDatabase(rId.toUpperCase()); } }
+        
         async function joinRoomDatabase(rId) {
             const snap = await get(ref(db, 'rooms/' + rId));
             if(snap.exists()) {
                 const data = snap.val();
                 if(data.status !== 'waiting') return showToast("Match already started!");
-                currentRoomId = rId; isHost = false; isBotMatch = false;
-                maxRounds = data.maxRounds; winsNeeded = data.winsNeeded;
+                currentRoomId = rId; isHost = false; isBotMatch = false; roomMode = data.mode;
                 
-                await update(ref(db, `rooms/${rId}/players/${currentUser.uid}`), { name: currentUser.name, avatar: currentUser.avatar, score: 0 });
+                if(roomMode === 'OX') { maxRounds = data.maxRounds; winsNeeded = data.winsNeeded; document.getElementById('waitRoomSettings').innerText = `OX Rounds: ${maxRounds}`; }
+                else if(roomMode === 'RLGL') { document.getElementById('waitRoomSettings').innerText = `Mode: Red Light, Green Light`; }
+                
+                await update(ref(db, `rooms/${rId}/players/${currentUser.uid}`), { name: currentUser.name, avatar: currentUser.avatar, score: 0, elim: false });
                 
                 document.getElementById('waitRoomIdText').innerText = rId;
-                document.getElementById('waitRoomSettings').innerText = `Rounds: ${maxRounds} (First to ${winsNeeded} Wins)`;
                 document.getElementById('shareLinkURL').innerText = "Only host can invite.";
                 document.getElementById('btnInviteFriendModal').style.display = 'none';
                 showScreen('waiting'); listenToRoom();
@@ -950,11 +868,12 @@
         window.leaveRoom = async () => {
             if(isHost) await remove(ref(db, 'rooms/' + currentRoomId));
             else if (currentRoomId) await remove(ref(db, `rooms/${currentRoomId}/players/${currentUser.uid}`));
-            currentRoomId = null; isHost = false; showScreen('dashboard');
+            currentRoomId = null; isHost = false; gameActive = false; showScreen('dashboard');
+            clearTimeout(rlglTimer);
         }
 
         // ==========================================
-        // OX GAME LOGIC & SYNC
+        // SHARED ROOM LISTENER (Routing to Games)
         // ==========================================
         let roomListenerUnsubscribe = null;
         function listenToRoom() {
@@ -966,34 +885,21 @@
                     const listObj = document.getElementById('waitingPlayersList');
                     listObj.innerHTML = ''; let count = 0;
                     Object.keys(data.players).forEach(uid => { count++; listObj.innerHTML += `<p style="margin:5px 0; font-size:1.2rem; border-bottom:1px solid #333; padding-bottom:5px;">${uid === data.hostUid ? "👑" : "⚔️"} ${data.players[uid].name}</p>`; });
-                    if (isHost) {
-                        document.getElementById('waitingTextHost').style.display = 'none';
-                        document.getElementById('btnStartGame').style.display = count >= 2 ? 'block' : 'none';
+                    if (isHost) { document.getElementById('waitingTextHost').style.display = 'none'; document.getElementById('btnStartGame').style.display = count >= (roomMode==='OX'?2:1) ? 'block' : 'none'; }
+                }
+                
+                if (data.status === 'playing') {
+                    if(!gameActive) {
+                        if(roomMode === 'OX') initMultiplayerGameOX(data);
+                        else if(roomMode === 'RLGL') initRLGLGame(data);
+                    }
+                    if(gameActive) {
+                        if(roomMode === 'OX') syncOXGame(data);
+                        else if(roomMode === 'RLGL') syncRLGLGame(data);
                     }
                 }
-                
-                if (data.status === 'playing' && !gameActive) initMultiplayerGame(data);
-                
-                if (data.status === 'playing' && gameActive) {
-                    boardState = data.board || ["", "", "", "", "", "", "", "", ""];
-                    currentTurn = data.turn;
-                    currentRoundNumber = data.round || 1;
-                    renderBoard();
-                    
-                    let oppUid = Object.keys(data.players).find(u => u !== currentUser.uid);
-                    myScore = data.players[currentUser.uid].score || 0;
-                    oppScore = oppUid ? (data.players[oppUid].score || 0) : 0;
-                    
-                    document.getElementById('gScore1').innerText = myScore;
-                    document.getElementById('gScore2').innerText = oppScore;
-                    document.getElementById('gameStatusDisplay').innerText = `Round ${currentRoundNumber} / ${maxRounds}`;
-                    document.getElementById('turnIndicator').innerText = currentTurn === mySymbol ? "YOUR TURN!" : "OPPONENT'S TURN";
-                    document.getElementById('turnIndicator').style.color = currentTurn === mySymbol ? "var(--neon-green)" : "var(--neon-pink)";
 
-                    if(isHost) checkWinCondition(); 
-                }
-
-                if (data.status === 'finished' && document.getElementById('screen-game').classList.contains('active-screen')) {
+                if (data.status === 'finished' && document.querySelector('.active-screen').id.includes('game')) {
                     handleMatchEndMultiplayer(data);
                 }
             });
@@ -1001,194 +907,217 @@
 
         window.startGameHost = async () => {
             if(!isHost) return;
-            await update(ref(db, 'rooms/' + currentRoomId), { status: 'playing', board: ["", "", "", "", "", "", "", "", ""], turn: 'X', round: 1 });
+            if(roomMode === 'OX') await update(ref(db, 'rooms/' + currentRoomId), { status: 'playing', board: ["", "", "", "", "", "", "", "", ""], turn: 'X', round: 1 });
+            else if(roomMode === 'RLGL') {
+                await update(ref(db, 'rooms/' + currentRoomId), { status: 'playing', light: 'green' });
+                hostRLGLLoop(); // Start doll logic
+            }
         }
 
-        function initMultiplayerGame(data) {
-            gameActive = true; myScore = 0; oppScore = 0;
-            mySymbol = isHost ? 'X' : 'O';
-            oppSymbol = isHost ? 'O' : 'X';
-            
-            showScreen('game');
-            document.getElementById('winTargetDisplay').innerText = winsNeeded;
-            
+        // ==========================================
+        // ❌⭕ OX GAME LOGIC
+        // ==========================================
+        let OX = { mySymbol:'X', oppSymbol:'O', turn:'X', round:1, myScore:0, oppScore:0, board:["", "", "", "", "", "", "", "", ""] };
+        const winCombos = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+        function initMultiplayerGameOX(data) {
+            gameActive = true; OX.myScore = 0; OX.oppScore = 0;
+            OX.mySymbol = isHost ? 'X' : 'O'; OX.oppSymbol = isHost ? 'O' : 'X';
+            showScreen('game-ox'); document.getElementById('winTargetDisplay').innerText = winsNeeded;
             let oppUid = Object.keys(data.players).find(u => u !== currentUser.uid);
-            document.getElementById('gName1').innerText = `You (${mySymbol})`;
-            document.getElementById('gName2').innerText = `${data.players[oppUid].name} (${oppSymbol})`;
+            document.getElementById('gName1').innerText = `You (${OX.mySymbol})`;
+            document.getElementById('gName2').innerText = `${oppUid ? data.players[oppUid].name : 'Opponent'} (${OX.oppSymbol})`;
+        }
+
+        function syncOXGame(data) {
+            OX.board = data.board || ["", "", "", "", "", "", "", "", ""]; OX.turn = data.turn; OX.round = data.round || 1;
+            for(let i=0; i<9; i++) {
+                const cell = document.getElementById('cell-'+i); cell.innerText = OX.board[i]; cell.className = 'ox-cell';
+                if(OX.board[i] === 'X') cell.classList.add('x'); if(OX.board[i] === 'O') cell.classList.add('o');
+            }
+            let oppUid = Object.keys(data.players).find(u => u !== currentUser.uid);
+            OX.myScore = data.players[currentUser.uid].score || 0; OX.oppScore = oppUid ? (data.players[oppUid].score || 0) : 0;
+            document.getElementById('gScore1').innerText = OX.myScore; document.getElementById('gScore2').innerText = OX.oppScore;
+            document.getElementById('gameStatusDisplay').innerText = `Round ${OX.round} / ${maxRounds}`;
+            document.getElementById('turnIndicator').innerText = OX.turn === OX.mySymbol ? "YOUR TURN!" : "OPPONENT'S TURN";
+            document.getElementById('turnIndicator').style.color = OX.turn === OX.mySymbol ? "var(--neon-green)" : "var(--neon-pink)";
+            if(isHost) checkWinConditionOX(); 
         }
 
         window.cellClick = async (index) => {
-            if(!gameActive) return;
-            if(boardState[index] !== "") return;
-            if(currentTurn !== mySymbol) return showToast("Not your turn!");
-
-            boardState[index] = mySymbol;
-            renderBoard(); 
-            
-            if(isBotMatch) {
-                currentTurn = oppSymbol;
-                let res = checkWinLocal();
-                if(res === 'continue') {
-                    document.getElementById('turnIndicator').innerText = "BOT IS THINKING...";
-                    setTimeout(botMakeMove, 800);
-                }
-            } else {
-                await update(ref(db, 'rooms/' + currentRoomId), { board: boardState, turn: oppSymbol });
-            }
+            if(!gameActive || roomMode !== 'OX' || OX.board[index] !== "" || OX.turn !== OX.mySymbol) return;
+            OX.board[index] = OX.mySymbol; // Predict local
+            if(isBotMatch) { OX.turn = OX.oppSymbol; if(checkWinLocalOX() === 'continue') { document.getElementById('turnIndicator').innerText = "BOT IS THINKING..."; setTimeout(botMakeMove, 800); } }
+            else { await update(ref(db, 'rooms/' + currentRoomId), { board: OX.board, turn: OX.oppSymbol }); }
         }
 
-        function renderBoard() {
-            for(let i=0; i<9; i++) {
-                const cell = document.getElementById('cell-'+i);
-                cell.innerText = boardState[i];
-                cell.className = 'ox-cell';
-                if(boardState[i] === 'X') cell.classList.add('x');
-                if(boardState[i] === 'O') cell.classList.add('o');
-            }
-        }
-
-        async function checkWinCondition() {
+        async function checkWinConditionOX() {
             let winnerSymbol = null;
-            for(let combo of winCombos) {
-                if(boardState[combo[0]] && boardState[combo[0]] === boardState[combo[1]] && boardState[combo[1]] === boardState[combo[2]]) {
-                    winnerSymbol = boardState[combo[0]]; break;
-                }
-            }
-
-            let isDraw = !boardState.includes("");
-
+            for(let combo of winCombos) { if(OX.board[combo[0]] && OX.board[combo[0]] === OX.board[combo[1]] && OX.board[combo[1]] === OX.board[combo[2]]) { winnerSymbol = OX.board[combo[0]]; break; } }
+            let isDraw = !OX.board.includes("");
             if(winnerSymbol || isDraw) {
                 let newScores = {};
-                if(winnerSymbol === mySymbol) { myScore++; newScores[currentUser.uid] = { score: myScore }; }
-                else if (winnerSymbol === oppSymbol) { 
-                    const oppUid = Object.keys((await get(ref(db, `rooms/${currentRoomId}/players`))).val()).find(u => u !== currentUser.uid);
-                    oppScore++; newScores[oppUid] = { score: oppScore };
-                }
-
-                for(let uid of Object.keys(newScores)) {
-                    await update(ref(db, `rooms/${currentRoomId}/players/${uid}`), newScores[uid]);
-                }
-
-                if(myScore >= winsNeeded) {
-                    await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: currentUser.uid });
-                } else if (oppScore >= winsNeeded) {
-                    const oppUid = Object.keys((await get(ref(db, `rooms/${currentRoomId}/players`))).val()).find(u => u !== currentUser.uid);
-                    await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: oppUid });
-                } else if (currentRoundNumber >= maxRounds) {
-                    let finalWinner = myScore > oppScore ? currentUser.uid : (oppScore > myScore ? "OPP_ID" : null); 
-                    await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: finalWinner });
-                } else {
-                    setTimeout(async () => {
-                        await update(ref(db, 'rooms/' + currentRoomId), { board: ["", "", "", "", "", "", "", "", ""], round: currentRoundNumber + 1, turn: (currentRoundNumber%2 === 0 ? 'X' : 'O') });
-                    }, 1500);
-                }
+                if(winnerSymbol === OX.mySymbol) { OX.myScore++; newScores[currentUser.uid] = { score: OX.myScore }; }
+                else if (winnerSymbol === OX.oppSymbol) { const oppUid = Object.keys((await get(ref(db, `rooms/${currentRoomId}/players`))).val()).find(u => u !== currentUser.uid); OX.oppScore++; newScores[oppUid] = { score: OX.oppScore }; }
+                for(let uid of Object.keys(newScores)) await update(ref(db, `rooms/${currentRoomId}/players/${uid}`), newScores[uid]);
+                
+                if(OX.myScore >= winsNeeded) await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: currentUser.uid });
+                else if (OX.oppScore >= winsNeeded) { const oppUid = Object.keys((await get(ref(db, `rooms/${currentRoomId}/players`))).val()).find(u => u !== currentUser.uid); await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: oppUid }); }
+                else if (OX.round >= maxRounds) { let finalWinner = OX.myScore > OX.oppScore ? currentUser.uid : (OX.oppScore > OX.myScore ? "OPP_ID" : null); await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: finalWinner }); }
+                else setTimeout(async () => { await update(ref(db, 'rooms/' + currentRoomId), { board: ["", "", "", "", "", "", "", "", ""], round: OX.round + 1, turn: (OX.round%2 === 0 ? 'X' : 'O') }); }, 1500);
             }
         }
 
         // ==========================================
-        // BOT LOGIC
+        // 🚦 RED LIGHT GREEN LIGHT LOGIC (SQUID GAME)
+        // ==========================================
+        let rlglTimer = null;
+        let rlglCurrentLight = 'green';
+        let amIEliminated = false;
+        
+        function initRLGLGame(data) {
+            gameActive = true; amIEliminated = false;
+            showScreen('game-rlgl');
+            document.getElementById('rlglMyProgress').style.width = '0%';
+            document.getElementById('rlglMyProgressText').innerText = '0';
+        }
+
+        function syncRLGLGame(data) {
+            // Update Light state UI
+            rlglCurrentLight = data.light;
+            const arena = document.getElementById('rlglArena');
+            const statusText = document.getElementById('rlglStatusText');
+            
+            if(rlglCurrentLight === 'green') {
+                arena.className = 'rlgl-arena green'; statusText.innerText = "RUN (TAP!)"; statusText.style.color = "var(--neon-green)";
+            } else {
+                arena.className = 'rlgl-arena red'; statusText.innerText = "STOP!"; statusText.style.color = "var(--neon-pink)";
+            }
+
+            // Sync players progress & elimination
+            const listObj = document.getElementById('rlglLeaderboard');
+            listObj.innerHTML = '';
+            
+            let anyoneWon = false;
+            let winnerUid = null;
+            let allEliminated = true;
+
+            Object.keys(data.players).forEach(uid => {
+                let p = data.players[uid];
+                let isElim = p.elim;
+                if(!isElim) allEliminated = false;
+                if(p.score >= 100) { anyoneWon = true; winnerUid = uid; }
+                
+                listObj.innerHTML += `
+                    <div class="rlgl-player ${isElim ? 'eliminated' : ''}">
+                        <span>${uid === currentUser.uid ? '⭐ ' : ''}${p.name} ${isElim ? '💀' : ''}</span>
+                        <span>${p.score}%</span>
+                    </div>`;
+                    
+                if(uid === currentUser.uid && isElim && !amIEliminated) {
+                    amIEliminated = true; showToast("ELIMINATED! You moved on Red."); playSound('shot');
+                }
+            });
+
+            // Host checks win/lose condition globally
+            if(isHost && gameActive) {
+                if(anyoneWon) { update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: winnerUid }); }
+                else if(allEliminated) { update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: null }); } // everyone died
+            }
+        }
+
+        window.rlglTap = () => {
+            if(!gameActive || amIEliminated) return;
+            
+            if(rlglCurrentLight === 'red') {
+                // Eliminate User immediately in DB
+                update(ref(db, `rooms/${currentRoomId}/players/${currentUser.uid}`), { elim: true });
+            } else {
+                // Progress
+                update(ref(db, `rooms/${currentRoomId}/players/${currentUser.uid}`), { score: increment(5) });
+                let curr = parseInt(document.getElementById('rlglMyProgressText').innerText) + 5;
+                if(curr > 100) curr = 100;
+                document.getElementById('rlglMyProgress').style.width = curr + '%';
+                document.getElementById('rlglMyProgressText').innerText = curr;
+            }
+        }
+
+        function hostRLGLLoop() {
+            if(!gameActive || !isHost) return;
+            
+            let isGreen = Math.random() > 0.4; // 60% chance green
+            let duration = Math.floor(Math.random() * 2000) + 1500; // 1.5s to 3.5s
+            
+            update(ref(db, 'rooms/' + currentRoomId), { light: isGreen ? 'green' : 'red' });
+            
+            rlglTimer = setTimeout(hostRLGLLoop, duration);
+        }
+
+        // ==========================================
+        // MATCH END GLOBALS
+        // ==========================================
+        async function handleMatchEndMultiplayer(data) {
+            gameActive = false; clearTimeout(rlglTimer);
+            
+            if (data.winnerUid === currentUser.uid) { update(ref(db, 'users/' + currentUser.uid), { wins: increment(1) }); playSound('win'); }
+            else { playSound('lose'); }
+
+            let oppName = data.winnerUid ? (data.players[data.winnerUid]?.name || "Someone") : "No one";
+            
+            showScreen('result');
+            const title = document.getElementById('resultTitle');
+            const display = document.getElementById('winnerNameDisplay');
+
+            if(data.winnerUid === currentUser.uid) {
+                title.innerText = "🏆 BOOYAH! 🏆"; title.style.color = "var(--neon-gold)"; display.innerText = "You Won The Match!";
+            } else if (!data.winnerUid) {
+                title.innerText = "GAME OVER"; title.style.color = "var(--text-muted)"; display.innerText = roomMode === 'RLGL' ? "Everyone was Eliminated!" : "It's a Tie!";
+            } else {
+                title.innerText = "DEFEAT"; title.style.color = "var(--neon-pink)"; display.innerText = `${oppName} Won!`;
+            }
+
+            if(isHost) await remove(ref(db, 'rooms/' + currentRoomId));
+            currentRoomId = null; isHost = false;
+        }
+
+        // ==========================================
+        // OX BOT LOGIC (Remains same)
         // ==========================================
         window.startBotMatch = () => {
-            isBotMatch = true; gameActive = true; myScore = 0; oppScore = 0;
-            currentRoundNumber = 1; maxRounds = 7; winsNeeded = 4;
-            mySymbol = 'X'; oppSymbol = 'O'; currentTurn = 'X';
-            boardState = ["", "", "", "", "", "", "", "", ""];
-            
-            showScreen('game');
-            document.getElementById('winTargetDisplay').innerText = winsNeeded;
-            document.getElementById('gName1').innerText = "You (X)";
-            document.getElementById('gName2').innerText = "Bot (O)";
-            document.getElementById('gameStatusDisplay').innerText = `Round 1 / 7`;
-            document.getElementById('turnIndicator').innerText = "YOUR TURN!";
-            renderBoard();
+            isBotMatch = true; gameActive = true; roomMode = 'OX'; OX.myScore = 0; OX.oppScore = 0; OX.round = 1; maxRounds = 7; winsNeeded = 4; OX.mySymbol = 'X'; OX.oppSymbol = 'O'; OX.turn = 'X'; OX.board = ["", "", "", "", "", "", "", "", ""];
+            showScreen('game-ox'); document.getElementById('winTargetDisplay').innerText = winsNeeded; document.getElementById('gName1').innerText = "You (X)"; document.getElementById('gName2').innerText = "Bot (O)"; document.getElementById('gameStatusDisplay').innerText = `Round 1 / 7`; document.getElementById('turnIndicator').innerText = "YOUR TURN!";
+            for(let i=0; i<9; i++) { const c = document.getElementById('cell-'+i); c.innerText=""; c.className="ox-cell"; }
         }
-
         function botMakeMove() {
             if(!gameActive) return;
-            let emptyCells = [];
-            for(let i=0; i<9; i++) if(boardState[i] === "") emptyCells.push(i);
-            
+            let emptyCells = []; for(let i=0; i<9; i++) if(OX.board[i] === "") emptyCells.push(i);
             if(emptyCells.length > 0) {
-                let move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                boardState[move] = oppSymbol;
-                renderBoard();
-                
-                let res = checkWinLocal();
-                if(res === 'continue') { currentTurn = mySymbol; document.getElementById('turnIndicator').innerText = "YOUR TURN!"; }
+                let move = emptyCells[Math.floor(Math.random() * emptyCells.length)]; OX.board[move] = OX.oppSymbol;
+                const cell = document.getElementById('cell-'+move); cell.innerText = OX.oppSymbol; cell.classList.add('o');
+                if(checkWinLocalOX() === 'continue') { OX.turn = OX.mySymbol; document.getElementById('turnIndicator').innerText = "YOUR TURN!"; }
             }
         }
-
-        function checkWinLocal() {
-            let winnerSymbol = null;
-            for(let combo of winCombos) {
-                if(boardState[combo[0]] && boardState[combo[0]] === boardState[combo[1]] && boardState[combo[1]] === boardState[combo[2]]) {
-                    winnerSymbol = boardState[combo[0]]; break;
-                }
-            }
-            let isDraw = !boardState.includes("");
-
+        function checkWinLocalOX() {
+            let winnerSymbol = null; for(let combo of winCombos) { if(OX.board[combo[0]] && OX.board[combo[0]] === OX.board[combo[1]] && OX.board[combo[1]] === OX.board[combo[2]]) { winnerSymbol = OX.board[combo[0]]; break; } }
+            let isDraw = !OX.board.includes("");
             if(winnerSymbol || isDraw) {
-                if(winnerSymbol === mySymbol) myScore++;
-                else if(winnerSymbol === oppSymbol) oppScore++;
-                
-                document.getElementById('gScore1').innerText = myScore;
-                document.getElementById('gScore2').innerText = oppScore;
-
-                if(myScore >= winsNeeded) { handleMatchEndBot(true); return 'end'; }
-                else if (oppScore >= winsNeeded) { handleMatchEndBot(false); return 'end'; }
-                else if (currentRoundNumber >= maxRounds) { handleMatchEndBot(myScore > oppScore); return 'end'; }
+                if(winnerSymbol === OX.mySymbol) OX.myScore++; else if(winnerSymbol === OX.oppSymbol) OX.oppScore++;
+                document.getElementById('gScore1').innerText = OX.myScore; document.getElementById('gScore2').innerText = OX.oppScore;
+                if(OX.myScore >= winsNeeded) { handleMatchEndBot(true); return 'end'; } else if (OX.oppScore >= winsNeeded) { handleMatchEndBot(false); return 'end'; } else if (OX.round >= maxRounds) { handleMatchEndBot(OX.myScore > OX.oppScore); return 'end'; }
                 else {
-                    currentRoundNumber++;
-                    setTimeout(() => {
-                        boardState = ["", "", "", "", "", "", "", "", ""];
-                        currentTurn = 'X';
-                        document.getElementById('gameStatusDisplay').innerText = `Round ${currentRoundNumber} / ${maxRounds}`;
-                        document.getElementById('turnIndicator').innerText = "YOUR TURN!";
-                        renderBoard();
-                    }, 1000);
+                    OX.round++; setTimeout(() => { OX.board = ["", "", "", "", "", "", "", "", ""]; OX.turn = 'X'; document.getElementById('gameStatusDisplay').innerText = `Round ${OX.round} / ${maxRounds}`; document.getElementById('turnIndicator').innerText = "YOUR TURN!"; for(let i=0; i<9; i++) { const c = document.getElementById('cell-'+i); c.innerText=""; c.className="ox-cell"; } }, 1000);
                     return 'reset';
                 }
             }
             return 'continue';
         }
-
         async function handleMatchEndBot(didIWin) {
-            gameActive = false;
-            update(ref(db, 'users/' + currentUser.uid), { wins: increment(didIWin ? 1 : 0) });
-            renderResultScreen(didIWin ? currentUser.uid : "BOT", myScore, oppScore, "Math Bot");
-        }
-
-        async function handleMatchEndMultiplayer(data) {
-            gameActive = false;
-            let oppUid = Object.keys(data.players).find(u => u !== currentUser.uid);
-            let oScore = oppUid ? data.players[oppUid].score : 0;
-            let oppName = oppUid ? data.players[oppUid].name : "Opponent";
-            
-            if (data.winnerUid === currentUser.uid) update(ref(db, 'users/' + currentUser.uid), { wins: increment(1) });
-
-            renderResultScreen(data.winnerUid, myScore, oScore, oppName);
-            if(isHost) await remove(ref(db, 'rooms/' + currentRoomId));
-            currentRoomId = null; isHost = false;
-        }
-
-        function renderResultScreen(winnerUid, mScore, oScore, oppName) {
-            showScreen('result');
-            document.getElementById('resMyScore').innerText = mScore;
-            document.getElementById('resOppScore').innerText = oScore;
-            
-            const title = document.getElementById('resultTitle');
-            const display = document.getElementById('winnerNameDisplay');
-
-            if(winnerUid === currentUser.uid) {
-                title.innerText = "🏆 BOOYAH! 🏆"; title.style.color = "var(--neon-gold)";
-                display.innerText = "You Won The Match!";
-            } else if (!winnerUid || mScore === oScore) {
-                title.innerText = "DRAW!"; title.style.color = "var(--text-muted)";
-                display.innerText = "It's a Tie!";
-            } else {
-                title.innerText = "DEFEAT"; title.style.color = "var(--neon-pink)";
-                display.innerText = `${oppName} Won!`;
-            }
+            gameActive = false; update(ref(db, 'users/' + currentUser.uid), { wins: increment(didIWin ? 1 : 0) });
+            if(didIWin) playSound('win'); else playSound('lose');
+            showScreen('result'); document.getElementById('resMyScore').innerText = OX.myScore; document.getElementById('resOppScore').innerText = OX.oppScore;
+            const title = document.getElementById('resultTitle'); const display = document.getElementById('winnerNameDisplay');
+            if(didIWin) { title.innerText = "🏆 BOOYAH! 🏆"; title.style.color = "var(--neon-gold)"; display.innerText = "You Won!"; } 
+            else { title.innerText = "DEFEAT"; title.style.color = "var(--neon-pink)"; display.innerText = `Bot Won!`; }
         }
     </script>
 </body>
