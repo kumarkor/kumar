@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Battle Pro | Free Fire Style</title>
+    <title>OX Battle Pro | Free Fire Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         /* =========================================================
@@ -18,7 +18,6 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: var(--font-game); }
-
         body { background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; overflow-x: hidden; }
 
         /* Screen Management */
@@ -35,14 +34,13 @@
         .nav-info p { margin: 0; font-size: 0.9rem; color: var(--neon-gold); font-weight: bold;}
         .logout-btn { background: var(--neon-pink); color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
-        /* Cards & Containers */
+        /* Cards & Inputs */
         .card { background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); text-align: center; }
         h1, h2 { text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); color: var(--neon-blue); margin-bottom: 15px;}
+        input, select { width: 100%; padding: 15px; background: rgba(0,0,0,0.6); border: 2px solid var(--text-muted); border-radius: 8px; color: #fff; font-size: 1.2rem; outline: none; margin-bottom: 15px; text-align: center; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
         
-        /* Inputs & Buttons */
-        input { width: 100%; padding: 15px; background: rgba(0,0,0,0.6); border: 2px solid var(--text-muted); border-radius: 8px; color: #fff; font-size: 1.2rem; outline: none; margin-bottom: 15px; text-align: center; transition: 0.3s; }
-        input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
-        
+        /* Buttons */
         .btn { width: 100%; background: transparent; color: var(--neon-blue); border: 2px solid var(--neon-blue); padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; margin-bottom: 10px; }
         .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
         .btn-pink { border-color: var(--neon-pink); color: var(--neon-pink); }
@@ -54,68 +52,98 @@
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-        /* Lists (Leaderboard & Friends) */
-        .list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border-left: 4px solid var(--neon-blue); margin-bottom: 10px; }
-        .list-user-info { display: flex; align-items: center; gap: 15px; }
-        .list-avatar { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--neon-gold); }
-        .list-details h4 { margin: 0; font-size: 1.2rem; }
-        .list-details p { margin: 0; color: var(--text-muted); font-size: 0.9rem; }
-        .list-action-btn { padding: 8px 15px; font-size: 0.9rem; width: auto; margin: 0; }
-
-        /* Profile Viewer */
-        .profile-header { text-align: center; padding: 30px; border-bottom: 1px solid #333; }
+        /* Profile Viewer & Image Upload */
+        .profile-header { text-align: center; padding: 20px; border-bottom: 1px solid #333; position: relative;}
         .profile-large-img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--neon-pink); object-fit: cover; margin-bottom: 15px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-box { background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px dashed var(--neon-gold); }
-        .stat-box h3 { font-size: 2rem; color: var(--neon-gold); margin: 0; }
+        .upload-btn { background: #000; color: #fff; border: 1px dashed var(--neon-blue); padding: 5px 10px; cursor: pointer; font-size: 0.9rem; margin-top: 10px; border-radius: 5px;}
+        
+        /* Global Chat */
+        .chat-container { height: 400px; background: rgba(0,0,0,0.6); border: 1px solid var(--neon-blue); border-radius: 10px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .chat-msg { background: #1f2833; padding: 10px 15px; border-radius: 8px; text-align: left; max-width: 80%; border-left: 3px solid var(--neon-blue); }
+        .chat-msg.me { align-self: flex-end; border-left: none; border-right: 3px solid var(--neon-pink); background: #2c1a2e; }
+        .chat-name { font-size: 0.8rem; color: var(--neon-gold); font-weight: bold; margin-bottom: 3px; }
+        
+        /* Lists & Modals */
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border-left: 4px solid var(--neon-blue); margin-bottom: 10px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-box { background: var(--panel-bg); padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; border: 2px solid var(--neon-pink); text-align: center; }
 
-        /* Game Arena */
-        .arena-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #000; border-radius: 10px; border: 1px solid #333; margin-bottom: 20px; }
-        .vs-board { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .player-stat { text-align: center; width: 40%; }
-        .score-box { font-size: 2.5rem; font-weight: bold; background: #000; border-radius: 10px; padding: 10px; margin-top: 10px; border: 1px solid var(--text-muted); }
-        .vs-badge { font-size: 2rem; color: var(--neon-pink); font-weight: bold; animation: pulse 1s infinite; }
-        
-        /* Telegram Bot Style Math Question Box */
-        .question-box { background: #1a1a2e; border: 2px solid var(--neon-blue); padding: 30px 20px; border-radius: 15px; font-size: 1.8rem; text-align: left; margin-bottom: 30px; box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.1); }
-        .question-box .title { font-size: 1.2rem; color: var(--neon-pink); border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase;}
-        
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .opt-btn { background: #1f2833; color: #fff; border: 2px solid #333; padding: 20px; font-size: 1.3rem; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.2s;}
-        .opt-btn.correct { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 0 20px var(--neon-green); }
-        .opt-btn.wrong { background: var(--neon-pink); color: #fff; border-color: var(--neon-pink); box-shadow: 0 0 20px var(--neon-pink); }
+        /* OX GAME BOARD (TIC-TAC-TOE) */
+        .game-status { font-size: 1.5rem; text-align: center; color: var(--neon-gold); margin: 15px 0; font-weight: bold;}
+        .ox-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 350px; margin: 20px auto; }
+        .ox-cell { background: #0b0c10; border: 2px solid var(--neon-blue); height: 100px; display: flex; align-items: center; justify-content: center; font-size: 4rem; cursor: pointer; border-radius: 10px; color: #fff; font-weight: bold;}
+        .ox-cell:active { transform: scale(0.95); }
+        .ox-cell.x { color: var(--neon-pink); text-shadow: 0 0 20px var(--neon-pink); }
+        .ox-cell.o { color: var(--neon-green); text-shadow: 0 0 20px var(--neon-green); }
 
-        /* Notification Toast */
-        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--neon-blue); color: #000; padding: 15px 25px; border-radius: 8px; font-weight: bold; z-index: 9999; display: none; box-shadow: 0 0 20px var(--neon-blue); }
-        
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        /* Notifications */
+        #toast, #invitePopup { position: fixed; z-index: 9999; display: none; background: var(--neon-blue); color: #000; padding: 15px 25px; border-radius: 8px; font-weight: bold; text-align: center;}
+        #toast { top: 20px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 20px var(--neon-blue); }
+        #invitePopup { bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: var(--neon-pink); color: #fff; border: 2px solid #fff;}
     </style>
 </head>
 <body>
 
+    <!-- NOTIFICATIONS -->
     <div id="toast">Notification</div>
+    <div id="invitePopup">
+        <p id="invitePopupMsg">Player invited you!</p>
+        <div class="grid-2" style="margin-top: 10px;">
+            <button class="btn btn-green" style="padding: 5px;" onclick="acceptInvite()">ACCEPT</button>
+            <button class="btn" style="padding: 5px; color: #fff; border-color: #fff;" onclick="closeInvitePopup()">DECLINE</button>
+        </div>
+    </div>
+
+    <!-- MODAL: SELECT ROUNDS -->
+    <div class="modal-overlay" id="roundModal">
+        <div class="modal-box">
+            <h2>Select Rounds</h2>
+            <p style="color:var(--text-muted); margin-bottom: 15px;">Best of format (e.g. 7 Rounds = First to 4 Wins)</p>
+            <select id="roundSelectInput">
+                <option value="3">3 Rounds (Win 2)</option>
+                <option value="5">5 Rounds (Win 3)</option>
+                <option value="7" selected>7 Rounds (Win 4)</option>
+                <option value="9">9 Rounds (Win 5)</option>
+                <option value="11">11 Rounds (Win 6)</option>
+                <option value="13">13 Rounds (Win 7)</option>
+                <option value="15">15 Rounds (Win 8)</option>
+            </select>
+            <button class="btn btn-pink" onclick="confirmCreateRoom()">Create Room</button>
+            <button class="btn" style="color: #fff; border: none;" onclick="closeModals()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- MODAL: INVITE FRIENDS -->
+    <div class="modal-overlay" id="inviteFriendModal">
+        <div class="modal-box">
+            <h2>Invite Friends</h2>
+            <div id="inviteFriendsListContainer" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px; text-align: left;">
+                <!-- Friends will load here -->
+            </div>
+            <button class="btn btn-pink" onclick="closeModals()">Close</button>
+        </div>
+    </div>
 
     <!-- ==========================================
          SCREEN 1: AUTH (LOGIN & REGISTER)
     =========================================== -->
     <div id="screen-auth" class="screen active-screen" style="justify-content: center;">
         <div class="card" id="loginForm">
-            <h1>LOGIN</h1>
+            <h1 style="color: var(--neon-pink); font-size: 3rem;">OX BATTLE</h1>
             <p style="color: var(--text-muted); margin-bottom: 20px;">Enter your 5-Digit UID and Password</p>
             <input type="number" id="loginUid" placeholder="5-Digit User ID (e.g., 12345)">
             <input type="password" id="loginPass" placeholder="Password">
-            <button class="btn" onclick="loginUser()">Login</button>
+            <button class="btn btn-pink" onclick="loginUser()">LOGIN</button>
             <p style="margin-top: 15px; cursor: pointer; color: var(--neon-gold);" onclick="toggleAuth('register')">New User? Create Account Here</p>
         </div>
 
         <div class="card" id="registerForm" style="display: none;">
-            <h1 style="color: var(--neon-pink);">CREATE ACCOUNT</h1>
+            <h1 style="color: var(--neon-blue);">CREATE ACCOUNT</h1>
             <input type="text" id="regName" placeholder="Gamer Name (e.g. Pro_Kumar)">
             <input type="number" id="regUid" placeholder="Create 5-Digit UID (e.g. 84521)">
             <input type="password" id="regPass" placeholder="Create Password">
-            <input type="text" id="regAvatar" placeholder="Profile Pic URL (Optional)">
-            <button class="btn btn-pink" onclick="registerUser()">Register & Login</button>
-            <p style="margin-top: 15px; cursor: pointer; color: var(--neon-blue);" onclick="toggleAuth('login')">Already have an account? Login</p>
+            <button class="btn btn-blue" onclick="registerUser()">REGISTER & LOGIN</button>
+            <p style="margin-top: 15px; cursor: pointer; color: var(--neon-pink);" onclick="toggleAuth('login')">Already have an account? Login</p>
         </div>
     </div>
 
@@ -124,8 +152,8 @@
     =========================================== -->
     <div id="screen-dashboard" class="screen">
         <div class="top-nav">
-            <div class="nav-left">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" id="myAvatar" class="nav-profile-pic" onclick="showScreen('profile-edit')">
+            <div class="nav-left" style="cursor: pointer;" onclick="showScreen('profile-edit')">
+                <img src="" id="myAvatar" class="nav-profile-pic">
                 <div class="nav-info">
                     <h3 id="myName">Loading...</h3>
                     <p>UID: <span id="myUid">00000</span></p>
@@ -135,10 +163,9 @@
         </div>
 
         <div class="card" style="margin-top: 20px;">
-            <h2>🎮 Game Modes</h2>
+            <h2>🎮 OX Game Modes</h2>
             <button class="btn btn-pink" onclick="startBotMatch()">🤖 Play VS Bot</button>
-            <button class="btn" onclick="createMultiplayerRoom()">⚔️ Create 1v1 Room</button>
-            
+            <button class="btn" onclick="openRoundModal()">⚔️ Create Custom Room</button>
             <div style="border-top: 1px dashed #333; margin: 20px 0; padding-top: 20px;">
                 <input type="text" id="joinRoomId" placeholder="Enter Room ID to Join">
                 <button class="btn btn-green" onclick="joinRoomBtn()">Join Room</button>
@@ -146,25 +173,42 @@
         </div>
 
         <div class="grid-2">
-            <div class="card" style="cursor: pointer;" onclick="fetchFriendsList()">
-                <h1 style="font-size: 2rem;">👥</h1>
-                <h3>Friends</h3>
+            <div class="card" style="cursor: pointer; padding: 15px;" onclick="fetchFriendsList()">
+                <h1 style="font-size: 2rem;">👥</h1><h3>Friends</h3>
             </div>
-            <div class="card" style="cursor: pointer;" onclick="fetchLeaderboard()">
-                <h1 style="font-size: 2rem;">🏆</h1>
-                <h3>Leaderboard</h3>
+            <div class="card" style="cursor: pointer; padding: 15px;" onclick="fetchLeaderboard()">
+                <h1 style="font-size: 2rem;">🏆</h1><h3>Leaderboard</h3>
             </div>
         </div>
+
+        <button class="btn btn-gold" onclick="openGlobalChat()">🌍 GLOBAL CHAT</button>
 
         <div class="card">
             <h2>🔍 Search User</h2>
             <input type="number" id="searchUidInput" placeholder="Enter 5-Digit UID">
-            <button class="btn btn-gold" onclick="searchUser()">Search Profile</button>
+            <button class="btn btn-pink" onclick="searchUser()">Search Profile</button>
         </div>
     </div>
 
     <!-- ==========================================
-         SCREEN 3: PROFILE VIEWER
+         SCREEN 3: GLOBAL CHAT
+    =========================================== -->
+    <div id="screen-chat" class="screen">
+        <div class="top-nav">
+            <button class="back-btn" onclick="showScreen('dashboard')">🔙</button>
+            <h3 style="color: var(--neon-gold);">WORLD CHAT</h3>
+            <div style="width: 30px;"></div>
+        </div>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Messages auto-delete after 24 hours.</p>
+        <div class="chat-container" id="chatBox"></div>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="chatInput" placeholder="Type message..." style="margin: 0;">
+            <button class="btn btn-gold" style="width: auto; margin: 0; padding: 0 20px;" onclick="sendGlobalMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SCREEN 4: PROFILE VIEWER / EDIT
     =========================================== -->
     <div id="screen-profile" class="screen">
         <div class="top-nav">
@@ -172,21 +216,25 @@
             <h3 style="color: var(--neon-blue);">PLAYER PROFILE</h3>
             <div style="width: 50px;"></div>
         </div>
-
         <div class="card" style="margin-top: 20px;">
             <div class="profile-header">
                 <img src="" id="profAvatar" class="profile-large-img">
-                <h1 id="profName">Player Name</h1>
+                <br>
+                <!-- File Input for changing photo, only visible if it's my profile -->
+                <input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                <label for="avatarUpload" class="upload-btn" id="btnChangePhoto" style="display: none;">📷 Change Photo</label>
+                
+                <h1 id="profName" style="margin-top: 15px;">Player Name</h1>
                 <p style="color: var(--neon-gold); font-size: 1.2rem;">UID: <span id="profUid">00000</span></p>
             </div>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <h3 id="profWins">0</h3>
-                    <p>Total Wins</p>
+            <div class="grid-2" style="margin-top: 20px;">
+                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px dashed var(--neon-gold);">
+                    <h3 id="profWins" style="font-size: 2rem; color: var(--neon-gold); margin:0;">0</h3>
+                    <p>Matches Won</p>
                 </div>
-                <div class="stat-box">
-                    <h3 id="profMatches">0</h3>
-                    <p>Matches</p>
+                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px dashed var(--neon-blue);">
+                    <h3 id="profMatches" style="font-size: 2rem; color: var(--neon-blue); margin:0;">0</h3>
+                    <p>Total Played</p>
                 </div>
             </div>
             <button class="btn btn-green" id="btnAddFriend" style="margin-top: 20px;" onclick="sendFriendRequest()">➕ Add Friend</button>
@@ -194,93 +242,92 @@
     </div>
 
     <!-- ==========================================
-         SCREEN 4: LEADERBOARD & FRIENDS LIST
+         SCREEN 5: LEADERBOARD & FRIENDS LIST
     =========================================== -->
     <div id="screen-list" class="screen">
         <div class="top-nav">
-            <button class="back-btn" onclick="showScreen('dashboard')">🔙 BACK</button>
+            <button class="back-btn" onclick="showScreen('dashboard')">🔙</button>
             <h3 id="listTitle" style="color: var(--neon-gold);">LIST</h3>
-            <div style="width: 50px;"></div>
+            <div style="width: 30px;"></div>
         </div>
-        <div class="card" style="margin-top: 20px; background: transparent; border: none; box-shadow: none;" id="listContainer">
-            <!-- Dynamically populated list items go here -->
-        </div>
+        <div class="card" style="margin-top: 20px; background: transparent; border: none; box-shadow: none;" id="listContainer"></div>
     </div>
 
     <!-- ==========================================
-         SCREEN 5: WAITING ROOM
+         SCREEN 6: WAITING ROOM (Free Fire Style)
     =========================================== -->
     <div id="screen-waiting" class="screen">
-        <div class="card" style="margin-top: 20vh;">
-            <h1 style="color: var(--neon-pink);">WAITING ROOM</h1>
-            <p>Room ID: <span id="waitRoomIdText" style="font-size: 1.5rem; color: var(--neon-blue); font-weight: bold;">XYZ12</span></p>
+        <div class="card" style="margin-top: 10vh; border-color: #333; padding: 40px 20px;">
+            <h1 style="color: var(--neon-pink); font-size: 2.5rem; letter-spacing: 3px;">WAITING ROOM</h1>
+            <p style="color: #fff; font-size: 1.2rem; margin: 15px 0;">Room ID: <span id="waitRoomIdText" style="color: var(--neon-blue); font-weight: bold; font-size: 1.5rem;">XYZ12</span></p>
+            <p style="color: var(--neon-gold); margin-bottom: 25px; font-weight: bold;" id="waitRoomSettings">Rounds: 7 (Win 4)</p>
             
-            <div style="margin: 30px 0;">
-                <p>Share this link to invite friend:</p>
-                <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px dashed var(--neon-gold); word-break: break-all; color: var(--neon-gold);" id="shareLinkURL">https://...</div>
-                <button class="btn" style="margin-top:10px;" onclick="copyShareLink()">📋 Copy Link</button>
-            </div>
+            <p style="color: #ccc; font-size: 0.9rem;">Share this link to invite friend:</p>
+            <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px dashed var(--neon-gold); word-break: break-all; color: var(--neon-gold); margin-bottom: 10px;" id="shareLinkURL">https://...</div>
             
-            <div id="waitingPlayersList" style="text-align: left; background: #000; padding: 15px; border-radius: 8px; margin-bottom: 20px;"></div>
+            <button class="btn" style="color: var(--neon-blue); border-color: var(--neon-blue);" onclick="copyShareLink()">📋 COPY LINK</button>
+            <button class="btn btn-gold" id="btnInviteFriendModal" style="display: none;" onclick="openInviteFriendModal()">➕ INVITE FRIEND</button>
             
-            <button class="btn btn-pink" id="btnStartGame" style="display: none;" onclick="startGameHost()">🔥 Start Match 🔥</button>
+            <div id="waitingPlayersList" style="text-align: left; background: #0b0c10; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #222;"></div>
+            
+            <button class="btn btn-pink" id="btnStartGame" style="display: none; font-size: 1.5rem; padding: 20px;" onclick="startGameHost()">🔥 START MATCH 🔥</button>
             <p id="waitingTextHost" style="color:var(--text-muted);">Waiting for opponent to join...</p>
-            <button class="btn btn-danger" style="margin-top: 20px;" onclick="leaveRoom()">❌ Leave Room</button>
+            
+            <button class="btn" style="color: var(--neon-pink); border-color: var(--neon-pink); margin-top: 20px;" onclick="leaveRoom()">❌ LEAVE ROOM</button>
         </div>
     </div>
 
     <!-- ==========================================
-         SCREEN 6: GAME ARENA
+         SCREEN 7: GAME ARENA (TIC-TAC-TOE)
     =========================================== -->
     <div id="screen-game" class="screen">
-        <div class="arena-header">
-            <div style="color: var(--text-muted);">Match: <span id="gameModeDisplay" style="color:var(--neon-blue);font-weight:bold;">1v1</span></div>
-            <div style="font-size: 1.8rem; font-weight: bold; color: var(--neon-pink);">⏱ <span id="gameTimer">60</span>s</div>
+        <div class="card" style="padding: 15px; margin-bottom: 10px;">
+            <h2 id="gameStatusDisplay" style="color: var(--neon-gold); margin:0;">Round 1 / 7</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Target: <span id="winTargetDisplay">4</span> Wins</p>
         </div>
 
-        <div class="vs-board">
-            <div class="player-stat">
-                <img src="" id="gAvatar1" class="nav-profile-pic">
-                <h4 id="gName1" style="color: var(--neon-blue); margin-top:5px;">Player 1</h4>
-                <div class="score-box" id="gScore1">0</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="text-align: center; width: 40%;">
+                <h4 id="gName1" style="color: var(--neon-pink);">You (X)</h4>
+                <div style="font-size: 2.5rem; font-weight: bold; background: #000; border-radius: 10px; padding: 10px; border: 1px solid var(--neon-pink);" id="gScore1">0</div>
             </div>
-            <div class="vs-badge">VS</div>
-            <div class="player-stat">
-                <img src="" id="gAvatar2" class="nav-profile-pic">
-                <h4 id="gName2" style="color: var(--neon-gold); margin-top:5px;">Opponent</h4>
-                <div class="score-box" id="gScore2">0</div>
+            <div style="font-size: 2rem; color: #fff; font-weight: bold;">VS</div>
+            <div style="text-align: center; width: 40%;">
+                <h4 id="gName2" style="color: var(--neon-green);">Opponent (O)</h4>
+                <div style="font-size: 2.5rem; font-weight: bold; background: #000; border-radius: 10px; padding: 10px; border: 1px solid var(--neon-green);" id="gScore2">0</div>
             </div>
         </div>
 
-        <!-- Math Question Box based on Telegram Bot UI -->
-        <div class="question-box">
-            <div class="title" id="gameQuestionTitle">🎒 DISCOUNT DETECTIVE</div>
-            <div id="gameQuestionText">MRP: ₹400, Discount: 20%. Final Price? 🤔</div>
-        </div>
+        <div class="game-status" id="turnIndicator">X's Turn!</div>
 
-        <div class="options-grid">
-            <button class="opt-btn" onclick="checkAnswer(0)" id="opt0">-</button>
-            <button class="opt-btn" onclick="checkAnswer(1)" id="opt1">-</button>
-            <button class="opt-btn" onclick="checkAnswer(2)" id="opt2">-</button>
-            <button class="opt-btn" onclick="checkAnswer(3)" id="opt3">-</button>
+        <div class="ox-board" id="oxBoard">
+            <div class="ox-cell" onclick="cellClick(0)" id="cell-0"></div>
+            <div class="ox-cell" onclick="cellClick(1)" id="cell-1"></div>
+            <div class="ox-cell" onclick="cellClick(2)" id="cell-2"></div>
+            <div class="ox-cell" onclick="cellClick(3)" id="cell-3"></div>
+            <div class="ox-cell" onclick="cellClick(4)" id="cell-4"></div>
+            <div class="ox-cell" onclick="cellClick(5)" id="cell-5"></div>
+            <div class="ox-cell" onclick="cellClick(6)" id="cell-6"></div>
+            <div class="ox-cell" onclick="cellClick(7)" id="cell-7"></div>
+            <div class="ox-cell" onclick="cellClick(8)" id="cell-8"></div>
         </div>
     </div>
 
     <!-- ==========================================
-         SCREEN 7: RESULT
+         SCREEN 8: RESULT BOOYAH
     =========================================== -->
     <div id="screen-result" class="screen" style="justify-content: center;">
         <div class="card" style="border-color: var(--neon-gold);">
-            <h1 style="color: var(--neon-gold); font-size: 3.5rem; text-shadow: 0 0 20px var(--neon-gold);" id="resultTitle">BOOYAH!</h1>
+            <h1 style="color: var(--neon-gold); font-size: 4rem; text-shadow: 0 0 20px var(--neon-gold);" id="resultTitle">BOOYAH!</h1>
             <h2 id="winnerNameDisplay" style="margin: 20px 0; color: #fff;">Winner Name</h2>
             
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                <h3 style="color:var(--text-muted);">Scores</h3>
+                <h3 style="color:var(--text-muted);">Final Rounds Won</h3>
                 <p style="font-size: 1.5rem;">You: <span id="resMyScore" style="color:var(--neon-blue); font-weight:bold;">0</span></p>
                 <p style="font-size: 1.5rem;">Opponent: <span id="resOppScore" style="color:var(--neon-pink); font-weight:bold;">0</span></p>
             </div>
 
-            <button class="btn btn-green" onclick="showScreen('dashboard')">🏠 Return to Lobby</button>
+            <button class="btn btn-green" onclick="leaveRoom()">🏠 Return to Lobby</button>
         </div>
     </div>
 
@@ -289,9 +336,9 @@
     ========================================================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getDatabase, ref, set, get, onValue, update, remove, onDisconnect } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue, update, remove, onDisconnect, push } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
 
-        // Firebase Config (Provided by User)
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
             authDomain: "newkumarbot.firebaseapp.com",
@@ -305,19 +352,26 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // GLOBAL STATE
-        let currentUser = null; // Contains auth details from DB
+        // GLOBAL VARIABLES
+        let currentUser = null; 
         let currentRoomId = null;
         let isHost = false;
         let isBotMatch = false;
         let gameActive = false;
-        let matchTimer = null;
-        let timeLeft = 60;
-        let currentCorrectAnswer = null;
+        let currentProfileView = null; 
+        let pendingInviteRoom = null;
+
+        // OX GAME STATE
+        let maxRounds = 7;
+        let winsNeeded = 4;
+        let currentRoundNumber = 1;
         let myScore = 0;
-        let botScore = 0;
-        let botTimer = null;
-        let currentProfileView = null; // UID of user currently being viewed
+        let oppScore = 0;
+        let mySymbol = 'X';
+        let oppSymbol = 'O';
+        let currentTurn = 'X'; 
+        let boardState = ["", "", "", "", "", "", "", "", ""];
+        const winCombos = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
         // UTILITIES
         window.showToast = (msg) => {
@@ -333,46 +387,43 @@
             document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
             document.getElementById('registerForm').style.display = type === 'register' ? 'block' : 'none';
         }
+        window.closeModals = () => {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        }
 
         // ==========================================
-        // AUTHENTICATION SYSTEM
+        // AUTHENTICATION & INITIALIZATION
         // ==========================================
         window.onload = async () => {
-            const savedUid = localStorage.getItem('mathBattleUID');
+            const savedUid = localStorage.getItem('oxBattleUID');
             if (savedUid) {
                 const snap = await get(ref(db, 'users/' + savedUid));
                 if (snap.exists()) {
-                    currentUser = snap.val();
-                    currentUser.uid = savedUid;
-                    initDashboard();
-                    checkUrlForInvite();
-                } else {
-                    localStorage.removeItem('mathBattleUID');
-                    showScreen('auth');
-                }
-            } else {
-                showScreen('auth');
-            }
+                    currentUser = snap.val(); currentUser.uid = savedUid;
+                    initDashboard(); checkUrlForInvite(); listenForFriendInvites();
+                } else { localStorage.removeItem('oxBattleUID'); showScreen('auth'); }
+            } else { showScreen('auth'); }
         }
 
         window.registerUser = async () => {
             const name = document.getElementById('regName').value.trim();
             const uid = document.getElementById('regUid').value.trim();
             const pass = document.getElementById('regPass').value.trim();
-            let avatar = document.getElementById('regAvatar').value.trim();
             
             if(name.length < 3 || uid.length !== 5 || pass.length < 4) return showToast("Invalid inputs! UID must be 5 digits.");
-            if(!avatar) avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
-
-            const snap = await get(ref(db, 'users/' + uid));
-            if(snap.exists()) return showToast("UID already exists. Choose a different 5-digit number.");
-
-            const userData = { name, password: pass, avatar, wins: 0, matches: 0, friends: {} };
-            await set(ref(db, 'users/' + uid), userData);
             
+            const snap = await get(ref(db, 'users/' + uid));
+            if(snap.exists()) return showToast("UID already exists. Choose different 5 digits.");
+
+            // Default Avatar generated automatically
+            const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
+            const userData = { name, password: pass, avatar, wins: 0, matches: 0, friends: {} };
+            
+            await set(ref(db, 'users/' + uid), userData);
             currentUser = userData; currentUser.uid = uid;
-            localStorage.setItem('mathBattleUID', uid);
-            showToast("Account Created!"); initDashboard();
+            localStorage.setItem('oxBattleUID', uid);
+            
+            showToast("Account Created!"); initDashboard(); listenForFriendInvites();
         }
 
         window.loginUser = async () => {
@@ -387,15 +438,11 @@
             if(data.password !== pass) return showToast("Wrong Password!");
 
             currentUser = data; currentUser.uid = uid;
-            localStorage.setItem('mathBattleUID', uid);
-            showToast("Login Success!"); initDashboard(); checkUrlForInvite();
+            localStorage.setItem('oxBattleUID', uid);
+            showToast("Login Success!"); initDashboard(); checkUrlForInvite(); listenForFriendInvites();
         }
 
-        window.logoutUser = () => {
-            localStorage.removeItem('mathBattleUID');
-            currentUser = null;
-            window.location.reload();
-        }
+        window.logoutUser = () => { localStorage.removeItem('oxBattleUID'); window.location.reload(); }
 
         function initDashboard() {
             document.getElementById('myName').innerText = currentUser.name;
@@ -405,81 +452,99 @@
         }
 
         // ==========================================
-        // PROFILE & FRIENDS SYSTEM
+        // PROFILE & IMAGE UPLOAD (BASE64)
         // ==========================================
+        window.showScreen = (id) => {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            document.getElementById('screen-' + id).classList.add('active-screen');
+            if (id === 'profile-edit') {
+                currentProfileView = currentUser.uid;
+                renderProfile(currentUser, true);
+            }
+        }
+
         window.searchUser = async () => {
             const searchUid = document.getElementById('searchUidInput').value.trim();
             if(searchUid.length !== 5) return showToast("Enter 5-digit UID.");
-            
             const snap = await get(ref(db, 'users/' + searchUid));
             if(!snap.exists()) return showToast("User not found!");
             
-            const data = snap.val();
             currentProfileView = searchUid;
-            
+            renderProfile(snap.val(), searchUid === currentUser.uid);
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            document.getElementById('screen-profile').classList.add('active-screen');
+        }
+
+        function renderProfile(data, isMe) {
             document.getElementById('profName').innerText = data.name;
-            document.getElementById('profUid').innerText = searchUid;
+            document.getElementById('profUid').innerText = currentProfileView;
             document.getElementById('profAvatar').src = data.avatar;
             document.getElementById('profWins').innerText = data.wins || 0;
             document.getElementById('profMatches').innerText = data.matches || 0;
             
-            const btnObj = document.getElementById('btnAddFriend');
-            if(searchUid === currentUser.uid) btnObj.style.display = 'none';
-            else {
-                btnObj.style.display = 'block';
-                // Check if already friends
-                if(currentUser.friends && currentUser.friends[searchUid]) {
-                    btnObj.innerText = "✅ Friends"; btnObj.disabled = true;
+            const btnChange = document.getElementById('btnChangePhoto');
+            const btnAdd = document.getElementById('btnAddFriend');
+            
+            if(isMe) {
+                btnChange.style.display = 'inline-block'; btnAdd.style.display = 'none';
+            } else {
+                btnChange.style.display = 'none'; btnAdd.style.display = 'block';
+                if(currentUser.friends && currentUser.friends[currentProfileView]) {
+                    btnAdd.innerText = "✅ Friends"; btnAdd.disabled = true;
                 } else {
-                    btnObj.innerText = "➕ Add Friend"; btnObj.disabled = false;
+                    btnAdd.innerText = "➕ Add Friend"; btnAdd.disabled = false;
                 }
             }
-            showScreen('profile');
         }
 
+        window.handleImageUpload = (event) => {
+            const file = event.target.files[0];
+            if(!file) return;
+            if(file.size > 2000000) return showToast("File too large. Please upload image under 2MB."); // Limit
+            
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const base64String = reader.result;
+                document.getElementById('profAvatar').src = base64String; // Update UI instantly
+                document.getElementById('myAvatar').src = base64String;
+                currentUser.avatar = base64String;
+                await update(ref(db, 'users/' + currentUser.uid), { avatar: base64String });
+                showToast("Profile Photo Updated!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ==========================================
+        // FRIENDS & LEADERBOARD
+        // ==========================================
         window.sendFriendRequest = async () => {
             if(!currentProfileView) return;
-            // Add directly for simplicity in this build (Direct Add)
             await update(ref(db, `users/${currentUser.uid}/friends`), { [currentProfileView]: true });
             await update(ref(db, `users/${currentProfileView}/friends`), { [currentUser.uid]: true });
-            
-            // Update local state
             if(!currentUser.friends) currentUser.friends = {};
             currentUser.friends[currentProfileView] = true;
-            
-            showToast("Friend Added Successfully!");
-            document.getElementById('btnAddFriend').innerText = "✅ Friends";
-            document.getElementById('btnAddFriend').disabled = true;
+            showToast("Friend Added!"); document.getElementById('btnAddFriend').innerText = "✅ Friends"; document.getElementById('btnAddFriend').disabled = true;
         }
 
         window.fetchFriendsList = async () => {
             document.getElementById('listTitle').innerText = "MY FRIENDS";
             const container = document.getElementById('listContainer');
-            container.innerHTML = '<div style="text-align:center;">Loading...</div>';
-            showScreen('list');
-
+            container.innerHTML = '<div style="text-align:center;">Loading...</div>'; showScreen('list');
             const snap = await get(ref(db, `users/${currentUser.uid}/friends`));
-            if(!snap.exists()) { container.innerHTML = '<p>No friends yet. Search users to add!</p>'; return; }
+            if(!snap.exists()) { container.innerHTML = '<p>No friends yet. Search 5-Digit UID to add!</p>'; return; }
             
-            const friendsObj = snap.val();
             container.innerHTML = '';
-            
-            for(let fUid of Object.keys(friendsObj)) {
+            for(let fUid of Object.keys(snap.val())) {
                 const fSnap = await get(ref(db, 'users/' + fUid));
                 if(fSnap.exists()) {
                     const fData = fSnap.val();
                     container.innerHTML += `
                         <div class="list-item">
-                            <div class="list-user-info">
-                                <img src="${fData.avatar}" class="list-avatar">
-                                <div class="list-details">
-                                    <h4>${fData.name}</h4>
-                                    <p>UID: ${fUid}</p>
-                                </div>
+                            <div style="display:flex; align-items:center; gap:15px;">
+                                <img src="${fData.avatar}" style="width:50px; height:50px; border-radius:50%;">
+                                <div><h4>${fData.name}</h4><p>UID: ${fUid}</p></div>
                             </div>
-                            <button class="btn btn-pink list-action-btn" onclick="inviteFriend('${fUid}')">⚔️ Challenge</button>
-                        </div>
-                    `;
+                        </div>`;
                 }
             }
         }
@@ -487,142 +552,172 @@
         window.fetchLeaderboard = async () => {
             document.getElementById('listTitle').innerText = "GLOBAL LEADERBOARD";
             const container = document.getElementById('listContainer');
-            container.innerHTML = '<div style="text-align:center;">Loading...</div>';
-            showScreen('list');
+            container.innerHTML = 'Loading...'; showScreen('list');
 
             const snap = await get(ref(db, 'users'));
             if(!snap.exists()) return;
-            
-            const usersObj = snap.val();
             let usersArray = [];
-            Object.keys(usersObj).forEach(k => {
-                usersArray.push({ uid: k, ...usersObj[k] });
-            });
-            
-            // Sort by wins
+            Object.keys(snap.val()).forEach(k => usersArray.push({ uid: k, ...snap.val()[k] }));
             usersArray.sort((a,b) => (b.wins || 0) - (a.wins || 0));
             
             container.innerHTML = '';
-            usersArray.slice(0, 10).forEach((u, index) => {
-                let rankT = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index+1}`;
+            usersArray.slice(0, 15).forEach((u, index) => {
+                let rank = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index+1}`;
                 container.innerHTML += `
                     <div class="list-item">
-                        <div class="list-user-info">
-                            <h2 style="margin:0; width: 40px; color:var(--neon-gold);">${rankT}</h2>
-                            <img src="${u.avatar}" class="list-avatar">
-                            <div class="list-details">
-                                <h4>${u.name}</h4>
-                                <p>UID: ${u.uid}</p>
-                            </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <h3 style="color:var(--neon-gold); width:30px;">${rank}</h3>
+                            <img src="${u.avatar}" style="width:40px; height:40px; border-radius:50%;">
+                            <div><h4>${u.name}</h4></div>
                         </div>
                         <h3 style="color:var(--neon-green); margin:0;">${u.wins || 0} Wins</h3>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
         // ==========================================
-        // GAME LOGIC: MATH QUESTION GENERATOR (Based on Telegram UI Images)[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span)
+        // GLOBAL CHAT (24 HOURS AUTO-DELETE)
         // ==========================================
-        function generateMathQuestion() {
-            const types = ['discount', 'sequence', 'missing', 'oddEven', 'profit'];
-            const type = types[Math.floor(Math.random() * types.length)];
-            let title = "", qText = "", ans = "", options = [];
-
-            if (type === 'discount') { //[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span)
-                title = "🛍️ DISCOUNT DETECTIVE";
-                const mrp = (Math.floor(Math.random() * 8) + 2) * 100; // 200 to 900
-                const disc = (Math.floor(Math.random() * 4) + 1) * 10; // 10, 20, 30, 40
-                ans = (mrp - (mrp * disc / 100)).toString();
-                qText = `MRP: ₹${mrp}, Discount: ${disc}%. Final Price? 🤔`;
-                options = [ans, (mrp - (disc*10)).toString(), (parseInt(ans)+50).toString(), (parseInt(ans)-50).toString()];
+        let chatListener = null;
+        window.openGlobalChat = () => {
+            showScreen('chat');
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = '';
             
-            } else if (type === 'sequence') { //[span_6](start_span)[span_6](end_span)
-                title = "🔢 GUESS THE NEXT NUMBER";
-                const step = Math.floor(Math.random() * 10) + 2;
-                const start = Math.floor(Math.random() * 20) + 1;
-                const seq = [start, start+step, start+(step*2)];
-                ans = (start+(step*3)).toString();
-                qText = `👉 ${seq[0]}, ${seq[1]}, ${seq[2]}, ❓\nFind the pattern! What comes next? 👇`;
-                options = [ans, (parseInt(ans)+step).toString(), (parseInt(ans)-step).toString(), (parseInt(ans)+1).toString()];
-            
-            } else if (type === 'missing') { //[span_7](start_span)[span_7](end_span)
-                title = "❓ FIND THE MISSING NUMBER";
-                const a = Math.floor(Math.random() * 12) + 2;
-                const x = Math.floor(Math.random() * 10) + 2;
-                const b = a * x;
-                ans = x.toString();
-                qText = `👉 ${a} * ❓ = ${b}\nWhich number belongs in the ❓ 👇`;
-                options = [ans, (x+1).toString(), (x-1).toString(), (x+2).toString()];
-            
-            } else if (type === 'oddEven') { //[span_8](start_span)[span_8](end_span)
-                title = "🎲 ODD OR EVEN 🎲";
-                const a = Math.floor(Math.random() * 20) + 5;
-                const b = Math.floor(Math.random() * 10) + 2;
-                const res = a * b;
-                ans = (res % 2 === 0) ? "Even" : "Odd";
-                qText = `👉 ${a} * ${b} = ❓\nIs the final answer Odd or Even? 👇`;
-                options = ["Even", "Odd", "Prime", "Zero"]; // Padding to 4 options
-            
-            } else if (type === 'profit') { //[span_9](start_span)[span_9](end_span)
-                title = "📈 PROFIT OR LOSS 📉";
-                const buy = (Math.floor(Math.random() * 10) + 5) * 10;
-                const diff = (Math.floor(Math.random() * 5) + 1) * 10;
-                const isProfit = Math.random() > 0.5;
-                const sell = isProfit ? buy + diff : buy - diff;
+            if(chatListener) return; // Prevent double listeners
+            chatListener = onValue(ref(db, 'global_chat'), (snapshot) => {
+                chatBox.innerHTML = '';
+                const data = snapshot.val();
+                if(!data) return;
                 
-                ans = isProfit ? `Profit ₹${diff}` : `Loss ₹${diff}`;
-                qText = `You buy an item for ₹${buy} and sell it for ₹${sell}.\nWhat is your Profit or Loss? 🤔`;
-                options = [ans, 
-                          isProfit ? `Loss ₹${diff}` : `Profit ₹${diff}`, 
-                          `Profit ₹${diff+10}`, 
-                          `Loss ₹${diff+10}`];
-            }
+                const now = Date.now();
+                const oneDay = 24 * 60 * 60 * 1000;
+                
+                Object.keys(data).forEach(key => {
+                    const msg = data[key];
+                    // Delete old messages
+                    if(now - msg.timestamp > oneDay) {
+                        remove(ref(db, 'global_chat/' + key));
+                    } else {
+                        const isMe = msg.uid === currentUser.uid;
+                        chatBox.innerHTML += `
+                            <div class="chat-msg ${isMe ? 'me' : ''}">
+                                ${!isMe ? `<div class="chat-name">${msg.name} (UID:${msg.uid})</div>` : ''}
+                                <div>${msg.text}</div>
+                            </div>`;
+                    }
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
 
-            // Shuffle Options (Filter duplicates just in case)
-            options = [...new Set(options)];
-            while(options.length < 4) { options.push("NaN"); } // Failsafe
-            options.sort(() => Math.random() - 0.5);
-
-            return { title, questionText: qText, answer: ans, options: options };
+        window.sendGlobalMessage = async () => {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if(!text) return;
+            
+            input.value = '';
+            const newMsgRef = push(ref(db, 'global_chat'));
+            await set(newMsgRef, {
+                uid: currentUser.uid, name: currentUser.name, text: text, timestamp: Date.now()
+            });
         }
 
         // ==========================================
-        // MULTIPLAYER ROOM & SYNC
+        // MULTIPLAYER ROOM CREATION & INVITES
         // ==========================================
+        window.openRoundModal = () => { document.getElementById('roundModal').style.display = 'flex'; }
         function generateRoomID() { return Math.random().toString(36).substring(2, 7).toUpperCase(); }
 
-        window.createMultiplayerRoom = async () => {
+        window.confirmCreateRoom = async () => {
+            closeModals();
+            maxRounds = parseInt(document.getElementById('roundSelectInput').value);
+            winsNeeded = Math.floor(maxRounds / 2) + 1;
+            
             currentRoomId = generateRoomID(); isHost = true; isBotMatch = false;
             const roomRef = ref(db, 'rooms/' + currentRoomId);
             await set(roomRef, {
-                hostUid: currentUser.uid, status: 'waiting',
+                hostUid: currentUser.uid, status: 'waiting', maxRounds: maxRounds, winsNeeded: winsNeeded,
                 players: { [currentUser.uid]: { name: currentUser.name, avatar: currentUser.avatar, score: 0 } }
             });
             onDisconnect(roomRef).remove();
             
             document.getElementById('waitRoomIdText').innerText = currentRoomId;
+            document.getElementById('waitRoomSettings').innerText = `Rounds: ${maxRounds} (First to ${winsNeeded} Wins)`;
             const shareUrl = `${window.location.origin}${window.location.pathname}?room=${currentRoomId}`;
             document.getElementById('shareLinkURL').innerText = shareUrl;
+            document.getElementById('btnInviteFriendModal').style.display = 'inline-block'; // Show invite button
             
-            showScreen('waiting');
-            listenToRoom();
+            showScreen('waiting'); listenToRoom();
         }
 
-        window.copyShareLink = () => { navigator.clipboard.writeText(document.getElementById('shareLinkURL').innerText); showToast("Invite Link Copied!"); }
+        window.copyShareLink = () => { navigator.clipboard.writeText(document.getElementById('shareLinkURL').innerText); showToast("Link Copied!"); }
 
-        window.inviteFriend = (friendUid) => {
-            // Shortcut: Create room, copy link, tell user to send. 
-            // Real-time invites require FCM or active listeners. Since user asked for "invent friend pahije request janar", we use the URL share method which acts as the invite.
-            createMultiplayerRoom();
-            showToast("Room created! Send the link below to your friend.");
+        // Invite Friend Logic (In-Room)
+        window.openInviteFriendModal = async () => {
+            const container = document.getElementById('inviteFriendsListContainer');
+            container.innerHTML = 'Loading...';
+            document.getElementById('inviteFriendModal').style.display = 'flex';
+            
+            if(!currentUser.friends || Object.keys(currentUser.friends).length === 0) {
+                container.innerHTML = "No friends added. Search users to add friends!"; return;
+            }
+            container.innerHTML = '';
+            for(let fUid of Object.keys(currentUser.friends)) {
+                const snap = await get(ref(db, 'users/' + fUid));
+                if(snap.exists()) {
+                    container.innerHTML += `
+                        <div class="list-item" style="padding: 10px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <img src="${snap.val().avatar}" style="width:30px; border-radius:50%;">
+                                <span style="font-weight:bold;">${snap.val().name}</span>
+                            </div>
+                            <button class="btn btn-gold" style="width:auto; padding:5px 10px; margin:0; font-size:0.9rem;" onclick="sendInviteToUser('${fUid}')">INVITE</button>
+                        </div>`;
+                }
+            }
         }
 
+        window.sendInviteToUser = async (friendUid) => {
+            await set(ref(db, `users/${friendUid}/invites/${currentRoomId}`), {
+                senderName: currentUser.name, roomId: currentRoomId, timestamp: Date.now()
+            });
+            showToast("Invite Sent!"); closeModals();
+        }
+
+        function listenForFriendInvites() {
+            onValue(ref(db, `users/${currentUser.uid}/invites`), (snapshot) => {
+                const invites = snapshot.val();
+                if(invites && !currentRoomId) { // Show popup only if I'm not already in a room
+                    const latestKey = Object.keys(invites)[Object.keys(invites).length - 1];
+                    const inv = invites[latestKey];
+                    // Delete old invites (older than 10 mins)
+                    if(Date.now() - inv.timestamp > 10 * 60 * 1000) {
+                        remove(ref(db, `users/${currentUser.uid}/invites/${latestKey}`)); return;
+                    }
+                    pendingInviteRoom = inv.roomId;
+                    document.getElementById('invitePopupMsg').innerText = `${inv.senderName} invited you to a match!`;
+                    document.getElementById('invitePopup').style.display = 'block';
+                    
+                    // Auto hide popup after 10s and delete from DB
+                    setTimeout(() => { closeInvitePopup(); }, 10000);
+                }
+            });
+        }
+
+        window.acceptInvite = () => {
+            if(pendingInviteRoom) { joinRoomDatabase(pendingInviteRoom); closeInvitePopup(); }
+        }
+        window.closeInvitePopup = () => {
+            document.getElementById('invitePopup').style.display = 'none';
+            if(pendingInviteRoom) { remove(ref(db, `users/${currentUser.uid}/invites/${pendingInviteRoom}`)); pendingInviteRoom = null;}
+        }
+
+        // Join Room Handling
         window.joinRoomBtn = () => {
             const rId = document.getElementById('joinRoomId').value.trim().toUpperCase();
             if(rId.length === 5) joinRoomDatabase(rId);
         }
-
         function checkUrlForInvite() {
             const rId = new URLSearchParams(window.location.search).get('room');
             if (rId && rId.length === 5) {
@@ -630,64 +725,70 @@
                 joinRoomDatabase(rId.toUpperCase());
             }
         }
-
         async function joinRoomDatabase(rId) {
             const snap = await get(ref(db, 'rooms/' + rId));
             if(snap.exists()) {
                 const data = snap.val();
                 if(data.status !== 'waiting') return showToast("Match already started!");
                 currentRoomId = rId; isHost = false; isBotMatch = false;
+                maxRounds = data.maxRounds; winsNeeded = data.winsNeeded;
+                
                 await update(ref(db, `rooms/${rId}/players/${currentUser.uid}`), { name: currentUser.name, avatar: currentUser.avatar, score: 0 });
                 
                 document.getElementById('waitRoomIdText').innerText = rId;
+                document.getElementById('waitRoomSettings').innerText = `Rounds: ${maxRounds} (First to ${winsNeeded} Wins)`;
                 document.getElementById('shareLinkURL').innerText = "Only host can invite.";
-                showScreen('waiting');
-                listenToRoom();
+                document.getElementById('btnInviteFriendModal').style.display = 'none';
+                showScreen('waiting'); listenToRoom();
             } else { showToast("Invalid Room ID!"); }
         }
 
         window.leaveRoom = async () => {
             if(isHost) await remove(ref(db, 'rooms/' + currentRoomId));
-            else await remove(ref(db, `rooms/${currentRoomId}/players/${currentUser.uid}`));
-            currentRoomId = null; isHost = false;
-            showScreen('dashboard');
+            else if (currentRoomId) await remove(ref(db, `rooms/${currentRoomId}/players/${currentUser.uid}`));
+            currentRoomId = null; isHost = false; showScreen('dashboard');
         }
 
+        // ==========================================
+        // OX GAME (TIC-TAC-TOE) LOGIC & SYNC
+        // ==========================================
         let roomListenerUnsubscribe = null;
         function listenToRoom() {
             roomListenerUnsubscribe = onValue(ref(db, 'rooms/' + currentRoomId), (snapshot) => {
                 const data = snapshot.val();
                 if (!data) { showToast("Room closed!"); return showScreen('dashboard'); }
                 
-                // WAITING ROOM RENDER
                 if (data.status === 'waiting') {
                     const listObj = document.getElementById('waitingPlayersList');
                     listObj.innerHTML = ''; let count = 0;
-                    Object.keys(data.players).forEach(uid => {
-                        count++;
-                        listObj.innerHTML += `<p style="margin:5px 0; font-size:1.2rem;">${uid === data.hostUid ? "👑" : "⚔️"} ${data.players[uid].name}</p>`;
-                    });
+                    Object.keys(data.players).forEach(uid => { count++; listObj.innerHTML += `<p style="margin:5px 0; font-size:1.2rem; border-bottom:1px solid #333; padding-bottom:5px;">${uid === data.hostUid ? "👑" : "⚔️"} ${data.players[uid].name}</p>`; });
                     if (isHost) {
                         document.getElementById('waitingTextHost').style.display = 'none';
                         document.getElementById('btnStartGame').style.display = count >= 2 ? 'block' : 'none';
                     }
                 }
                 
-                // GAME STARTED
-                if (data.status === 'playing' && !gameActive) initMultiplayerUI(data.players);
+                if (data.status === 'playing' && !gameActive) initMultiplayerGame(data);
                 
-                // IN-GAME SYNC
                 if (data.status === 'playing' && gameActive) {
-                    // Sync Scores
+                    boardState = data.board || ["", "", "", "", "", "", "", "", ""];
+                    currentTurn = data.turn;
+                    currentRoundNumber = data.round || 1;
+                    renderBoard();
+                    
                     let oppUid = Object.keys(data.players).find(u => u !== currentUser.uid);
-                    document.getElementById('gScore1').innerText = data.players[currentUser.uid].score || 0;
-                    if(oppUid) document.getElementById('gScore2').innerText = data.players[oppUid].score || 0;
+                    myScore = data.players[currentUser.uid].score || 0;
+                    oppScore = oppUid ? (data.players[oppUid].score || 0) : 0;
+                    
+                    document.getElementById('gScore1').innerText = myScore;
+                    document.getElementById('gScore2').innerText = oppScore;
+                    document.getElementById('gameStatusDisplay').innerText = `Round ${currentRoundNumber} / ${maxRounds}`;
+                    document.getElementById('turnIndicator').innerText = currentTurn === mySymbol ? "YOUR TURN!" : "OPPONENT'S TURN";
+                    document.getElementById('turnIndicator').style.color = currentTurn === mySymbol ? "var(--neon-green)" : "var(--neon-pink)";
 
-                    // Sync Question
-                    if(data.currentQuestion) renderQuestionUI(data.currentQuestion);
+                    if(isHost) checkWinCondition(); // Host manages game rules
                 }
 
-                // GAME FINISHED (Triggered by Host when timer ends)
                 if (data.status === 'finished' && document.getElementById('screen-game').classList.contains('active-screen')) {
                     handleMatchEndMultiplayer(data);
                 }
@@ -696,165 +797,184 @@
 
         window.startGameHost = async () => {
             if(!isHost) return;
-            await update(ref(db, 'rooms/' + currentRoomId), { status: 'playing', currentQuestion: generateMathQuestion() });
+            // Host is always X, Guest is always O
+            await update(ref(db, 'rooms/' + currentRoomId), { status: 'playing', board: ["", "", "", "", "", "", "", "", ""], turn: 'X', round: 1 });
         }
 
-        function initMultiplayerUI(playersDict) {
-            gameActive = true; myScore = 0; timeLeft = 60;
-            document.getElementById('gameModeDisplay').innerText = "1v1 Multiplayer";
+        function initMultiplayerGame(data) {
+            gameActive = true; myScore = 0; oppScore = 0;
+            mySymbol = isHost ? 'X' : 'O';
+            oppSymbol = isHost ? 'O' : 'X';
+            
             showScreen('game');
+            document.getElementById('winTargetDisplay').innerText = winsNeeded;
             
-            let oppUid = Object.keys(playersDict).find(u => u !== currentUser.uid);
-            document.getElementById('gName1').innerText = "You";
-            document.getElementById('gAvatar1').src = currentUser.avatar;
-            document.getElementById('gName2').innerText = playersDict[oppUid].name;
-            document.getElementById('gAvatar2').src = playersDict[oppUid].avatar;
-            
-            startGlobalTimer();
+            let oppUid = Object.keys(data.players).find(u => u !== currentUser.uid);
+            document.getElementById('gName1').innerText = `You (${mySymbol})`;
+            document.getElementById('gName2').innerText = `${data.players[oppUid].name} (${oppSymbol})`;
         }
 
-        // ==========================================
-        // BOT MATCH LOGIC
-        // ==========================================
-        window.startBotMatch = () => {
-            isBotMatch = true; gameActive = true; myScore = 0; botScore = 0; timeLeft = 60;
-            document.getElementById('gameModeDisplay').innerText = "VS AI BOT 🤖";
-            
-            document.getElementById('gName1').innerText = "You";
-            document.getElementById('gAvatar1').src = currentUser.avatar;
-            document.getElementById('gName2').innerText = "Math Bot";
-            document.getElementById('gAvatar2').src = "https://api.dicebear.com/7.x/avataaars/svg?seed=MathBot&backgroundColor=ff0055";
-            
-            document.getElementById('gScore1').innerText = 0;
-            document.getElementById('gScore2').innerText = 0;
-
-            showScreen('game');
-            pushNextBotQuestion();
-            startGlobalTimer();
-        }
-
-        function pushNextBotQuestion() {
+        window.cellClick = async (index) => {
             if(!gameActive) return;
-            const q = generateMathQuestion();
-            renderQuestionUI(q);
+            if(boardState[index] !== "") return; // Cell occupied
+            if(currentTurn !== mySymbol) return showToast("Not your turn!");
+
+            boardState[index] = mySymbol;
+            renderBoard(); // Predict locally
             
-            // Bot answers randomly between 2s and 5s
-            clearTimeout(botTimer);
-            const botDelay = Math.floor(Math.random() * 3000) + 2000;
-            botTimer = setTimeout(() => {
-                if(gameActive) {
-                    botScore += 10;
-                    document.getElementById('gScore2').innerText = botScore;
-                    pushNextBotQuestion(); // Move to next question if bot answers first
-                }
-            }, botDelay);
-        }
-
-        // ==========================================
-        // SHARED GAMEPLAY LOGIC (UI & Timer)
-        // ==========================================
-        function renderQuestionUI(q) {
-            // Reset buttons
-            for(let i=0; i<4; i++) {
-                let b = document.getElementById('opt'+i);
-                b.className = 'opt-btn'; b.disabled = false;
-            }
-            
-            document.getElementById('gameQuestionTitle').innerText = q.title;
-            // Handle line breaks in question text
-            document.getElementById('gameQuestionText').innerHTML = q.questionText.replace(/\n/g, '<br>');
-            currentCorrectAnswer = q.answer;
-
-            for(let i=0; i<4; i++) {
-                let btn = document.getElementById('opt'+i);
-                btn.innerText = q.options[i];
-                btn.dataset.val = q.options[i];
-            }
-        }
-
-        function startGlobalTimer() {
-            document.getElementById('gameTimer').innerText = timeLeft;
-            clearInterval(matchTimer);
-            matchTimer = setInterval(async () => {
-                timeLeft--;
-                document.getElementById('gameTimer').innerText = timeLeft;
-                if(timeLeft <= 0) {
-                    clearInterval(matchTimer);
-                    if(isBotMatch) handleMatchEndBot();
-                    else if(isHost) {
-                        // Host triggers endgame in DB
-                        gameActive = false;
-                        const snap = await get(ref(db, 'rooms/' + currentRoomId));
-                        const d = snap.val();
-                        let maxS = -1, winU = null;
-                        Object.keys(d.players).forEach(u => {
-                            if(d.players[u].score > maxS) { maxS = d.players[u].score; winU = u; }
-                        });
-                        await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: winU });
-                    }
-                }
-            }, 1000);
-        }
-
-        window.checkAnswer = async (btnIndex) => {
-            if(!gameActive) return;
-            const btn = document.getElementById('opt'+btnIndex);
-            const selectedVal = btn.dataset.val;
-            
-            // Disable all to prevent spam
-            for(let i=0; i<4; i++) document.getElementById('opt'+i).disabled = true;
-
-            if (selectedVal === currentCorrectAnswer) {
-                btn.classList.add('correct');
-                myScore += 10;
-                
-                if(isBotMatch) {
-                    document.getElementById('gScore1').innerText = myScore;
-                    clearTimeout(botTimer); // Stop bot from answering this one
-                    setTimeout(pushNextBotQuestion, 600);
-                } else {
-                    await update(ref(db, `rooms/${currentRoomId}/players/${currentUser.uid}`), { score: myScore });
-                    if(isHost) setTimeout(async () => { await update(ref(db, `rooms/${currentRoomId}`), { currentQuestion: generateMathQuestion() }); }, 600);
+            if(isBotMatch) {
+                currentTurn = oppSymbol;
+                let res = checkWinLocal();
+                if(res === 'continue') {
+                    document.getElementById('turnIndicator').innerText = "BOT IS THINKING...";
+                    setTimeout(botMakeMove, 800);
                 }
             } else {
-                btn.classList.add('wrong');
-                // Highlight correct
-                for(let i=0; i<4; i++) {
-                    if(document.getElementById('opt'+i).dataset.val === currentCorrectAnswer) document.getElementById('opt'+i).classList.add('correct');
-                }
-                
-                if(isBotMatch) {
-                    setTimeout(pushNextBotQuestion, 1200);
-                } else {
-                    if(isHost) setTimeout(async () => { await update(ref(db, `rooms/${currentRoomId}`), { currentQuestion: generateMathQuestion() }); }, 1200);
+                await update(ref(db, 'rooms/' + currentRoomId), { board: boardState, turn: oppSymbol });
+            }
+        }
+
+        function renderBoard() {
+            for(let i=0; i<9; i++) {
+                const cell = document.getElementById('cell-'+i);
+                cell.innerText = boardState[i];
+                cell.className = 'ox-cell';
+                if(boardState[i] === 'X') cell.classList.add('x');
+                if(boardState[i] === 'O') cell.classList.add('o');
+            }
+        }
+
+        async function checkWinCondition() {
+            // ONLY HOST RUNS THIS IN MULTIPLAYER
+            let winnerSymbol = null;
+            for(let combo of winCombos) {
+                if(boardState[combo[0]] && boardState[combo[0]] === boardState[combo[1]] && boardState[combo[1]] === boardState[combo[2]]) {
+                    winnerSymbol = boardState[combo[0]]; break;
                 }
             }
+
+            let isDraw = !boardState.includes("");
+
+            if(winnerSymbol || isDraw) {
+                // Round Over
+                let newScores = {};
+                if(winnerSymbol === mySymbol) { myScore++; newScores[currentUser.uid] = { score: myScore }; }
+                else if (winnerSymbol === oppSymbol) { 
+                    const oppUid = Object.keys((await get(ref(db, `rooms/${currentRoomId}/players`))).val()).find(u => u !== currentUser.uid);
+                    oppScore++; newScores[oppUid] = { score: oppScore };
+                }
+
+                // Apply Scores
+                for(let uid of Object.keys(newScores)) {
+                    await update(ref(db, `rooms/${currentRoomId}/players/${uid}`), newScores[uid]);
+                }
+
+                // Check Match Winner (Best of)
+                if(myScore >= winsNeeded) {
+                    await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: currentUser.uid });
+                } else if (oppScore >= winsNeeded) {
+                    const oppUid = Object.keys((await get(ref(db, `rooms/${currentRoomId}/players`))).val()).find(u => u !== currentUser.uid);
+                    await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: oppUid });
+                } else if (currentRoundNumber >= maxRounds) {
+                    // All rounds done, whoever has more wins
+                    let finalWinner = myScore > oppScore ? currentUser.uid : (oppScore > myScore ? "OPP_ID" : null); // null = tie
+                    await update(ref(db, 'rooms/' + currentRoomId), { status: 'finished', winnerUid: finalWinner });
+                } else {
+                    // Next Round Reset
+                    setTimeout(async () => {
+                        await update(ref(db, 'rooms/' + currentRoomId), { board: ["", "", "", "", "", "", "", "", ""], round: currentRoundNumber + 1, turn: (currentRoundNumber%2 === 0 ? 'X' : 'O') });
+                    }, 1500);
+                }
+            }
+        }
+
+        // ==========================================
+        // BOT LOGIC
+        // ==========================================
+        window.startBotMatch = () => {
+            isBotMatch = true; gameActive = true; myScore = 0; oppScore = 0;
+            currentRoundNumber = 1; maxRounds = 7; winsNeeded = 4;
+            mySymbol = 'X'; oppSymbol = 'O'; currentTurn = 'X';
+            boardState = ["", "", "", "", "", "", "", "", ""];
+            
+            showScreen('game');
+            document.getElementById('winTargetDisplay').innerText = winsNeeded;
+            document.getElementById('gName1').innerText = "You (X)";
+            document.getElementById('gName2').innerText = "Bot (O)";
+            document.getElementById('gameStatusDisplay').innerText = `Round 1 / 7`;
+            document.getElementById('turnIndicator').innerText = "YOUR TURN!";
+            renderBoard();
+        }
+
+        function botMakeMove() {
+            if(!gameActive) return;
+            let emptyCells = [];
+            for(let i=0; i<9; i++) if(boardState[i] === "") emptyCells.push(i);
+            
+            if(emptyCells.length > 0) {
+                // Simple Bot: Pick random
+                let move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                boardState[move] = oppSymbol;
+                renderBoard();
+                
+                let res = checkWinLocal();
+                if(res === 'continue') { currentTurn = mySymbol; document.getElementById('turnIndicator').innerText = "YOUR TURN!"; }
+            }
+        }
+
+        function checkWinLocal() {
+            let winnerSymbol = null;
+            for(let combo of winCombos) {
+                if(boardState[combo[0]] && boardState[combo[0]] === boardState[combo[1]] && boardState[combo[1]] === boardState[combo[2]]) {
+                    winnerSymbol = boardState[combo[0]]; break;
+                }
+            }
+            let isDraw = !boardState.includes("");
+
+            if(winnerSymbol || isDraw) {
+                if(winnerSymbol === mySymbol) myScore++;
+                else if(winnerSymbol === oppSymbol) oppScore++;
+                
+                document.getElementById('gScore1').innerText = myScore;
+                document.getElementById('gScore2').innerText = oppScore;
+
+                if(myScore >= winsNeeded) { handleMatchEndBot(true); return 'end'; }
+                else if (oppScore >= winsNeeded) { handleMatchEndBot(false); return 'end'; }
+                else if (currentRoundNumber >= maxRounds) { handleMatchEndBot(myScore > oppScore); return 'end'; }
+                else {
+                    currentRoundNumber++;
+                    setTimeout(() => {
+                        boardState = ["", "", "", "", "", "", "", "", ""];
+                        currentTurn = 'X';
+                        document.getElementById('gameStatusDisplay').innerText = `Round ${currentRoundNumber} / ${maxRounds}`;
+                        document.getElementById('turnIndicator').innerText = "YOUR TURN!";
+                        renderBoard();
+                    }, 1000);
+                    return 'reset';
+                }
+            }
+            return 'continue';
         }
 
         // ==========================================
         // MATCH END & RESULTS
         // ==========================================
-        async function handleMatchEndBot() {
-            gameActive = false; clearTimeout(botTimer);
-            updateProfileStats(myScore > botScore);
-            renderResultScreen(
-                myScore > botScore ? currentUser.uid : "BOT", 
-                myScore, botScore, "Math Bot"
-            );
+        async function handleMatchEndBot(didIWin) {
+            gameActive = false; updateProfileStats(didIWin);
+            renderResultScreen(didIWin ? currentUser.uid : "BOT", myScore, oppScore, "Math Bot");
         }
 
         async function handleMatchEndMultiplayer(data) {
             gameActive = false;
             let oppUid = Object.keys(data.players).find(u => u !== currentUser.uid);
-            let oppScore = data.players[oppUid].score || 0;
-            let oppName = data.players[oppUid].name;
+            let oScore = oppUid ? data.players[oppUid].score : 0;
+            let oppName = oppUid ? data.players[oppUid].name : "Opponent";
             
-            // Update my profile stats in DB
             if (data.winnerUid === currentUser.uid) updateProfileStats(true);
-            else updateProfileStats(false);
+            else if(data.winnerUid) updateProfileStats(false); // only lose if someone actually won
 
-            renderResultScreen(data.winnerUid, myScore, oppScore, oppName);
-            if(isHost) await remove(ref(db, 'rooms/' + currentRoomId)); // Clean up DB
+            renderResultScreen(data.winnerUid, myScore, oScore, oppName);
+            if(isHost) await remove(ref(db, 'rooms/' + currentRoomId));
             currentRoomId = null; isHost = false;
         }
 
@@ -863,7 +983,6 @@
             const curMatches = currentUser.matches || 0;
             const newWins = didWin ? curWins + 1 : curWins;
             const newMatches = curMatches + 1;
-            
             currentUser.wins = newWins; currentUser.matches = newMatches;
             await update(ref(db, 'users/' + currentUser.uid), { wins: newWins, matches: newMatches });
         }
@@ -879,7 +998,7 @@
             if(winnerUid === currentUser.uid) {
                 title.innerText = "🏆 BOOYAH! 🏆"; title.style.color = "var(--neon-gold)";
                 display.innerText = "You Won The Match!";
-            } else if (!winnerUid || mScore === oScore) { // Tie
+            } else if (!winnerUid || mScore === oScore) {
                 title.innerText = "DRAW!"; title.style.color = "var(--text-muted)";
                 display.innerText = "It's a Tie!";
             } else {
