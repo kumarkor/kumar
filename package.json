@@ -1,0 +1,11 @@
+{
+  "name": "kumar-api-network",
+  "version": "1.0.0",
+  "description": "Kumar Bot API Gateway",
+  "scripts": {
+    "start": "node api/bot.js"
+  },
+  "dependencies": {
+    "firebase": "^10.8.1"
+  }
+}
