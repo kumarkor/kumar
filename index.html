@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 🔥 Mobile sathi touch fix aani zoom disable -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kumar API Network | Bot Hub</title>
     
     <!-- FIREBASE CDNS -->
@@ -32,44 +33,64 @@
         .main-content { flex: 1; display: flex; overflow: hidden; }
         
         /* AUTH SCREENS (LOGIN / REGISTER) */
-        .auth-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, #14141f 0%, #0a0a0f 100%); }
-        .auth-box { background: rgba(20, 20, 31, 0.9); padding: 40px; border-radius: 10px; border: 1px solid var(--border-color); width: 400px; backdrop-filter: blur(10px); }
+        .auth-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, #14141f 0%, #0a0a0f 100%); padding: 20px; }
+        .auth-box { background: rgba(20, 20, 31, 0.9); padding: 30px; border-radius: 10px; border: 1px solid var(--border-color); width: 100%; max-width: 450px; backdrop-filter: blur(10px); }
+        
+        /* 🔥 MOBILE TOUCH FIX: Changed to native buttons */
         .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); }
-        .tab-btn { flex: 1; padding: 12px; text-align: center; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
-        .tab-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .tab-btn { flex: 1; padding: 15px 10px; text-align: center; cursor: pointer; color: #888; font-weight: bold; background: transparent; border: none; font-size: 16px; outline: none; transition: 0.3s; }
+        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
         
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #aaa; }
-        input { width: 100%; padding: 12px; background: #0a0a0f; border: 1px solid var(--border-color); color: white; border-radius: 5px; outline: none; transition: 0.3s; }
+        input { width: 100%; padding: 15px; background: #0a0a0f; border: 1px solid var(--border-color); color: white; border-radius: 5px; outline: none; font-size: 16px; transition: 0.3s; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,255,204,0.2); }
-        .action-btn { width: 100%; padding: 14px; background: var(--primary); color: #000; border: none; font-weight: bold; font-size: 16px; cursor: pointer; border-radius: 5px; text-transform: uppercase; transition: 0.3s; }
+        
+        .action-btn { width: 100%; padding: 16px; background: var(--primary); color: #000; border: none; font-weight: bold; font-size: 16px; cursor: pointer; border-radius: 5px; text-transform: uppercase; transition: 0.3s; margin-top: 10px; }
         .action-btn:hover { background: #00ccaa; box-shadow: 0 0 15px var(--primary); }
-        .msg-box { padding: 10px; margin-bottom: 15px; border-radius: 5px; font-weight: bold; text-align: center; display: none; }
+        .msg-box { padding: 12px; margin-bottom: 15px; border-radius: 5px; font-weight: bold; text-align: center; display: none; font-size: 14px; }
         
         /* DASHBOARD & SIDEBAR */
         #dashboard { display: none; flex: 1; width: 100%; }
         .sidebar { width: 250px; background: #0d0d14; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px 0; }
         .user-profile { text-align: center; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
         .user-profile h3 { color: var(--primary); margin-bottom: 5px; }
-        .menu-item { padding: 15px 20px; cursor: pointer; color: #aaa; transition: 0.3s; border-left: 3px solid transparent; }
+        .menu-item { padding: 15px 20px; cursor: pointer; color: #aaa; transition: 0.3s; border-left: 3px solid transparent; background: transparent; border-top: none; border-right: none; border-bottom: none; text-align: left; font-size: 15px; font-weight: bold; }
         .menu-item:hover, .menu-item.active { color: white; background: #1a1a2e; border-left: 3px solid var(--primary); }
-        .dashboard-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .dashboard-content { flex: 1; padding: 30px; overflow-y: auto; }
         
         /* PANELS */
-        .panel { display: none; animation: fadeIn 0.5s; }
+        .panel { display: none; animation: fadeIn 0.4s; }
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* MATH GAME UI */
-        .score-card { background: #0a0a0f; padding: 20px; border: 1px solid var(--primary); border-radius: 8px; font-size: 24px; text-align: center; margin-bottom: 30px; }
-        .equation-box { font-size: 40px; text-align: center; margin: 40px 0; letter-spacing: 5px; font-weight: bold; }
+        .score-card { background: #0a0a0f; padding: 20px; border: 1px solid var(--primary); border-radius: 8px; font-size: 22px; text-align: center; margin-bottom: 30px; }
+        .equation-box { font-size: 45px; text-align: center; margin: 30px 0; letter-spacing: 5px; font-weight: bold; }
         
         /* API DEVELOPER PORTAL UI */
         .api-header { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .code-block { background: #050508; padding: 20px; border-radius: 8px; border: 1px solid #333; overflow-x: auto; color: #00ffcc; font-family: monospace; margin-bottom: 20px; position: relative; }
-        .copy-btn { position: absolute; top: 10px; right: 10px; background: #333; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+        .code-block { background: #050508; padding: 20px; border-radius: 8px; border: 1px solid #333; overflow-x: auto; color: #00ffcc; font-family: monospace; margin-bottom: 20px; position: relative; font-size: 13px; line-height: 1.5; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #333; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
         .copy-btn:hover { background: var(--primary); color: black; }
-        .api-desc { color: #888; margin-bottom: 10px; line-height: 1.6; }
+        .api-desc { color: #888; margin-bottom: 15px; line-height: 1.6; }
+
+        /* 🔥 MOBILE RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .os-window { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+            .logo { font-size: 16px; }
+            .auth-box { padding: 20px; }
+            .main-content { flex-direction: column; }
+            
+            /* Mobile Sidebar (Horizontal) */
+            .sidebar { width: 100%; flex-direction: row; border-right: none; border-bottom: 1px solid var(--border-color); padding: 10px 0; overflow-x: auto; align-items: center; }
+            .user-profile { padding: 0 15px; border-bottom: none; border-right: 1px solid var(--border-color); margin-bottom: 0; min-width: 120px; }
+            .menu-item { border-left: none; border-bottom: 3px solid transparent; padding: 10px 15px; white-space: nowrap; }
+            .menu-item:hover, .menu-item.active { border-left: none; border-bottom: 3px solid var(--primary); }
+            
+            .dashboard-content { padding: 20px; }
+            .equation-box { font-size: 35px; }
+        }
     </style>
 </head>
 <body>
@@ -77,16 +98,18 @@
     <div class="os-window">
         <div class="top-bar">
             <div class="logo">KUMAR // API NETWORK</div>
-            <div id="status-indicator" style="color: #888;">System Offline</div>
+            <div id="status-indicator" style="color: #888; font-weight: bold;">System Offline</div>
         </div>
 
         <div class="main-content">
             <!-- ================= AUTHENTICATION PORTAL ================= -->
             <div class="auth-wrapper" id="auth-system">
                 <div class="auth-box">
+                    
+                    <!-- 🔥 FIXED: Native buttons for perfect touch response -->
                     <div class="auth-tabs">
-                        <div class="tab-btn active" onclick="switchAuthTab('login')" id="tab-login">Login</div>
-                        <div class="tab-btn" onclick="switchAuthTab('register')" id="tab-register">Create Account</div>
+                        <button class="tab-btn active" onclick="switchAuthTab('login')" id="tab-login">Login</button>
+                        <button class="tab-btn" onclick="switchAuthTab('register')" id="tab-register">Create Account</button>
                     </div>
                     
                     <div id="auth-msg" class="msg-box"></div>
@@ -95,7 +118,7 @@
                     <div id="login-form">
                         <div class="input-group">
                             <label>5-Digit User ID</label>
-                            <input type="text" id="log-id" maxlength="5" placeholder="Enter exactly 5 digits">
+                            <input type="tel" id="log-id" maxlength="5" placeholder="Enter exactly 5 digits">
                         </div>
                         <div class="input-group">
                             <label>Password</label>
@@ -108,7 +131,7 @@
                     <div id="register-form" style="display: none;">
                         <div class="input-group">
                             <label>Choose 5-Digit ID (Strict)</label>
-                            <input type="text" id="reg-id" maxlength="5" placeholder="e.g. 84930">
+                            <input type="tel" id="reg-id" maxlength="5" placeholder="e.g. 84930">
                         </div>
                         <div class="input-group">
                             <label>Create Password</label>
@@ -124,11 +147,11 @@
                 <div class="sidebar">
                     <div class="user-profile">
                         <h3 id="dash-userid">#00000</h3>
-                        <p style="color: #888; font-size: 12px;">Verified Developer</p>
+                        <p style="color: #888; font-size: 11px; text-transform: uppercase;">Developer</p>
                     </div>
-                    <div class="menu-item active" onclick="switchPanel('game-panel')">🎮 Math Hack (Earn)</div>
-                    <div class="menu-item" onclick="switchPanel('api-panel')">🔌 API Developer Portal</div>
-                    <div class="menu-item" style="color: var(--error-color); margin-top: auto;" onclick="logout()">🛑 Terminate Session</div>
+                    <button class="menu-item active" onclick="switchPanel('game-panel')">🎮 Math Hack</button>
+                    <button class="menu-item" onclick="switchPanel('api-panel')">🔌 API Portal</button>
+                    <button class="menu-item" style="color: var(--error-color);" onclick="logout()">🛑 Logout</button>
                 </div>
 
                 <div class="dashboard-content">
@@ -137,20 +160,20 @@
                     <div id="game-panel" class="panel active">
                         <h2 class="api-header">Hack The Points Database</h2>
                         <div class="score-card">
-                            Total API Points: <span id="dash-score" style="color: var(--primary); font-weight: bold;">0</span>
+                            Total API Points: <span id="dash-score" style="color: var(--primary); font-weight: bold; font-size: 28px;">0</span>
                         </div>
                         <div class="equation-box" id="equation">Loading...</div>
-                        <div style="max-width: 300px; margin: 0 auto;">
-                            <input type="number" id="math-answer" placeholder="Enter Answer" style="text-align: center; font-size: 20px;">
-                            <button class="action-btn" style="margin-top: 15px;" onclick="verifyMath()">Submit Code</button>
+                        <div style="max-width: 100%; margin: 0 auto; text-align: center;">
+                            <input type="tel" id="math-answer" placeholder="Enter Answer Here" style="text-align: center; font-size: 22px; width: 100%; max-width: 300px;">
+                            <button class="action-btn" style="max-width: 300px; margin-top: 15px;" onclick="verifyMath()">Submit Code</button>
                         </div>
                         <div id="math-feedback" style="text-align: center; margin-top: 20px; font-size: 18px; font-weight: bold;"></div>
                     </div>
 
                     <!-- PANEL 2: DEVELOPER API PORTAL -->
                     <div id="api-panel" class="panel">
-                        <h2 class="api-header">Developer API Configuration</h2>
-                        <p class="api-desc">Tujhya svatahchya Telegram bot madhe database connect karnyasathi khali dilela code vapar. Ha code direct tujhya 5-digit ID (<span id="api-user-id" style="color:white;font-weight:bold;"></span>) sobat linked ahe.</p>
+                        <h2 class="api-header">API Configuration</h2>
+                        <p class="api-desc">Tujhya Telegram bot madhe database connect karnyasathi khali dilela code vapar. Ha code direct tujhya 5-digit ID (<span id="api-user-id" style="color:white;font-weight:bold;"></span>) sobat linked ahe.</p>
                         
                         <h3 style="color: #fff; margin: 20px 0 10px;">For Bots.Business (BJS)</h3>
                         <div class="code-block">
@@ -176,7 +199,7 @@ HTTP.post({
                             </pre>
                         </div>
 
-                        <h3 style="color: #fff; margin: 20px 0 10px;">For Python (Telebot/Aiogram)</h3>
+                        <h3 style="color: #fff; margin: 20px 0 10px;">For Python</h3>
                         <div class="code-block">
                             <button class="copy-btn" onclick="copyCode('py-code')">Copy</button>
                             <pre id="py-code">
@@ -187,10 +210,11 @@ USER_ID = "<span class="dynamic-id"></span>"
 
 def get_points():
     payload = {"userId": USER_ID, "action": "getScore"}
-    response = requests.post(KUMAR_API, json=payload)
-    if response.status_code == 200:
+    try:
+        response = requests.post(KUMAR_API, json=payload)
         return response.json().get('score', 0)
-    return "Error connecting to Kumar Network"
+    except:
+        return "Error connecting"
                             </pre>
                         </div>
                     </div>
@@ -202,7 +226,7 @@ def get_points():
 
     <!-- ================= JAVASCRIPT: THE ENGINE ================= -->
     <script>
-        // 1. FIREBASE SETUP
+        // 1. FIREBASE SETUP (Tuzi exact config thoda pan na badalta)
         const firebaseConfig = {
             apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
             authDomain: "newkumarbot.firebaseapp.com",
@@ -210,7 +234,8 @@ def get_points():
             projectId: "newkumarbot",
             storageBucket: "newkumarbot.firebasestorage.app",
             messagingSenderId: "1006933600404",
-            appId: "1:1006933600404:web:1df122474a7598a25fec81"
+            appId: "1:1006933600404:web:1df122474a7598a25fec81",
+            measurementId: "G-PMQ8SCYQC9"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -226,9 +251,11 @@ def get_points():
             m.style.display = "block";
             m.innerText = text;
             m.style.background = isError ? "rgba(255, 51, 102, 0.2)" : "rgba(51, 255, 119, 0.2)";
-            m.style.color = isError ? var(--error-color) : var(--success-color);
+            m.style.color = isError ? "var(--error-color)" : "var(--success-color)";
             m.style.border = `1px solid ${isError ? '#ff3366' : '#33ff77'}`;
         }
+        
+        // 🔥 FIX: Tab Switching Logic updated for Buttons
         function switchAuthTab(tab) {
             document.getElementById('tab-login').classList.remove('active');
             document.getElementById('tab-register').classList.remove('active');
@@ -298,7 +325,6 @@ def get_points():
             document.getElementById('dash-userid').innerText = "#" + activeUser;
             document.getElementById('dash-score').innerText = activeScore;
             
-            // Inject ID into API Portal Code
             document.getElementById('api-user-id').innerText = activeUser;
             const spans = document.querySelectorAll('.dynamic-id');
             spans.forEach(span => span.innerText = activeUser);
@@ -360,10 +386,10 @@ def get_points():
         function copyCode(id) {
             const text = document.getElementById(id).innerText;
             navigator.clipboard.writeText(text);
-            alert("API Code Copied!");
+            alert("API Code Copied! Aata Bot madhe paste kar.");
         }
 
-        // Input Restrictions
+        // Input Restrictions (Fakt Numbers sathi)
         document.getElementById('reg-id').addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
         document.getElementById('log-id').addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
     </script>
