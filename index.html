@@ -3,176 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kumar's Bot Network | Math Hack</title>
+    <title>Kumar API Network | Bot Hub</title>
     
-    <!-- FIREBASE CDNS (Direct HTML Connection) -->
+    <!-- FIREBASE CDNS -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-    <!-- MASSIVE CSS STYLING FOR VIP LOOK -->
     <style>
+        /* =========================================
+           MASSIVE CSS: HACKER OS DESIGN SYSTEM
+           ========================================= */
         :root {
-            --primary: #00e676;
-            --bg-color: #0d1117;
-            --box-bg: #161b22;
-            --text-color: #c9d1d9;
-            --error: #ff4444;
+            --primary: #00ffcc;
+            --bg-dark: #0a0a0f;
+            --panel-bg: #14141f;
+            --border-color: #2a2a3f;
+            --text-main: #e0e0e0;
+            --error-color: #ff3366;
+            --success-color: #33ff77;
         }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .container {
-            background-color: var(--box-bg);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 230, 118, 0.2);
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-            border: 1px solid #30363d;
-        }
-        h1 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #8b949e;
-        }
-        input {
-            width: 100%;
-            padding: 15px;
-            background-color: #010409;
-            border: 1px solid #30363d;
-            color: white;
-            border-radius: 6px;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-        }
-        input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
-        }
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--primary);
-            color: #000;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-        button:hover {
-            background-color: #00c853;
-            transform: scale(1.02);
-        }
-        .error-msg {
-            color: var(--error);
-            margin-bottom: 15px;
-            font-weight: bold;
-            display: none;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Consolas', 'Courier New', monospace; }
+        body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         
-        /* GAME UI HIDDEN BY DEFAULT */
-        #game-section {
-            display: none;
-        }
-        .score-board {
-            font-size: 24px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #010409;
-            border-radius: 8px;
-            border: 1px solid var(--primary);
-        }
-        .math-question {
-            font-size: 45px;
-            font-weight: bold;
-            margin: 30px 0;
-            letter-spacing: 5px;
-            color: white;
-        }
-        #feedback {
-            margin-top: 15px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .logout-btn {
-            background-color: var(--error);
-            margin-top: 20px;
-        }
-        .logout-btn:hover {
-            background-color: #cc0000;
-        }
+        /* UI CONTAINERS */
+        .os-window { background: var(--panel-bg); width: 90vw; height: 90vh; max-width: 1200px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 0 30px rgba(0, 255, 204, 0.1); display: flex; flex-direction: column; overflow: hidden; }
+        .top-bar { background: #0d0d14; padding: 15px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: var(--primary); font-size: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        .main-content { flex: 1; display: flex; overflow: hidden; }
+        
+        /* AUTH SCREENS (LOGIN / REGISTER) */
+        .auth-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, #14141f 0%, #0a0a0f 100%); }
+        .auth-box { background: rgba(20, 20, 31, 0.9); padding: 40px; border-radius: 10px; border: 1px solid var(--border-color); width: 400px; backdrop-filter: blur(10px); }
+        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { flex: 1; padding: 12px; text-align: center; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
+        .tab-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #aaa; }
+        input { width: 100%; padding: 12px; background: #0a0a0f; border: 1px solid var(--border-color); color: white; border-radius: 5px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,255,204,0.2); }
+        .action-btn { width: 100%; padding: 14px; background: var(--primary); color: #000; border: none; font-weight: bold; font-size: 16px; cursor: pointer; border-radius: 5px; text-transform: uppercase; transition: 0.3s; }
+        .action-btn:hover { background: #00ccaa; box-shadow: 0 0 15px var(--primary); }
+        .msg-box { padding: 10px; margin-bottom: 15px; border-radius: 5px; font-weight: bold; text-align: center; display: none; }
+        
+        /* DASHBOARD & SIDEBAR */
+        #dashboard { display: none; flex: 1; width: 100%; }
+        .sidebar { width: 250px; background: #0d0d14; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px 0; }
+        .user-profile { text-align: center; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        .user-profile h3 { color: var(--primary); margin-bottom: 5px; }
+        .menu-item { padding: 15px 20px; cursor: pointer; color: #aaa; transition: 0.3s; border-left: 3px solid transparent; }
+        .menu-item:hover, .menu-item.active { color: white; background: #1a1a2e; border-left: 3px solid var(--primary); }
+        .dashboard-content { flex: 1; padding: 40px; overflow-y: auto; }
+        
+        /* PANELS */
+        .panel { display: none; animation: fadeIn 0.5s; }
+        .panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* MATH GAME UI */
+        .score-card { background: #0a0a0f; padding: 20px; border: 1px solid var(--primary); border-radius: 8px; font-size: 24px; text-align: center; margin-bottom: 30px; }
+        .equation-box { font-size: 40px; text-align: center; margin: 40px 0; letter-spacing: 5px; font-weight: bold; }
+        
+        /* API DEVELOPER PORTAL UI */
+        .api-header { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .code-block { background: #050508; padding: 20px; border-radius: 8px; border: 1px solid #333; overflow-x: auto; color: #00ffcc; font-family: monospace; margin-bottom: 20px; position: relative; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #333; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+        .copy-btn:hover { background: var(--primary); color: black; }
+        .api-desc { color: #888; margin-bottom: 10px; line-height: 1.6; }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
-    <div class="container" id="login-section">
-        <h1>Bot Network Login</h1>
-        <p style="margin-bottom: 25px; color: #8b949e;">Strictly 5-Digit Access ID Required</p>
-        
-        <div id="login-error" class="error-msg">Error Message Here</div>
+    <div class="os-window">
+        <div class="top-bar">
+            <div class="logo">KUMAR // API NETWORK</div>
+            <div id="status-indicator" style="color: #888;">System Offline</div>
+        </div>
 
-        <div class="input-group">
-            <label>5-Digit Access ID:</label>
-            <input type="text" id="userid" placeholder="e.g. 12345" maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <div class="main-content">
+            <!-- ================= AUTHENTICATION PORTAL ================= -->
+            <div class="auth-wrapper" id="auth-system">
+                <div class="auth-box">
+                    <div class="auth-tabs">
+                        <div class="tab-btn active" onclick="switchAuthTab('login')" id="tab-login">Login</div>
+                        <div class="tab-btn" onclick="switchAuthTab('register')" id="tab-register">Create Account</div>
+                    </div>
+                    
+                    <div id="auth-msg" class="msg-box"></div>
+
+                    <!-- LOGIN FORM -->
+                    <div id="login-form">
+                        <div class="input-group">
+                            <label>5-Digit User ID</label>
+                            <input type="text" id="log-id" maxlength="5" placeholder="Enter exactly 5 digits">
+                        </div>
+                        <div class="input-group">
+                            <label>Password</label>
+                            <input type="password" id="log-pass" placeholder="••••••••">
+                        </div>
+                        <button class="action-btn" onclick="loginUser()">Access Network</button>
+                    </div>
+
+                    <!-- REGISTER FORM -->
+                    <div id="register-form" style="display: none;">
+                        <div class="input-group">
+                            <label>Choose 5-Digit ID (Strict)</label>
+                            <input type="text" id="reg-id" maxlength="5" placeholder="e.g. 84930">
+                        </div>
+                        <div class="input-group">
+                            <label>Create Password</label>
+                            <input type="password" id="reg-pass" placeholder="Minimum 4 chars">
+                        </div>
+                        <button class="action-btn" onclick="registerUser()">Register ID</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= MAIN DASHBOARD ================= -->
+            <div id="dashboard">
+                <div class="sidebar">
+                    <div class="user-profile">
+                        <h3 id="dash-userid">#00000</h3>
+                        <p style="color: #888; font-size: 12px;">Verified Developer</p>
+                    </div>
+                    <div class="menu-item active" onclick="switchPanel('game-panel')">🎮 Math Hack (Earn)</div>
+                    <div class="menu-item" onclick="switchPanel('api-panel')">🔌 API Developer Portal</div>
+                    <div class="menu-item" style="color: var(--error-color); margin-top: auto;" onclick="logout()">🛑 Terminate Session</div>
+                </div>
+
+                <div class="dashboard-content">
+                    
+                    <!-- PANEL 1: MATH GAME -->
+                    <div id="game-panel" class="panel active">
+                        <h2 class="api-header">Hack The Points Database</h2>
+                        <div class="score-card">
+                            Total API Points: <span id="dash-score" style="color: var(--primary); font-weight: bold;">0</span>
+                        </div>
+                        <div class="equation-box" id="equation">Loading...</div>
+                        <div style="max-width: 300px; margin: 0 auto;">
+                            <input type="number" id="math-answer" placeholder="Enter Answer" style="text-align: center; font-size: 20px;">
+                            <button class="action-btn" style="margin-top: 15px;" onclick="verifyMath()">Submit Code</button>
+                        </div>
+                        <div id="math-feedback" style="text-align: center; margin-top: 20px; font-size: 18px; font-weight: bold;"></div>
+                    </div>
+
+                    <!-- PANEL 2: DEVELOPER API PORTAL -->
+                    <div id="api-panel" class="panel">
+                        <h2 class="api-header">Developer API Configuration</h2>
+                        <p class="api-desc">Tujhya svatahchya Telegram bot madhe database connect karnyasathi khali dilela code vapar. Ha code direct tujhya 5-digit ID (<span id="api-user-id" style="color:white;font-weight:bold;"></span>) sobat linked ahe.</p>
+                        
+                        <h3 style="color: #fff; margin: 20px 0 10px;">For Bots.Business (BJS)</h3>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode('bjs-code')">Copy</button>
+                            <pre id="bjs-code">
+// Kumar API Connection Code (BJS)
+var botId = "<span class="dynamic-id"></span>"; 
+var serverUrl = "https://kumar-lac.vercel.app/api/bot";
+
+HTTP.post({
+    url: serverUrl,
+    headers: { "Content-Type": "application/json" },
+    body: {
+        "userId": botId,
+        "action": "getScore"
+    },
+    success: "on_api_reply"
+});
+// ---------------------------------
+// Put this in 'on_api_reply' command:
+// var res = JSON.parse(content);
+// Bot.sendMessage("Your Score: " + res.score);
+                            </pre>
+                        </div>
+
+                        <h3 style="color: #fff; margin: 20px 0 10px;">For Python (Telebot/Aiogram)</h3>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode('py-code')">Copy</button>
+                            <pre id="py-code">
+import requests
+
+KUMAR_API = "https://kumar-lac.vercel.app/api/bot"
+USER_ID = "<span class="dynamic-id"></span>"
+
+def get_points():
+    payload = {"userId": USER_ID, "action": "getScore"}
+    response = requests.post(KUMAR_API, json=payload)
+    if response.status_code == 200:
+        return response.json().get('score', 0)
+    return "Error connecting to Kumar Network"
+                            </pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
-        <div class="input-group">
-            <label>Secure Password:</label>
-            <input type="password" id="password" placeholder="Enter Password">
-        </div>
-        <button onclick="attemptLogin()" id="login-btn">Authenticate</button>
     </div>
 
-    <!-- MATH GAME SCREEN -->
-    <div class="container" id="game-section">
-        <h1>System Hacked</h1>
-        <div class="score-board">
-            Current Score: <span id="display-score" style="color: var(--primary);">0</span>
-        </div>
-        
-        <p>Solve this equation to bypass firewalls:</p>
-        <div class="math-question" id="equation">0 + 0 = ?</div>
-
-        <div class="input-group">
-            <input type="number" id="math-answer" placeholder="Type your answer...">
-        </div>
-        <button onclick="checkAnswer()">Submit Answer</button>
-        
-        <div id="feedback"></div>
-        <button class="logout-btn" onclick="logout()">Terminate Session</button>
-    </div>
-
-    <!-- THE JAVASCRIPT BRAIN (Firebase + Game Logic) -->
+    <!-- ================= JAVASCRIPT: THE ENGINE ================= -->
     <script>
-        // 1. TUZHI FIREBASE CONFIG
+        // 1. FIREBASE SETUP
         const firebaseConfig = {
             apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
             authDomain: "newkumarbot.firebaseapp.com",
@@ -182,140 +212,160 @@
             messagingSenderId: "1006933600404",
             appId: "1:1006933600404:web:1df122474a7598a25fec81"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // System Variables
-        let currentUser = null;
-        let currentScore = 0;
-        let correctAnswer = 0;
+        // 2. SYSTEM STATE
+        let activeUser = null;
+        let activeScore = 0;
+        let correctMathAns = 0;
 
-        // 2. LOGIN LOGIC (STRICT 5-DIGIT CHECK)
-        function attemptLogin() {
-            const idInput = document.getElementById("userid").value;
-            const passInput = document.getElementById("password").value;
-            const errorDiv = document.getElementById("login-error");
-            const btn = document.getElementById("login-btn");
+        // UI HELPERS
+        function showMsg(text, isError) {
+            const m = document.getElementById("auth-msg");
+            m.style.display = "block";
+            m.innerText = text;
+            m.style.background = isError ? "rgba(255, 51, 102, 0.2)" : "rgba(51, 255, 119, 0.2)";
+            m.style.color = isError ? var(--error-color) : var(--success-color);
+            m.style.border = `1px solid ${isError ? '#ff3366' : '#33ff77'}`;
+        }
+        function switchAuthTab(tab) {
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-register').classList.remove('active');
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('auth-msg').style.display = 'none';
+            
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            document.getElementById(`${tab}-form`).style.display = 'block';
+        }
 
-            // Strict Validation
-            if(idInput.length !== 5) {
-                errorDiv.innerText = "❌ ID must be exactly 5 digits!";
-                errorDiv.style.display = "block";
-                return;
-            }
-            if(passInput.length < 4) {
-                errorDiv.innerText = "❌ Password too short!";
-                errorDiv.style.display = "block";
-                return;
-            }
+        // 3. REGISTRATION (CREATE ACCOUNT) LOGIC
+        function registerUser() {
+            const id = document.getElementById('reg-id').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+            
+            if(!/^\d{5}$/.test(id)) return showMsg("❌ ERROR: ID must be strictly 5 numbers!", true);
+            if(pass.length < 4) return showMsg("❌ ERROR: Password must be 4+ chars!", true);
 
-            errorDiv.style.display = "none";
-            btn.innerText = "Connecting...";
-
-            // Check Database
-            const userRef = db.ref('players/' + idInput);
-            userRef.once('value', (snapshot) => {
-                if (snapshot.exists()) {
-                    // User Exists - Check Password
-                    const data = snapshot.val();
-                    if(data.password === passInput) {
-                        startGame(idInput, data.score || 0);
-                    } else {
-                        errorDiv.innerText = "❌ ID already taken! Wrong Password.";
-                        errorDiv.style.display = "block";
-                        btn.innerText = "Authenticate";
-                    }
+            db.ref('users/' + id).once('value', snapshot => {
+                if(snapshot.exists()) {
+                    showMsg("❌ ERROR: This 5-Digit ID is already taken!", true);
                 } else {
-                    // New User - Create Account
-                    userRef.set({
-                        password: passInput,
+                    db.ref('users/' + id).set({
+                        password: pass,
                         score: 0,
                         created: new Date().toISOString()
                     }).then(() => {
-                        startGame(idInput, 0);
+                        showMsg("✅ Success! Account created. Please login.", false);
+                        setTimeout(() => switchAuthTab('login'), 2000);
                     });
                 }
             });
         }
 
-        // 3. MATH GAME LOGIC
-        function startGame(id, score) {
-            currentUser = id;
-            currentScore = score;
+        // 4. LOGIN LOGIC
+        function loginUser() {
+            const id = document.getElementById('log-id').value.trim();
+            const pass = document.getElementById('log-pass').value.trim();
             
-            document.getElementById("login-section").style.display = "none";
-            document.getElementById("game-section").style.display = "block";
-            document.getElementById("display-score").innerText = currentScore;
-            
-            generateMath();
+            if(!/^\d{5}$/.test(id)) return showMsg("❌ ERROR: Invalid ID format!", true);
+
+            db.ref('users/' + id).once('value', snapshot => {
+                if(snapshot.exists()) {
+                    const data = snapshot.val();
+                    if(data.password === pass) {
+                        launchDashboard(id, data.score || 0);
+                    } else {
+                        showMsg("❌ ERROR: Incorrect Password!", true);
+                    }
+                } else {
+                    showMsg("❌ ERROR: ID not found. Create Account first.", true);
+                }
+            });
         }
 
-        function generateMath() {
-            const num1 = Math.floor(Math.random() * 50) + 10;
-            const num2 = Math.floor(Math.random() * 20) + 1;
+        // 5. DASHBOARD & API INJECTION
+        function launchDashboard(id, score) {
+            activeUser = id;
+            activeScore = score;
+            
+            document.getElementById('auth-system').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'flex';
+            document.getElementById('status-indicator').innerText = "System Online";
+            document.getElementById('status-indicator').style.color = "var(--primary)";
+            
+            document.getElementById('dash-userid').innerText = "#" + activeUser;
+            document.getElementById('dash-score').innerText = activeScore;
+            
+            // Inject ID into API Portal Code
+            document.getElementById('api-user-id').innerText = activeUser;
+            const spans = document.querySelectorAll('.dynamic-id');
+            spans.forEach(span => span.innerText = activeUser);
+
+            generateEquation();
+        }
+
+        function switchPanel(panelId) {
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+        }
+
+        // 6. MATH GAME ENGINE
+        function generateEquation() {
             const ops = ['+', '-', '*'];
             const op = ops[Math.floor(Math.random() * ops.length)];
-
-            // Prevent negative answers for minus
-            let finalN1 = num1, finalN2 = num2;
-            if(op === '-' && num1 < num2) {
-                finalN1 = num2; finalN2 = num1;
-            }
-
-            document.getElementById("equation").innerText = `${finalN1} ${op} ${finalN2} = ?`;
+            let n1 = Math.floor(Math.random() * 20) + 5;
+            let n2 = Math.floor(Math.random() * 10) + 1;
             
-            if(op === '+') correctAnswer = finalN1 + finalN2;
-            if(op === '-') correctAnswer = finalN1 - finalN2;
-            if(op === '*') correctAnswer = finalN1 * finalN2;
+            if(op === '-' && n1 < n2) [n1, n2] = [n2, n1];
             
-            document.getElementById("math-answer").value = "";
-            document.getElementById("math-answer").focus();
+            document.getElementById('equation').innerText = `${n1} ${op} ${n2} = ?`;
+            if(op === '+') correctMathAns = n1 + n2;
+            if(op === '-') correctMathAns = n1 - n2;
+            if(op === '*') correctMathAns = n1 * n2;
+            
+            document.getElementById('math-answer').value = '';
         }
 
-        function checkAnswer() {
-            const userAnswer = parseInt(document.getElementById("math-answer").value);
-            const feedback = document.getElementById("feedback");
-
-            if(userAnswer === correctAnswer) {
-                currentScore += 10;
-                document.getElementById("display-score").innerText = currentScore;
-                feedback.innerText = "✅ Correct! +10 Points added to Firebase!";
-                feedback.style.color = "#00e676";
-                
-                // Live Update to Firebase
-                db.ref('players/' + currentUser).update({
-                    score: currentScore
-                });
-
-                setTimeout(() => {
-                    feedback.innerText = "";
-                    generateMath();
-                }, 1000);
+        function verifyMath() {
+            const ans = parseInt(document.getElementById('math-answer').value);
+            const fb = document.getElementById('math-feedback');
+            
+            if(ans === correctMathAns) {
+                activeScore += 5;
+                document.getElementById('dash-score').innerText = activeScore;
+                fb.innerText = "✅ Bypass Successful! +5 Points";
+                fb.style.color = "var(--success-color)";
+                db.ref('users/' + activeUser).update({ score: activeScore });
+                setTimeout(() => { fb.innerText = ""; generateEquation(); }, 1200);
             } else {
-                feedback.innerText = "❌ Incorrect! Try again.";
-                feedback.style.color = "#ff4444";
+                fb.innerText = "❌ Bypass Failed!";
+                fb.style.color = "var(--error-color)";
             }
         }
 
+        // 7. UTILS
         function logout() {
-            currentUser = null;
-            document.getElementById("userid").value = "";
-            document.getElementById("password").value = "";
-            document.getElementById("login-btn").innerText = "Authenticate";
-            
-            document.getElementById("game-section").style.display = "none";
-            document.getElementById("login-section").style.display = "block";
+            activeUser = null;
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('auth-system').style.display = 'flex';
+            document.getElementById('status-indicator').innerText = "System Offline";
+            document.getElementById('status-indicator').style.color = "#888";
+            document.getElementById('log-pass').value = "";
         }
-        
-        // Enter key to submit
-        document.getElementById("password").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") { attemptLogin(); }
-        });
-        document.getElementById("math-answer").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") { checkAnswer(); }
-        });
+        function copyCode(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text);
+            alert("API Code Copied!");
+        }
+
+        // Input Restrictions
+        document.getElementById('reg-id').addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
+        document.getElementById('log-id').addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
     </script>
 </body>
 </html>
