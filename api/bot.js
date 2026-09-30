@@ -4,13 +4,14 @@
  * Architecture: Serverless API Gateway
  * Database: Firebase Realtime Database (SDK Integration)
  * Security: High (CORS Enabled, Payload Validation, Type Checking)
+ * Features: Authentication, Points System, Multiple-Choice Math Hack
  * ====================================================================
  */
 
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, update, set } from "firebase/database";
+import { getDatabase, ref, get, update } from "firebase/database";
 
-// 🔒 1. SECURE FIREBASE CONFIGURATION (Tu bolla tasa ek pan shabd visarlo nahi!)
+// 🔒 1. SECURE FIREBASE CONFIGURATION
 const firebaseConfig = {
     apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
     authDomain: "newkumarbot.firebaseapp.com",
@@ -28,14 +29,14 @@ let db;
 try {
     app = initializeApp(firebaseConfig);
     db = getDatabase(app);
-    console.log("Firebase Database Connected Successfully.");
+    console.log("[SYSTEM] Firebase Database Connected Successfully.");
 } catch (err) {
-    console.error("Firebase Initialization Error:", err);
+    console.error("[ERROR] Firebase Initialization Error:", err);
 }
 
 // 🌐 3. MASTER API HANDLER
 export default async function handler(req, res) {
-    // 🛡️ SECURITY: CORS Headers Setup (Allow bots to connect)
+    // 🛡️ SECURITY: CORS Headers Setup (Allow bots to connect securely)
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -45,26 +46,26 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
-    // Block non-POST requests (Only bots allowed)
+    // Block non-POST requests
     if (req.method !== 'POST') {
         return res.status(405).json({ 
             success: false, 
-            error: "Method Not Allowed. This API only accepts POST requests from Telegram Bots." 
+            error: "Method Not Allowed. This API only accepts POST requests from verified Telegram Bots." 
         });
     }
 
-    // 📦 4. PAYLOAD EXTRACTION
+    // 📦 4. PAYLOAD EXTRACTION & STRICT VALIDATION
     const { userId, password, action, num1, num2, operator, answer } = req.body;
 
-    // Strict Validation: Action and userId are compulsory
     if (!action || !userId) {
         return res.status(400).json({ 
             success: false, 
-            error: "Missing parameters! 'userId' and 'action' are required." 
+            error: "Missing parameters! 'userId' and 'action' are strictly required." 
         });
     }
 
     try {
+        // Fetch User Data from Firebase
         const userRef = ref(db, `users/${userId}`);
         const snapshot = await get(userRef);
         const userData = snapshot.exists() ? snapshot.val() : null;
@@ -79,7 +80,7 @@ export default async function handler(req, res) {
             if (userData && userData.password === password) {
                 return res.status(200).json({ 
                     success: true, 
-                    message: "Access Granted", 
+                    message: "Access Granted. Session secured.", 
                     userId: userId 
                 });
             }
@@ -93,14 +94,15 @@ export default async function handler(req, res) {
             if (userData) {
                 return res.status(200).json({ 
                     success: true, 
-                    score: userData.score || 0 
+                    score: userData.score || 0,
+                    message: "Score fetched successfully."
                 });
             }
             return res.status(404).json({ success: false, error: "User profile not found in database." });
         }
 
         // ==========================================
-        // 🟠 ACTION 3: GENERATE MATH QUESTION
+        // 🟠 ACTION 3: GENERATE MATH QUESTION (With 4 Options)
         // ==========================================
         if (action === "getQuestion") {
             const ops = ['+', '-', '*'];
@@ -113,12 +115,32 @@ export default async function handler(req, res) {
                 let temp = n1; n1 = n2; n2 = temp;
             }
             
+            // Calculate Correct Answer
+            let correctAns = 0;
+            if (op === '+') correctAns = n1 + n2;
+            if (op === '-') correctAns = n1 - n2;
+            if (op === '*') correctAns = n1 * n2;
+
+            // Generate 3 Fake Options
+            let options = [correctAns];
+            while(options.length < 4) {
+                let fake = correctAns + Math.floor(Math.random() * 30) - 15;
+                if(fake !== correctAns && !options.includes(fake) && fake >= 0) {
+                    options.push(fake);
+                }
+            }
+            
+            // Shuffle the options array so the correct answer isn't always first
+            options.sort(() => Math.random() - 0.5);
+
             return res.status(200).json({ 
                 success: true, 
                 question: `${n1} ${op} ${n2} = ?`, 
                 n1: n1, 
                 n2: n2, 
-                op: op 
+                op: op,
+                options: options, // Sending the 4 shuffled options to the bot
+                message: "Secure math puzzle generated."
             });
         }
 
@@ -126,26 +148,24 @@ export default async function handler(req, res) {
         // 🟣 ACTION 4: VERIFY ANSWER & UPDATE DB
         // ==========================================
         if (action === "submitAnswer") {
-            // Validate incoming math payload
             if (num1 === undefined || num2 === undefined || !operator || answer === undefined) {
-                return res.status(400).json({ success: false, error: "Incomplete math data sent by bot." });
+                return res.status(400).json({ success: false, error: "Incomplete math payload sent by bot." });
             }
 
             let correctAnswer = 0;
             const parsedN1 = parseInt(num1);
             const parsedN2 = parseInt(num2);
 
-            // Calculate real answer on server (Cheating proof)
+            // Server-side calculation to prevent cheating
             if (operator === '+') correctAnswer = parsedN1 + parsedN2;
             else if (operator === '-') correctAnswer = parsedN1 - parsedN2;
             else if (operator === '*') correctAnswer = parsedN1 * parsedN2;
 
-            // Check if user answer matches
             if (parseInt(answer) === correctAnswer) {
                 let currentScore = userData ? (userData.score || 0) : 0;
-                let newScore = currentScore + 10; // Award 10 points
+                let newScore = currentScore + 10;
                 
-                // 🔥 FIREBASE UPDATE (Live Sync)
+                // Live sync to Firebase
                 await update(userRef, { 
                     score: newScore,
                     lastActive: new Date().toISOString()
@@ -167,11 +187,10 @@ export default async function handler(req, res) {
             }
         }
 
-        // Action not recognized
         return res.status(400).json({ success: false, error: "Invalid Action Requested by Bot." });
 
     } catch (error) {
-        console.error("Vercel Internal Server Error:", error);
+        console.error("[CRITICAL] Vercel Internal Server Error:", error);
         return res.status(500).json({ 
             success: false, 
             error: "CRITICAL: Firebase Database Connection Failed.",
