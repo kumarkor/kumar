@@ -1,7 +1,8 @@
 /**
  * =========================================================================================
  * KUMAR API NETWORK - MASTER BACKEND SERVER
- * File: api/bot.js
+ * Architecture: Serverless API Gateway (Firebase Integrated)
+ * Features: 2x Boosters, Dynamic Rewards, Mega Exams, Mota JSON Payload
  * =========================================================================================
  */
 
@@ -26,7 +27,6 @@ try {
     console.error("Firebase Error:", err);
 }
 
-// Check if user has an active booster
 const getBoosterMultiplier = (userData) => {
     if (userData && userData.booster && userData.booster.expires) {
         if (userData.booster.expires > Date.now()) {
@@ -34,6 +34,10 @@ const getBoosterMultiplier = (userData) => {
         }
     }
     return 1;
+};
+
+const generateTerminalLog = (action, userId) => {
+    return `[${new Date().toISOString()}] AUTH:#${userId} | ACTION:${action} | SECURE:TRUE`;
 };
 
 export default async function handler(req, res) {
@@ -57,23 +61,29 @@ export default async function handler(req, res) {
 
         const multiplier = getBoosterMultiplier(userData);
 
-        // 🟢 1. VERIFY USER
         if (action === "verifyUser") {
             if (userData && userData.password === password) {
-                return res.status(200).json({ success: true, userId: userId });
+                return res.status(200).json({ 
+                    success: true, 
+                    userId: userId,
+                    terminal_log: generateTerminalLog("LOGIN", userId)
+                });
             }
             return res.status(401).json({ success: false, error: "Access Denied." });
         }
 
-        // 🔵 2. GET SCORE
         if (action === "getScore") {
             if (userData) {
-                return res.status(200).json({ success: true, score: userData.score || 0 });
+                return res.status(200).json({ 
+                    success: true, 
+                    score: userData.score || 0,
+                    multiplier: multiplier,
+                    terminal_log: generateTerminalLog("FETCH_SCORE", userId)
+                });
             }
             return res.status(404).json({ success: false, error: "User not found." });
         }
 
-        // 🟠 3. GET MATH QUESTION (Normal)
         if (action === "getQuestion") {
             const ops = ['+', '-', '*'];
             const op = ops[Math.floor(Math.random() * ops.length)];
@@ -94,10 +104,14 @@ export default async function handler(req, res) {
             }
             options.sort(() => Math.random() - 0.5);
 
-            return res.status(200).json({ success: true, question: `${n1} ${op} ${n2} = ?`, n1, n2, op, options });
+            return res.status(200).json({ 
+                success: true, 
+                question: `${n1} ${op} ${n2} = ?`, 
+                n1, n2, op, options,
+                terminal_log: generateTerminalLog("GET_HACK", userId)
+            });
         }
 
-        // 🟣 4. SUBMIT MATH ANSWER (Normal)
         if (action === "submitAnswer") {
             let correctAns = 0;
             const p1 = parseInt(num1), p2 = parseInt(num2);
@@ -107,7 +121,7 @@ export default async function handler(req, res) {
             else if (operator === '*') correctAns = p1 * p2;
 
             if (parseInt(answer) === correctAns) {
-                let earned = 10 * multiplier; // 🔥 BOOSTER APPLIED HERE
+                let earned = 10 * multiplier; // Dynamic Points Calculation
                 let newScore = (userData ? userData.score || 0 : 0) + earned;
                 
                 await update(userRef, { score: newScore });
@@ -116,14 +130,15 @@ export default async function handler(req, res) {
                     success: true, 
                     isCorrect: true, 
                     newScore: newScore,
-                    message: multiplier > 1 ? `✅ BOOSTER ACTIVE! +${earned} Points!` : `✅ +${earned} Points!`
+                    earned: earned,          // SENDING REAL EARNED POINTS TO BOT
+                    multiplier: multiplier,  // SENDING MULTIPLIER TO BOT
+                    terminal_log: generateTerminalLog("SOLVE_HACK", userId)
                 });
             } else {
                 return res.status(200).json({ success: true, isCorrect: false, correctAnswer: correctAns });
             }
         }
 
-        // 🔥 5. GET MEGA EXAM
         if (action === "getMegaExam") {
             let n1 = Math.floor(Math.random() * 15) + 5;
             let n2 = Math.floor(Math.random() * 10) + 2;
@@ -140,13 +155,12 @@ export default async function handler(req, res) {
             return res.status(200).json({ success: true, question: `(${n1} * ${n2}) + ${n3} = ?`, n1, n2, n3, op: 'mega', options });
         }
 
-        // 💥 6. SUBMIT MEGA EXAM
         if (action === "submitMegaExam") {
             const p1 = parseInt(num1), p2 = parseInt(num2), p3 = parseInt(n3);
             let correctAns = (p1 * p2) + p3;
 
             if (parseInt(answer) === correctAns) {
-                let earned = 50 * multiplier; // 🔥 BOOSTER APPLIED HERE
+                let earned = 50 * multiplier;
                 let newScore = (userData ? userData.score || 0 : 0) + earned;
                 
                 await update(userRef, { score: newScore });
@@ -155,29 +169,12 @@ export default async function handler(req, res) {
                     success: true, 
                     isCorrect: true, 
                     newScore: newScore,
-                    message: `🔥 MEGA WIN! +${earned} Points!`
+                    earned: earned,
+                    multiplier: multiplier
                 });
             } else {
                 return res.status(200).json({ success: true, isCorrect: false, correctAnswer: correctAns });
             }
-        }
-
-        // 🛒 7. BUY BOOSTER FROM BOT
-        if (action === "buyItem") {
-            let cost = 0, hours = 0;
-            if (itemCode === "boost_1h") { cost = 150; hours = 1; }
-            else if (itemCode === "boost_24h") { cost = 500; hours = 24; }
-            else return res.status(400).json({ success: false, error: "Invalid item." });
-
-            let currentScore = userData ? userData.score || 0 : 0;
-            if (currentScore < cost) return res.status(200).json({ success: false, error: "Insufficient Points." });
-
-            const expiresAt = Date.now() + (hours * 60 * 60 * 1000);
-            let newScore = currentScore - cost;
-
-            await update(userRef, { score: newScore, booster: { multiplier: 2, expires: expiresAt } });
-
-            return res.status(200).json({ success: true, message: `✅ Booster Activated for ${hours}H!`, newScore: newScore });
         }
 
         return res.status(400).json({ success: false, error: "Invalid Action." });
