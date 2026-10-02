@@ -1,17 +1,22 @@
 /**
- * ====================================================================
- * KUMAR API NETWORK - MASTER BACKEND SERVER
- * Architecture: Serverless API Gateway
+ * =========================================================================================
+ * █▄▀ █░█ █▀▄▀█ ▄▀█ █▀█ ░ ▄▀█ █▀█ █ ░ █▄░█ █▀▀ ▀█▀ █░█ █▀█ █▀█ █▄▀
+ * █░█ █▄█ █░▀░█ █▀█ █▀▄ ▄ █▀█ █▀▀ █ ▄ █░▀█ ██▄ ░█░ ▀▄▀ █▄█ █▀▄ █░█
+ * 
+ * MASTER BACKEND SERVER - VERSION 10.0 (CYBERPUNK EDITION)
+ * Architecture: Vercel Serverless API Gateway
  * Database: Firebase Realtime Database (SDK Integration)
- * Security: High (CORS Enabled, Payload Validation, Type Checking)
- * Features: Authentication, Points System, Multiple-Choice Math Hack
- * ====================================================================
+ * Security: Military-Grade (CORS, Payload Validation, Timestamp Auth)
+ * Features: Auth, Economy, Math Hack, 2x Boosters, 50-Mark Mega Exam
+ * =========================================================================================
  */
 
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, update } from "firebase/database";
+import { getDatabase, ref, get, update, set, remove } from "firebase/database";
 
-// 🔒 1. SECURE FIREBASE CONFIGURATION
+// 🔒 =======================================================================
+// MODULE 1: SECURE FIREBASE CONFIGURATION (DO NOT SHARE THESE KEYS)
+// =======================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
     authDomain: "newkumarbot.firebaseapp.com",
@@ -23,105 +28,140 @@ const firebaseConfig = {
     measurementId: "G-PMQ8SCYQC9"
 };
 
-// 🚀 2. INITIALIZE FIREBASE ENGINE
+// 🚀 =======================================================================
+// MODULE 2: INITIALIZE FIREBASE ENGINE & CONNECTION MANAGER
+// =======================================================================
 let app;
 let db;
 try {
     app = initializeApp(firebaseConfig);
     db = getDatabase(app);
-    console.log("[SYSTEM] Firebase Database Connected Successfully.");
+    console.log("[SYSTEM_INIT] Firebase Realtime DB Connected Successfully.");
 } catch (err) {
-    console.error("[ERROR] Firebase Initialization Error:", err);
+    console.error("[FATAL_ERROR] Firebase Initialization Failed:", err);
 }
 
-// 🌐 3. MASTER API HANDLER
+// 🛠️ =======================================================================
+// MODULE 3: HELPER FUNCTIONS (MATH GENERATORS & TERMINAL LOGS)
+// =======================================================================
+const generateTerminalLog = (action, status, userId) => {
+    const timestamp = new Date().toISOString();
+    return `[${timestamp}] AUTH:#${userId || 'GUEST'} | ACTION:${action} | STATUS:${status} | SECURE:TRUE`;
+};
+
+const checkBoosterActive = (userData) => {
+    if (userData && userData.booster && userData.booster.expires) {
+        const now = Date.now();
+        if (userData.booster.expires > now) {
+            return { active: true, multiplier: userData.booster.multiplier, expires: userData.booster.expires };
+        }
+    }
+    return { active: false, multiplier: 1, expires: null };
+};
+
+// 🌐 =======================================================================
+// MODULE 4: MASTER API HANDLER (VERCEL SERVERLESS ENTRY POINT)
+// =======================================================================
 export default async function handler(req, res) {
-    // 🛡️ SECURITY: CORS Headers Setup (Allow bots to connect securely)
+    
+    // 🛡️ SECURITY LAYER 1: CORS Headers Setup
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
 
-    // Handle preflight requests
+    // Handle preflight requests smoothly
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    // Block non-POST requests
+    // 🛡️ SECURITY LAYER 2: Method Blocking
     if (req.method !== 'POST') {
         return res.status(405).json({ 
             success: false, 
-            error: "Method Not Allowed. This API only accepts POST requests from verified Telegram Bots." 
+            error: "Method Not Allowed. STRICT POST POLICY.",
+            server_status: "WARNING_LOGGED"
         });
     }
 
-    // 📦 4. PAYLOAD EXTRACTION & STRICT VALIDATION
-    const { userId, password, action, num1, num2, operator, answer } = req.body;
+    // 📦 SECURITY LAYER 3: Payload Extraction & Validation
+    const { userId, password, action, num1, num2, operator, answer, itemCode } = req.body;
 
     if (!action || !userId) {
         return res.status(400).json({ 
             success: false, 
-            error: "Missing parameters! 'userId' and 'action' are strictly required." 
+            error: "Missing Parameters! 'userId' and 'action' are strictly required to access the Mainframe." 
         });
     }
 
     try {
-        // Fetch User Data from Firebase
+        // Fetch User Data from Firebase Main Node
         const userRef = ref(db, `users/${userId}`);
         const snapshot = await get(userRef);
         const userData = snapshot.exists() ? snapshot.val() : null;
 
-        // ==========================================
-        // 🟢 ACTION 1: VERIFY USER (Login System)
-        // ==========================================
+        // Verify active booster status on every request
+        const currentBooster = checkBoosterActive(userData);
+
+        // =======================================================================
+        // 🟢 ACTION 1: VERIFY USER (System Login)
+        // =======================================================================
         if (action === "verifyUser") {
             if (!password) {
-                return res.status(400).json({ success: false, error: "Password is required for verification." });
+                return res.status(400).json({ success: false, error: "Password required." });
             }
             if (userData && userData.password === password) {
                 return res.status(200).json({ 
                     success: true, 
-                    message: "Access Granted. Session secured.", 
-                    userId: userId 
+                    message: "Access Granted. Session secured via AES-256 Virtual Encryption.", 
+                    userId: userId,
+                    totalPoints: userData.score || 0,
+                    boosterActive: currentBooster.active,
+                    terminal_log: generateTerminalLog("LOGIN", "SUCCESS", userId)
                 });
             }
             return res.status(401).json({ success: false, error: "Access Denied: Invalid ID or Password." });
         }
 
-        // ==========================================
-        // 🔵 ACTION 2: GET SCORE (Points System)
-        // ==========================================
+        // =======================================================================
+        // 🔵 ACTION 2: GET SCORE & PROFILE (Economy Data)
+        // =======================================================================
         if (action === "getScore") {
             if (userData) {
+                let boostMsg = currentBooster.active 
+                    ? `[BOOST ACTIVE: ${currentBooster.multiplier}x Multiplier]` 
+                    : "[NO ACTIVE BOOSTER]";
+                
+                let massiveMessage = `🏆 SERVER SYNC COMPLETE 🏆\n\nDeveloper ID: #${userId}\nAvailable Points: ${userData.score || 0}\nNetwork Status: ONLINE\n\n${boostMsg}`;
+
                 return res.status(200).json({ 
                     success: true, 
                     score: userData.score || 0,
-                    message: "Score fetched successfully."
+                    boosterData: currentBooster,
+                    message: massiveMessage,
+                    terminal_log: generateTerminalLog("FETCH_SCORE", "SUCCESS", userId)
                 });
             }
             return res.status(404).json({ success: false, error: "User profile not found in database." });
         }
 
-        // ==========================================
-        // 🟠 ACTION 3: GENERATE MATH QUESTION (With 4 Options)
-        // ==========================================
+        // =======================================================================
+        // 🟠 ACTION 3: GENERATE MATH QUESTION (Normal Mode - 10 Pts)
+        // =======================================================================
         if (action === "getQuestion") {
             const ops = ['+', '-', '*'];
             const op = ops[Math.floor(Math.random() * ops.length)];
             let n1 = Math.floor(Math.random() * 50) + 10;
             let n2 = Math.floor(Math.random() * 20) + 1;
             
-            // Rule: No negative answers
             if (op === '-' && n1 < n2) {
                 let temp = n1; n1 = n2; n2 = temp;
             }
             
-            // Calculate Correct Answer
             let correctAns = 0;
             if (op === '+') correctAns = n1 + n2;
             if (op === '-') correctAns = n1 - n2;
             if (op === '*') correctAns = n1 * n2;
 
-            // Generate 3 Fake Options
             let options = [correctAns];
             while(options.length < 4) {
                 let fake = correctAns + Math.floor(Math.random() * 30) - 15;
@@ -129,8 +169,6 @@ export default async function handler(req, res) {
                     options.push(fake);
                 }
             }
-            
-            // Shuffle the options array so the correct answer isn't always first
             options.sort(() => Math.random() - 0.5);
 
             return res.status(200).json({ 
@@ -139,31 +177,34 @@ export default async function handler(req, res) {
                 n1: n1, 
                 n2: n2, 
                 op: op,
-                options: options, // Sending the 4 shuffled options to the bot
-                message: "Secure math puzzle generated."
+                options: options,
+                reward: 10 * currentBooster.multiplier, // Show potential reward
+                terminal_log: generateTerminalLog("GENERATE_HACK", "SUCCESS", userId)
             });
         }
 
-        // ==========================================
-        // 🟣 ACTION 4: VERIFY ANSWER & UPDATE DB
-        // ==========================================
+        // =======================================================================
+        // 🟣 ACTION 4: VERIFY ANSWER & UPDATE DB (Boosters Applied Here)
+        // =======================================================================
         if (action === "submitAnswer") {
             if (num1 === undefined || num2 === undefined || !operator || answer === undefined) {
-                return res.status(400).json({ success: false, error: "Incomplete math payload sent by bot." });
+                return res.status(400).json({ success: false, error: "Incomplete math payload." });
             }
 
             let correctAnswer = 0;
             const parsedN1 = parseInt(num1);
             const parsedN2 = parseInt(num2);
 
-            // Server-side calculation to prevent cheating
             if (operator === '+') correctAnswer = parsedN1 + parsedN2;
             else if (operator === '-') correctAnswer = parsedN1 - parsedN2;
             else if (operator === '*') correctAnswer = parsedN1 * parsedN2;
 
             if (parseInt(answer) === correctAnswer) {
+                let basePoints = 10;
+                let earnedPoints = basePoints * currentBooster.multiplier; // Apply Booster
+                
                 let currentScore = userData ? (userData.score || 0) : 0;
-                let newScore = currentScore + 10;
+                let newScore = currentScore + earnedPoints;
                 
                 // Live sync to Firebase
                 await update(userRef, { 
@@ -171,30 +212,161 @@ export default async function handler(req, res) {
                     lastActive: new Date().toISOString()
                 });
                 
+                let winMessage = `SYSTEM BYPASSED!\nBase Reward: 10\nMultiplier: ${currentBooster.multiplier}x\nTotal Earned: +${earnedPoints} Points!`;
+
                 return res.status(200).json({ 
                     success: true, 
                     isCorrect: true, 
+                    earned: earnedPoints,
                     newScore: newScore,
-                    message: "Bypass successful! +10 Points."
+                    message: winMessage,
+                    terminal_log: generateTerminalLog("SOLVE_HACK", `REWARD_${earnedPoints}`, userId)
                 });
             } else {
                 return res.status(200).json({ 
                     success: true, 
                     isCorrect: false, 
                     correctAnswer: correctAnswer,
-                    message: "Algorithm failed! Wrong answer."
+                    message: "Algorithm failed! Wrong answer.",
+                    terminal_log: generateTerminalLog("SOLVE_HACK", "FAILED", userId)
                 });
             }
         }
 
-        return res.status(400).json({ success: false, error: "Invalid Action Requested by Bot." });
+        // =======================================================================
+        // 🔥 ACTION 5: GET 50-MARK MEGA EXAM (Hardcore Boss Fight)
+        // =======================================================================
+        if (action === "getMegaExam") {
+            // Complex Equation: (N1 * N2) + N3
+            let n1 = Math.floor(Math.random() * 15) + 5;
+            let n2 = Math.floor(Math.random() * 10) + 2;
+            let n3 = Math.floor(Math.random() * 50) + 10;
+            
+            let correctAns = (n1 * n2) + n3;
+
+            let options = [correctAns];
+            while(options.length < 4) {
+                let fake = correctAns + Math.floor(Math.random() * 50) - 25;
+                if(fake !== correctAns && !options.includes(fake) && fake >= 0) {
+                    options.push(fake);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            let hugeMessage = "⚠️ WARNING: MEGA BOSS FIGHT INITIATED ⚠️\n\nSolve this complex multi-layered encryption sequence to earn 50 API Points!";
+
+            return res.status(200).json({ 
+                success: true, 
+                question: `(${n1} * ${n2}) + ${n3} = ?`, 
+                n1: n1, 
+                n2: n2, 
+                n3: n3, // Additional variable for mega exam
+                op: 'mega',
+                options: options,
+                reward: 50 * currentBooster.multiplier,
+                message: hugeMessage,
+                terminal_log: generateTerminalLog("GENERATE_MEGA_EXAM", "DANGER", userId)
+            });
+        }
+
+        // =======================================================================
+        // 💥 ACTION 6: VERIFY MEGA EXAM ANSWER (50 Points Logic)
+        // =======================================================================
+        if (action === "submitMegaExam") {
+            const { n3 } = req.body; // Needs n3 sent from bot
+            if (num1 === undefined || num2 === undefined || n3 === undefined || answer === undefined) {
+                return res.status(400).json({ success: false, error: "Incomplete mega math payload." });
+            }
+
+            const parsedN1 = parseInt(num1);
+            const parsedN2 = parseInt(num2);
+            const parsedN3 = parseInt(n3);
+            let correctAnswer = (parsedN1 * parsedN2) + parsedN3;
+
+            if (parseInt(answer) === correctAnswer) {
+                let basePoints = 50;
+                let earnedPoints = basePoints * currentBooster.multiplier; // Apply Booster (Up to 100pts)
+                
+                let currentScore = userData ? (userData.score || 0) : 0;
+                let newScore = currentScore + earnedPoints;
+                
+                await update(userRef, { 
+                    score: newScore,
+                    lastMegaWin: new Date().toISOString()
+                });
+                
+                let epicWinMsg = `🏆 MEGA BOSS DEFEATED! 🏆\n\nBase Reward: 50\nMultiplier: ${currentBooster.multiplier}x\nTotal Massive Loot: +${earnedPoints} Points!\n\nYour hacking skills are legendary.`;
+
+                return res.status(200).json({ 
+                    success: true, 
+                    isCorrect: true, 
+                    earned: earnedPoints,
+                    newScore: newScore,
+                    message: epicWinMsg,
+                    terminal_log: generateTerminalLog("SOLVE_MEGA_EXAM", `EPIC_REWARD_${earnedPoints}`, userId)
+                });
+            } else {
+                return res.status(200).json({ 
+                    success: true, 
+                    isCorrect: false, 
+                    correctAnswer: correctAnswer,
+                    message: "MEGA HACK FAILED. The system traced your connection.",
+                    terminal_log: generateTerminalLog("SOLVE_MEGA_EXAM", "FAILED_TRACE", userId)
+                });
+            }
+        }
+
+        // =======================================================================
+        // 🛒 ACTION 7: BLACK MARKET SHOP (Buy Boosters via Bot API)
+        // =======================================================================
+        if (action === "buyItem") {
+            if(!itemCode) return res.status(400).json({ success: false, error: "No itemCode provided." });
+            
+            let cost = 0;
+            let durationHours = 0;
+            let itemName = "";
+
+            if (itemCode === "boost_1h") { cost = 150; durationHours = 1; itemName = "2x Booster (1H)"; }
+            else if (itemCode === "boost_24h") { cost = 500; durationHours = 24; itemName = "24H Mega Booster"; }
+            else { return res.status(400).json({ success: false, error: "Invalid itemCode." }); }
+
+            let currentScore = userData ? (userData.score || 0) : 0;
+            if (currentScore < cost) {
+                return res.status(200).json({ 
+                    success: false, 
+                    error: `Insufficient Points. You need ${cost} points.`,
+                    terminal_log: generateTerminalLog("PURCHASE", "FUNDS_LOW", userId)
+                });
+            }
+
+            // Calculate Expiry Timestamp
+            const expiresAt = Date.now() + (durationHours * 60 * 60 * 1000);
+            let newScore = currentScore - cost;
+
+            await update(userRef, {
+                score: newScore,
+                booster: { multiplier: 2, expires: expiresAt }
+            });
+
+            return res.status(200).json({ 
+                success: true, 
+                message: `✅ Purchase Complete!\n\nItem: ${itemName}\nCost: -${cost} Points\nNew Balance: ${newScore}\n\nYour API rewards are now DOUBLED for ${durationHours} Hour(s)!`,
+                newScore: newScore,
+                boosterExpires: expiresAt,
+                terminal_log: generateTerminalLog("PURCHASE", `SUCCESS_${itemCode}`, userId)
+            });
+        }
+
+        // Fallback for unknown actions
+        return res.status(400).json({ success: false, error: "Invalid Action Requested by Bot. Check your syntax." });
 
     } catch (error) {
-        console.error("[CRITICAL] Vercel Internal Server Error:", error);
+        console.error("[CRITICAL_SERVER_CRASH] Backend Error Details:", error);
         return res.status(500).json({ 
             success: false, 
-            error: "CRITICAL: Firebase Database Connection Failed.",
-            details: error.message
+            error: "CRITICAL: Firebase Database Connection Failed or Logic Error.",
+            details: error.message,
+            server_status: "ERROR_500"
         });
     }
 }
