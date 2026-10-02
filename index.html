@@ -15,7 +15,7 @@
 
     <style>
         /* ==========================================================================
-           MASSIVE CSS ARCHITECTURE: NEXT-GEN HACKER OS DESIGN (1000+ LINES READY)
+           MASSIVE CSS ARCHITECTURE: NEXT-GEN HACKER OS DESIGN
            ========================================================================== */
         :root {
             --primary: #00ffcc;
@@ -29,6 +29,7 @@
             --success-color: #2aff77;
             --cyber-font: 'Share Tech Mono', monospace;
             --title-font: 'Orbitron', sans-serif;
+            --gold: #ffd700;
         }
 
         /* GLOBAL RESET & SCROLLBAR */
@@ -60,7 +61,7 @@
 
         .main-content { flex: 1; display: flex; overflow: hidden; width: 100%; position: relative; }
 
-        /* AUTHENTICATION PORTAL (LOGIN/REGISTER) */
+        /* AUTHENTICATION PORTAL */
         .auth-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; position: relative; }
         .auth-box { background: rgba(5, 5, 8, 0.8); padding: 50px; border-radius: 15px; border: 1px solid var(--border-color); width: 100%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; overflow: hidden; }
         .auth-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, var(--primary), transparent 30%); animation: rotate 4s linear infinite; z-index: -1; opacity: 0.1; }
@@ -106,11 +107,39 @@
         
         /* STATS CARDS */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: rgba(0,0,0,0.6); border: 1px solid #222; padding: 25px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: inset 0 0 20px rgba(0,0,0,1); transition: 0.3s; }
+        .stat-card { background: rgba(0,0,0,0.6); border: 1px solid #222; padding: 25px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: inset 0 0 20px rgba(0,0,0,1); transition: 0.3s; position: relative; overflow: hidden;}
         .stat-card:hover { border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); transform: translateY(-5px); }
         .stat-icon { font-size: 30px; color: var(--primary); margin-bottom: 15px; }
         .stat-value { font-size: 45px; font-family: var(--title-font); font-weight: bold; color: #fff; margin-bottom: 5px; }
         .stat-label { color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* BOOSTER TAG */
+        .booster-tag { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; display: none; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 50% { transform: scale(1.05); box-shadow: 0 0 10px 5px rgba(255, 215, 0, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
+
+        /* POINT SHOP / BLACK MARKET */
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .shop-item { background: rgba(5,5,8,0.8); border: 1px solid #222; border-radius: 10px; padding: 25px; display: flex; flex-direction: column; transition: 0.3s; position: relative; overflow: hidden; }
+        .shop-item:hover { border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,255,204,0.1); }
+        .item-icon { font-size: 40px; color: var(--primary); margin-bottom: 15px; text-align: center; }
+        .item-title { font-family: var(--title-font); font-size: 18px; color: #fff; text-align: center; margin-bottom: 10px; }
+        .item-desc { color: #888; font-size: 13px; text-align: center; margin-bottom: 20px; line-height: 1.4; flex: 1; }
+        .item-price { text-align: center; font-size: 20px; color: var(--gold); font-weight: bold; margin-bottom: 20px; font-family: var(--title-font); }
+        .buy-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 12px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-family: var(--title-font); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; width: 100%; }
+        .buy-btn:hover { background: var(--primary); color: #000; }
+        .buy-btn:disabled { border-color: #333; color: #555; cursor: not-allowed; background: transparent; }
+
+        /* LEADERBOARD */
+        .leaderboard-container { background: rgba(5,5,8,0.8); border: 1px solid #1a1a2e; border-radius: 12px; overflow: hidden; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; }
+        .leaderboard-table th { background: #111; padding: 15px; text-align: left; color: var(--primary); font-family: var(--title-font); border-bottom: 1px solid #222; text-transform: uppercase; letter-spacing: 1px; }
+        .leaderboard-table td { padding: 15px; border-bottom: 1px solid #1a1a2e; color: #aaa; transition: 0.3s; }
+        .leaderboard-table tr:hover td { background: rgba(0,255,204,0.05); color: #fff; }
+        .rank-1 td { color: var(--gold); font-weight: bold; }
+        .rank-2 td { color: #c0c0c0; font-weight: bold; }
+        .rank-3 td { color: #cd7f32; font-weight: bold; }
+        
+        .rank-icon { margin-right: 10px; }
 
         /* API DOCUMENTATION PORTAL */
         .api-docs { background: rgba(5,5,8,0.8); border: 1px solid #1a1a2e; border-radius: 12px; padding: 30px; }
@@ -119,8 +148,7 @@
         .url { color: #fff; font-size: 16px; }
 
         .docs-title { font-size: 20px; color: var(--primary); margin: 30px 0 15px; display: flex; align-items: center; gap: 10px; }
-        .docs-title i { font-size: 16px; }
-
+        
         .api-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: #050508; border-radius: 8px; overflow: hidden; border: 1px solid #222; }
         .api-table th { background: #111; padding: 15px; text-align: left; color: var(--primary); font-family: var(--title-font); border-bottom: 1px solid #222; }
         .api-table td { padding: 15px; border-bottom: 1px solid #1a1a2e; color: #aaa; }
@@ -137,6 +165,17 @@
         pre { color: var(--primary); font-size: 14px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: break-word; }
         .copy-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,255,204,0.1); color: var(--primary); border: 1px solid var(--primary); padding: 8px 15px; border-radius: 4px; cursor: pointer; font-family: var(--title-font); transition: 0.3s; }
         .copy-btn:hover { background: var(--primary); color: #000; }
+
+        /* MODAL (FOR ID CHANGE) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-box { background: var(--panel-bg); border: 1px solid var(--primary); border-radius: 10px; padding: 30px; width: 90%; max-width: 400px; box-shadow: 0 0 30px var(--primary-glow); }
+        .modal-title { color: #fff; font-family: var(--title-font); font-size: 22px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .modal-desc { color: #aaa; margin-bottom: 20px; font-size: 14px; }
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-btn { flex: 1; padding: 12px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        .btn-cancel { background: #333; color: #fff; }
+        .btn-confirm { background: var(--primary); color: #000; }
+        .btn-confirm:hover { background: #fff; }
 
         /* TOAST NOTIFICATIONS */
         #toast-box { position: fixed; bottom: 30px; right: 30px; z-index: 10000; display: flex; flex-direction: column; gap: 15px; }
@@ -173,6 +212,21 @@
 
     <!-- TOAST NOTIFICATIONS -->
     <div id="toast-box"></div>
+    
+    <!-- MODAL FOR CHANGING ID -->
+    <div class="modal-overlay" id="change-id-modal">
+        <div class="modal-box">
+            <div class="modal-title"><i class="fa-solid fa-id-card-clip"></i> Change Developer ID</div>
+            <div class="modal-desc">Enter your new 5-digit Developer ID. This will cost 500 Points. Your current data will be transferred.</div>
+            <div class="input-group">
+                <input type="tel" id="new-dev-id" maxlength="5" placeholder="New 5-Digit ID" style="padding-left: 15px;">
+            </div>
+            <div class="modal-btns">
+                <button class="modal-btn btn-cancel" onclick="closeModal('change-id-modal')">Cancel</button>
+                <button class="modal-btn btn-confirm" onclick="processIdChange()">Confirm (500 pts)</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN OS WINDOW -->
     <div class="os-window" id="os-window">
@@ -242,6 +296,8 @@
                         <p>VERIFIED DEVELOPER</p>
                     </div>
                     <button class="menu-item active" onclick="switchPanel('overview-panel')"><i class="fa-solid fa-chart-line"></i> Overview</button>
+                    <button class="menu-item" onclick="switchPanel('shop-panel')"><i class="fa-solid fa-cart-shopping"></i> Black Market</button>
+                    <button class="menu-item" onclick="switchPanel('leaderboard-panel')"><i class="fa-solid fa-trophy"></i> Global Leaderboard</button>
                     <button class="menu-item" onclick="switchPanel('api-panel')"><i class="fa-solid fa-code"></i> API Gateway Docs</button>
                     <button class="menu-item" style="color: var(--error-color); margin-top: auto;" onclick="logout()"><i class="fa-solid fa-power-off"></i> Disconnect</button>
                 </div>
@@ -258,6 +314,7 @@
                                 <i class="fa-solid fa-database stat-icon"></i>
                                 <div class="stat-value" id="dash-score">0</div>
                                 <div class="stat-label">Total API Points</div>
+                                <div class="booster-tag" id="booster-active-tag">BOOST ACTIVE <span id="boost-multiplier"></span>x</div>
                             </div>
                             <div class="stat-card">
                                 <i class="fa-solid fa-server stat-icon"></i>
@@ -273,11 +330,68 @@
 
                         <div style="background: rgba(0,0,0,0.5); padding: 30px; border-radius: 10px; border: 1px solid #222; text-align: center;">
                             <h3 style="color: var(--primary); margin-bottom: 15px; font-family: var(--title-font);">⚠️ IMPORTANT SYSTEM UPDATE</h3>
-                            <p style="color: #aaa; font-size: 16px; line-height: 1.6;">Math calculations are no longer performed on this website frontend. To earn points, you must connect your Telegram Bot to the API Endpoint and use the Bot's built-in Math Game interface. The server will verify answers internally.</p>
+                            <p style="color: #aaa; font-size: 16px; line-height: 1.6;">Math calculations are no longer performed on this website frontend. To earn points, you must connect your Telegram Bot to the API Endpoint and use the Bot's built-in Math Game interface. You can now use your points in the Black Market.</p>
                         </div>
                     </div>
 
-                    <!-- PANEL 2: MASSIVE API DOCS -->
+                    <!-- PANEL 2: BLACK MARKET (SHOP) -->
+                    <div id="shop-panel" class="panel">
+                        <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> Black Market</h2>
+                        <p style="color: #888; margin-bottom: 25px;">Use your API Points to purchase server upgrades and enhancements.</p>
+
+                        <div class="shop-grid">
+                            <!-- Item 1: 2x Booster (1 Hour) -->
+                            <div class="shop-item">
+                                <div class="item-icon"><i class="fa-solid fa-bolt"></i></div>
+                                <div class="item-title">2x Points Booster</div>
+                                <div class="item-desc">Double the points earned from Telegram Bot Math API requests for 1 Hour.</div>
+                                <div class="item-price">150 Points</div>
+                                <button class="buy-btn" id="btn-buy-boost-1" onclick="buyItem('boost_1h', 150)">Purchase Access</button>
+                            </div>
+
+                            <!-- Item 2: 2x Booster (24 Hours) -->
+                            <div class="shop-item">
+                                <div class="item-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                                <div class="item-title">24Hr Mega Booster</div>
+                                <div class="item-desc">Double the points earned from Telegram Bot Math API requests for 24 Hours.</div>
+                                <div class="item-price">500 Points</div>
+                                <button class="buy-btn" id="btn-buy-boost-24" onclick="buyItem('boost_24h', 500)">Purchase Access</button>
+                            </div>
+
+                            <!-- Item 3: Change Developer ID -->
+                            <div class="shop-item">
+                                <div class="item-icon"><i class="fa-solid fa-id-card-clip"></i></div>
+                                <div class="item-title">Change Developer ID</div>
+                                <div class="item-desc">Migrate your account and points to a new custom 5-Digit Developer ID.</div>
+                                <div class="item-price">500 Points</div>
+                                <button class="buy-btn" id="btn-buy-id-change" onclick="openIdChangeModal()">Initiate Protocol</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL 3: LEADERBOARD -->
+                    <div id="leaderboard-panel" class="panel">
+                        <h2 class="section-title"><i class="fa-solid fa-trophy"></i> Global API Leaderboard</h2>
+                        <p style="color: #888; margin-bottom: 25px;">Top 50 developers by API Points across the network.</p>
+
+                        <div class="leaderboard-container">
+                            <table class="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th width="15%">Rank</th>
+                                        <th width="50%">Developer ID</th>
+                                        <th width="35%">Total Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body">
+                                    <!-- Populated by JS -->
+                                    <tr><td colspan="3" style="text-align: center;">Loading Neural Link...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- PANEL 4: MASSIVE API DOCS -->
                     <div id="api-panel" class="panel">
                         <h2 class="section-title"><i class="fa-solid fa-book-journal-whills"></i> Vercel API Documentation</h2>
                         
@@ -375,7 +489,7 @@ HTTP.post({
 
     <!-- ================= 1000+ LINES JS ENGINE ================= -->
     <script>
-        // --- 1. FIREBASE CONFIGURATION (UI Read-Only for Overview) ---
+        // --- 1. FIREBASE CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
             authDomain: "newkumarbot.firebaseapp.com",
@@ -391,6 +505,8 @@ HTTP.post({
 
         // --- 2. GLOBAL SYSTEM STATE ---
         let activeUser = null;
+        let userScore = 0;
+        let activeBooster = null; // null, {type: '2x', expires: timestamp}
 
         // --- 3. TOAST NOTIFICATION SYSTEM ---
         function showToast(message, type = 'success') {
@@ -444,7 +560,7 @@ HTTP.post({
                 showToast("Restoring secure session...", "success");
                 db.ref('users/' + savedSession).once('value', snapshot => {
                     if(snapshot.exists()) {
-                        launchDashboard(savedSession, snapshot.val().score || 0);
+                        launchDashboard(savedSession, snapshot.val());
                         showToast(`Welcome back, #${savedSession}`, "success");
                     } else {
                         localStorage.removeItem("kumar_api_session");
@@ -478,6 +594,7 @@ HTTP.post({
                     db.ref('users/' + id).set({
                         password: pass,
                         score: 0,
+                        booster: null,
                         created: new Date().toISOString()
                     }).then(() => {
                         showToast("Account Created! Please Login.", "success");
@@ -498,7 +615,7 @@ HTTP.post({
                     const data = snapshot.val();
                     if(data.password === pass) {
                         localStorage.setItem("kumar_api_session", id);
-                        launchDashboard(id, data.score || 0);
+                        launchDashboard(id, data);
                         showToast("Authentication Successful", "success");
                     } else {
                         showToast("Access Denied: Incorrect Password", "error");
@@ -510,8 +627,9 @@ HTTP.post({
         }
 
         // --- 7. DASHBOARD LOGIC ---
-        function launchDashboard(id, score) {
+        function launchDashboard(id, userData) {
             activeUser = id;
+            userScore = userData.score || 0;
             
             document.getElementById('auth-system').style.display = 'none';
             document.getElementById('dashboard').style.display = 'flex';
@@ -521,17 +639,25 @@ HTTP.post({
             document.getElementById('status-dot').classList.add('online');
             
             document.getElementById('dash-userid').innerText = "#" + activeUser;
-            document.getElementById('dash-score').innerText = score;
+            document.getElementById('dash-score').innerText = userScore;
             
             // Inject dynamic ID into all API code blocks
             const spans = document.querySelectorAll('.dynamic-id');
             spans.forEach(span => span.innerText = activeUser);
             
-            // Listen for live score updates from Firebase
-            db.ref('users/' + activeUser + '/score').on('value', (snapshot) => {
-                const currentScore = snapshot.val() || 0;
-                document.getElementById('dash-score').innerText = currentScore;
+            // Listen for live score & booster updates from Firebase
+            db.ref('users/' + activeUser).on('value', (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    userScore = data.score || 0;
+                    document.getElementById('dash-score').innerText = userScore;
+                    updateShopButtons();
+                    checkBoosterStatus(data.booster);
+                }
             });
+            
+            // Load Leaderboard on init
+            loadLeaderboard();
         }
 
         function switchPanel(panelId) {
@@ -540,10 +666,167 @@ HTTP.post({
             
             document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
             document.getElementById(panelId).classList.add('active');
+            
+            if(panelId === 'leaderboard-panel') {
+                loadLeaderboard();
+            }
         }
 
-        // --- 8. UTILITIES ---
+        // --- 8. SHOP & ECONOMY SYSTEM ---
+        function updateShopButtons() {
+            const btns = [
+                {id: 'btn-buy-boost-1', cost: 150},
+                {id: 'btn-buy-boost-24', cost: 500},
+                {id: 'btn-buy-id-change', cost: 500}
+            ];
+            
+            btns.forEach(btn => {
+                const el = document.getElementById(btn.id);
+                if(userScore < btn.cost) {
+                    el.disabled = true;
+                    el.innerText = "INSUFFICIENT FUNDS";
+                } else {
+                    el.disabled = false;
+                    if(btn.id === 'btn-buy-id-change') el.innerText = "Initiate Protocol";
+                    else el.innerText = "Purchase Access";
+                }
+            });
+        }
+
+        function buyItem(itemType, cost) {
+            if(userScore < cost) {
+                showToast("Insufficient Points!", "error");
+                return;
+            }
+
+            // Deduct Points
+            const newScore = userScore - cost;
+            
+            if(itemType === 'boost_1h' || itemType === 'boost_24h') {
+                const durationHours = itemType === 'boost_1h' ? 1 : 24;
+                const expiresAt = Date.now() + (durationHours * 60 * 60 * 1000);
+                
+                db.ref('users/' + activeUser).update({
+                    score: newScore,
+                    booster: { multiplier: 2, expires: expiresAt }
+                }).then(() => {
+                    showToast(`${durationHours}H Booster Activated!`, "success");
+                });
+            }
+        }
+
+        function checkBoosterStatus(boosterData) {
+            const tag = document.getElementById('booster-active-tag');
+            if(boosterData && boosterData.expires > Date.now()) {
+                tag.style.display = 'block';
+                document.getElementById('boost-multiplier').innerText = boosterData.multiplier;
+            } else {
+                tag.style.display = 'none';
+                // If expired in DB but still present, clear it
+                if(boosterData) {
+                     db.ref('users/' + activeUser + '/booster').remove();
+                }
+            }
+        }
+
+        // --- 9. CHANGE ID PROTOCOL ---
+        function openIdChangeModal() {
+            if(userScore < 500) return showToast("Need 500 points to change ID.", "error");
+            document.getElementById('change-id-modal').style.display = 'flex';
+            document.getElementById('new-dev-id').value = '';
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function processIdChange() {
+            const newId = document.getElementById('new-dev-id').value.trim();
+            if(!/^\d{5}$/.test(newId)) return showToast("ERROR: ID must be exactly 5 numbers!", "error");
+            if(newId === activeUser) return showToast("You are already using this ID.", "error");
+            
+            // Check if new ID is taken
+            db.ref('users/' + newId).once('value', snapshot => {
+                if(snapshot.exists()) {
+                    showToast("ERROR: This ID is already registered to someone else.", "error");
+                } else {
+                    // Start Migration Process
+                    db.ref('users/' + activeUser).once('value', oldSnap => {
+                        const oldData = oldSnap.val();
+                        oldData.score -= 500; // Deduct fee
+                        
+                        // Create new node
+                        db.ref('users/' + newId).set(oldData).then(() => {
+                            // Delete old node
+                            db.ref('users/' + activeUser).remove().then(() => {
+                                showToast("Developer ID Migration Successful!", "success");
+                                closeModal('change-id-modal');
+                                
+                                // Re-login logic
+                                activeUser = newId;
+                                localStorage.setItem("kumar_api_session", newId);
+                                document.getElementById('dash-userid').innerText = "#" + activeUser;
+                                
+                                // Update Spans
+                                const spans = document.querySelectorAll('.dynamic-id');
+                                spans.forEach(span => span.innerText = activeUser);
+                                
+                                // Reattach listeners
+                                db.ref('users').off(); // Clear old listeners
+                                launchDashboard(activeUser, oldData); // Re-init
+                            });
+                        });
+                    });
+                }
+            });
+        }
+
+        // --- 10. LEADERBOARD SYSTEM ---
+        function loadLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Fetching Database...</td></tr>';
+            
+            db.ref('users').orderByChild('score').limitToLast(50).once('value', snapshot => {
+                if(snapshot.exists()) {
+                    let usersArray = [];
+                    snapshot.forEach(child => {
+                        usersArray.push({ id: child.key, score: child.val().score || 0 });
+                    });
+                    
+                    // Sort descending (highest first)
+                    usersArray.sort((a, b) => b.score - a.score);
+                    
+                    tbody.innerHTML = '';
+                    usersArray.forEach((u, index) => {
+                        const rank = index + 1;
+                        let rankClass = '';
+                        let icon = `#${rank}`;
+                        
+                        if(rank === 1) { rankClass = 'rank-1'; icon = '<i class="fa-solid fa-crown rank-icon"></i>1'; }
+                        else if(rank === 2) { rankClass = 'rank-2'; icon = '<i class="fa-solid fa-medal rank-icon"></i>2'; }
+                        else if(rank === 3) { rankClass = 'rank-3'; icon = '<i class="fa-solid fa-award rank-icon"></i>3'; }
+
+                        const tr = document.createElement('tr');
+                        tr.className = rankClass;
+                        // Highlight current user
+                        if(u.id === activeUser) tr.style.background = 'rgba(0, 255, 204, 0.1)';
+                        
+                        tr.innerHTML = `
+                            <td>${icon}</td>
+                            <td>#${u.id} ${u.id === activeUser ? ' <span style="font-size:10px;color:var(--primary);">(YOU)</span>' : ''}</td>
+                            <td>${u.score}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">No Data Found</td></tr>';
+                }
+            });
+        }
+
+        // --- 11. UTILITIES ---
         function logout() {
+            db.ref('users/' + activeUser).off(); // Detach listener
             activeUser = null;
             localStorage.removeItem("kumar_api_session");
             
@@ -567,6 +850,7 @@ HTTP.post({
         // Input Formatters
         document.getElementById('reg-id').addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
         document.getElementById('log-id').addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
+        document.getElementById('new-dev-id').addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
         
         // Enter key support
         document.getElementById('log-pass').addEventListener('keypress', function(e) { if(e.key === 'Enter') loginUser(); });
