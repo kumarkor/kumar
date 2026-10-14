@@ -1,276 +1,212 @@
-/**
- * =========================================================================================
- * █▄▀ █░█ █▀▄▀█ ▄▀█ █▀█ ░ ▄▀█ █▀█ █ ░ █▄░█ █▀▀ ▀█▀ █░█ █▀█ █▀█ █▄▀
- * █░█ █▄█ █░▀░█ █▀█ █▀▄ ▄ █▀█ █▀▀ █ ▄ █░▀█ ██▄ ░█░ ▀▄▀ █▄█ █▀▄ █░█
- * 
- * MASTER BACKEND SERVER - VERSION 11.0 (ULTIMATE EDITION)
- * Architecture: Serverless API Gateway (Firebase Integrated)
- * Features: Type X Boosters, Global Admin Events, Mega Exams, Stacking Math
- * =========================================================================================
- */
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getDatabase, ref, get, set, update } from "firebase/database";
 
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, update, set } from "firebase/database";
-
-// 🔒 =======================================================================
-// MODULE 1: SECURE FIREBASE CONFIGURATION
-// =======================================================================
+// 🔒 TUMCHE FIREBASE CONFIGURATION
 const firebaseConfig = {
-    apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
-    authDomain: "newkumarbot.firebaseapp.com",
-    databaseURL: "https://newkumarbot-default-rtdb.firebaseio.com",
-    projectId: "newkumarbot",
-    storageBucket: "newkumarbot.firebasestorage.app",
-    messagingSenderId: "1006933600404",
-    appId: "1:1006933600404:web:1df122474a7598a25fec81",
-    measurementId: "G-PMQ8SCYQC9"
+  apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
+  authDomain: "newkumarbot.firebaseapp.com",
+  databaseURL: "https://newkumarbot-default-rtdb.firebaseio.com",
+  projectId: "newkumarbot",
+  storageBucket: "newkumarbot.firebasestorage.app",
+  messagingSenderId: "1006933600404",
+  appId: "1:1006933600404:web:1df122474a7598a25fec81",
+  measurementId: "G-PMQ8SCYQC9"
 };
 
 let app, db;
 try {
-    app = initializeApp(firebaseConfig);
-    db = getDatabase(app);
-    console.log("[SYSTEM] Firebase Connected Successfully.");
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  db = getDatabase(app);
 } catch (err) {
-    console.error("Firebase Error:", err);
+  console.error("Firebase Connection Error:", err);
 }
 
-// 🛠️ =======================================================================
-// MODULE 2: HELPER FUNCTIONS (MULTIPLIER MATH & LOGS)
-// =======================================================================
-
-// Gets User's Personal Multiplier (Custom X)
-const getUserBoosterX = (userData) => {
-    if (userData && userData.booster && userData.booster.expires) {
-        if (userData.booster.expires > Date.now()) {
-            return parseInt(userData.booster.multiplier) || 1;
-        }
-    }
-    return 1;
-};
-
-// Gets Global Event Multiplier from Database
-const getGlobalEventX = async () => {
-    try {
-        const eventRef = ref(db, 'serverSettings/event');
-        const snapshot = await get(eventRef);
-        const eventData = snapshot.exists() ? snapshot.val() : null;
-        
-        if (eventData && eventData.active) {
-            return parseInt(eventData.multiplier) || 1;
-        }
-        return 1;
-    } catch (e) {
-        return 1; // Fallback to 1x on error
-    }
-};
-
-const generateTerminalLog = (action, userId) => {
-    return `[${new Date().toISOString()}] AUTH:#${userId} | ACTION:${action} | SECURE:TRUE`;
-};
-
-// 🌐 =======================================================================
-// MODULE 3: MASTER API HANDLER
-// =======================================================================
 export default async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  // CORS Headers (Website aani Bot doghansathi)
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') return res.status(405).json({ success: false, error: "Only POST allowed." });
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
-    const { userId, action, num1, num2, operator, answer, n3, password, itemCode, customX, customH } = req.body;
+  try {
+    // GET kiva POST madhun data ghene
+    const data = req.method === "POST" ? req.body || {} : req.query || {};
+    const action = String(data.action || req.query.action || "").trim();
+    const account = String(data.account || data.userId || req.query.account || req.query.userId || "").trim();
+    const password = String(data.password || req.query.password || "").trim();
+    const name = String(data.name || req.query.name || "").trim();
+    const coins = parseInt(data.coins ?? req.query.coins ?? 0, 10);
 
-    if (!action || !userId) {
-        return res.status(400).json({ success: false, error: "Missing userId or action." });
+    // 1. CREATE NEW ACCOUNT (Name + 5 Number Account + 4 Number Password)
+    if (action === "register") {
+      if (!name) {
+        return res.status(400).json({
+          status: "error",
+          message: "Krupaya tumche Nav (Name) taka!"
+        });
+      }
+      if (!/^\d{5}$/.test(account)) {
+        return res.status(400).json({
+          status: "error",
+          message: "Account ID barobar 5 number cha asayla hava!"
+        });
+      }
+      if (!/^\d{4}$/.test(password)) {
+        return res.status(400).json({
+          status: "error",
+          message: "Password barobar 4 number cha asayla hava!"
+        });
+      }
+
+      const userRef = ref(db, `users/${account}`);
+      const snapshot = await get(userRef);
+
+      if (snapshot.exists()) {
+        return res.status(400).json({
+          status: "error",
+          message: "Ha 5 number cha Account adhich tayar ahe! Dusra number taka."
+        });
+      }
+
+      const newUser = {
+        name: name,
+        account: account,
+        password: password,
+        coins: 0,
+        createdAt: Date.now()
+      };
+
+      await set(userRef, newUser);
+
+      return res.status(200).json({
+        status: "success",
+        message: "Account yashasvipane tayar jhale!",
+        user: {
+          name: newUser.name,
+          account: newUser.account,
+          coins: newUser.coins
+        }
+      });
     }
 
-    try {
-        // Fetch User Data
-        const userRef = ref(db, `users/${userId}`);
-        const snapshot = await get(userRef);
-        const userData = snapshot.exists() ? snapshot.val() : null;
+    // 2. LOGIN ACCOUNT (5 Number Account + 4 Number Password)
+    if (action === "login") {
+      if (!/^\d{5}$/.test(account) \vert{}\vert{} !/^\d{4}$/.test(password)) {
+        return res.status(400).json({
+          status: "error",
+          message: "5 number cha Account ID aani 4 number cha Password taka!"
+        });
+      }
 
-        // Fetch Both Multipliers
-        const userX = getUserBoosterX(userData);
-        const eventX = await getGlobalEventX();
-        
-        // 🚨 CRITICAL STACKING FORMULA: Total X = User Boost X * Global Event X
-        const finalMultiplier = userX * eventX;
+      const userRef = ref(db, `users/${account}`);
+      const snapshot = await get(userRef);
 
-        // ==========================================
-        // 🟢 ACTION 1: VERIFY USER
-        // ==========================================
-        if (action === "verifyUser") {
-            if (userData && userData.password === password) {
-                return res.status(200).json({ 
-                    success: true, 
-                    userId: userId,
-                    terminal_log: generateTerminalLog("LOGIN", userId)
-                });
-            }
-            return res.status(401).json({ success: false, error: "Access Denied." });
+      if (!snapshot.exists()) {
+        return res.status(404).json({
+          status: "error",
+          message: "Account sapadla nahi! Pahile Create New Account kara."
+        });
+      }
+
+      const currentUser = snapshot.val();
+
+      if (String(currentUser.password) !== password) {
+        return res.status(401).json({
+          status: "error",
+          message: "Chukicha Password! Barobar 4 number password taka."
+        });
+      }
+
+      return res.status(200).json({
+        status: "success",
+        message: "Login yashasvi jhale!",
+        user: {
+          name: currentUser.name || "Player",
+          account: account,
+          coins: Number(currentUser.coins || 0)
         }
-
-        // ==========================================
-        // 🔵 ACTION 2: GET SCORE
-        // ==========================================
-        if (action === "getScore") {
-            if (userData) {
-                return res.status(200).json({ 
-                    success: true, 
-                    score: userData.score || 0,
-                    userMultiplier: userX,
-                    eventMultiplier: eventX,
-                    finalMultiplier: finalMultiplier,
-                    terminal_log: generateTerminalLog("FETCH_SCORE", userId)
-                });
-            }
-            return res.status(404).json({ success: false, error: "User not found." });
-        }
-
-        // ==========================================
-        // 🟠 ACTION 3: GET QUESTION
-        // ==========================================
-        if (action === "getQuestion") {
-            const ops = ['+', '-', '*'];
-            const op = ops[Math.floor(Math.random() * ops.length)];
-            let n1 = Math.floor(Math.random() * 50) + 10;
-            let n2 = Math.floor(Math.random() * 20) + 1;
-            
-            if (op === '-' && n1 < n2) { let temp = n1; n1 = n2; n2 = temp; }
-            
-            let correctAns = 0;
-            if (op === '+') correctAns = n1 + n2;
-            if (op === '-') correctAns = n1 - n2;
-            if (op === '*') correctAns = n1 * n2;
-
-            let options = [correctAns];
-            while(options.length < 4) {
-                let fake = correctAns + Math.floor(Math.random() * 30) - 15;
-                if(fake !== correctAns && !options.includes(fake) && fake >= 0) options.push(fake);
-            }
-            options.sort(() => Math.random() - 0.5);
-
-            return res.status(200).json({ 
-                success: true, 
-                question: `${n1} ${op} ${n2} = ?`, 
-                n1, n2, op, options,
-                terminal_log: generateTerminalLog("GET_HACK", userId)
-            });
-        }
-
-        // ==========================================
-        // 🟣 ACTION 4: SUBMIT ANSWER (DYNAMIC REWARDS)
-        // ==========================================
-        if (action === "submitAnswer") {
-            let correctAns = 0;
-            const p1 = parseInt(num1), p2 = parseInt(num2);
-
-            if (operator === '+') correctAns = p1 + p2;
-            else if (operator === '-') correctAns = p1 - p2;
-            else if (operator === '*') correctAns = p1 * p2;
-
-            if (parseInt(answer) === correctAns) {
-                // Base points is 10. Multiply by Stacked Multiplier.
-                let earned = 10 * finalMultiplier; 
-                let newScore = (userData ? userData.score || 0 : 0) + earned;
-                
-                await update(userRef, { score: newScore });
-                
-                return res.status(200).json({ 
-                    success: true, 
-                    isCorrect: true, 
-                    newScore: newScore,
-                    earned: earned,          
-                    multiplier: finalMultiplier,  
-                    terminal_log: generateTerminalLog("SOLVE_HACK", userId)
-                });
-            } else {
-                return res.status(200).json({ success: true, isCorrect: false, correctAnswer: correctAns });
-            }
-        }
-
-        // ==========================================
-        // 🔥 ACTION 5: GET MEGA EXAM
-        // ==========================================
-        if (action === "getMegaExam") {
-            let n1 = Math.floor(Math.random() * 15) + 5;
-            let n2 = Math.floor(Math.random() * 10) + 2;
-            let n3 = Math.floor(Math.random() * 50) + 10;
-            
-            let correctAns = (n1 * n2) + n3;
-            let options = [correctAns];
-            while(options.length < 4) {
-                let fake = correctAns + Math.floor(Math.random() * 50) - 25;
-                if(fake !== correctAns && !options.includes(fake) && fake >= 0) options.push(fake);
-            }
-            options.sort(() => Math.random() - 0.5);
-
-            return res.status(200).json({ success: true, question: `(${n1} * ${n2}) + ${n3} = ?`, n1, n2, n3, op: 'mega', options });
-        }
-
-        // ==========================================
-        // 💥 ACTION 6: SUBMIT MEGA EXAM
-        // ==========================================
-        if (action === "submitMegaExam") {
-            const p1 = parseInt(num1), p2 = parseInt(num2), p3 = parseInt(n3);
-            let correctAns = (p1 * p2) + p3;
-
-            if (parseInt(answer) === correctAns) {
-                // Base points is 50. Multiply by Stacked Multiplier.
-                let earned = 50 * finalMultiplier;
-                let newScore = (userData ? userData.score || 0 : 0) + earned;
-                
-                await update(userRef, { score: newScore });
-                
-                return res.status(200).json({ 
-                    success: true, 
-                    isCorrect: true, 
-                    newScore: newScore,
-                    earned: earned,
-                    multiplier: finalMultiplier
-                });
-            } else {
-                return res.status(200).json({ success: true, isCorrect: false, correctAnswer: correctAns });
-            }
-        }
-
-        // ==========================================
-        // 🛒 ACTION 7: BUY CUSTOM X BOOSTER
-        // ==========================================
-        if (action === "buyCustomBooster") {
-            let reqX = parseInt(customX) || 2;
-            let reqH = parseInt(customH) || 1;
-
-            if(reqX < 2) reqX = 2;
-            if(reqX > 10) reqX = 10;
-
-            const baseRate = reqH === 1 ? 75 : 250;
-            let cost = reqX * baseRate;
-
-            let currentScore = userData ? userData.score || 0 : 0;
-            if (currentScore < cost) {
-                return res.status(200).json({ success: false, error: `Insufficient Points. Need ${cost}.` });
-            }
-
-            const expiresAt = Date.now() + (reqH * 60 * 60 * 1000);
-            let newScore = currentScore - cost;
-
-            await update(userRef, { score: newScore, booster: { multiplier: reqX, expires: expiresAt } });
-
-            return res.status(200).json({ 
-                success: true, 
-                message: `✅ ${reqX}x Booster Activated for ${reqH}H!`, 
-                newScore: newScore 
-            });
-        }
-
-        return res.status(400).json({ success: false, error: "Invalid Action." });
-
-    } catch (error) {
-        console.error("Vercel Error:", error);
-        return res.status(500).json({ success: false, error: "Server Error", details: error.message });
+      });
     }
+
+    // 3. GAME COINS UPDATE KARNE (Firebase madhe coins save karne)
+    if (action === "update_coins") {
+      if (!/^\d{5}$/.test(account)) {
+        return res.status(400).json({
+          status: "error",
+          message: "Invalid Account ID!"
+        });
+      }
+
+      const userRef = ref(db, `users/${account}`);
+      const snapshot = await get(userRef);
+
+      if (!snapshot.exists()) {
+        return res.status(404).json({
+          status: "error",
+          message: "Account sapadla nahi!"
+        });
+      }
+
+      const updatedCoins = isNaN(coins) ? 0 : coins;
+      await update(userRef, { coins: updatedCoins });
+
+      const userData = snapshot.val();
+      return res.status(200).json({
+        status: "success",
+        message: "Coins Firebase madhe save jhale!",
+        user: {
+          name: userData.name || "Player",
+          account: account,
+          coins: updatedCoins
+        }
+      });
+    }
+
+    // 4. BOT REQUEST (Jevha Bot website la request takel tevha Firebase madhun uttar deil)
+    if (action === "bot_get" || account) {
+      const userRef = ref(db, `users/${account}`);
+      const snapshot = await get(userRef);
+
+      if (!snapshot.exists()) {
+        return res.status(200).json({
+          status: "error",
+          message: "Ha 5 number cha Account ajun website var banavlela nahi!"
+        });
+      }
+
+      const user = snapshot.val();
+
+      // Jar Bot ne password pan pathavla asel tar to check kara
+      if (password && String(user.password) !== password) {
+        return res.status(200).json({
+          status: "error",
+          message: "Password chukicha ahe!"
+        });
+      }
+
+      return res.status(200).json({
+        status: "success",
+        message: "Account data milala!",
+        name: user.name || "Player",
+        account: account,
+        coins: Number(user.coins || 0)
+      });
+    }
+
+    // Default Uttar (API check karnyasathi)
+    return res.status(200).json({
+      status: "online",
+      message: "Firebase Game API chalu ahe! Bot aani Website connect karnyasathi tayar."
+    });
+
+  } catch (error) {
+    console.error("Server Error:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Server Error: " + error.message
+    });
+  }
 }
