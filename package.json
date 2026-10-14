@@ -1,11 +1,13 @@
 {
-  "name": "kumar-api-network",
+  "name": "kumar-game-website",
   "version": "1.0.0",
-  "description": "Kumar Bot API Gateway",
+  "description": "Simple Game with Firebase, 5-digit Account, 4-digit Password and Bot API",
+  "main": "api/bot.js",
+  "type": "module",
   "scripts": {
     "start": "node api/bot.js"
   },
   "dependencies": {
-    "firebase": "^10.8.1"
+    "firebase": "^10.12.2"
   }
 }
