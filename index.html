@@ -192,18 +192,7 @@
       document.getElementById("createMsg").innerText = "";
     }
 
-    // LocalStorage backup (jyamule data kadhich janar nahi)
-    function getLocalUsers() {
-      return JSON.parse(localStorage.getItem("game_users") || "{}");
-    }
-
-    function saveLocalUser(user) {
-      const users = getLocalUsers();
-      users[user.account] = user;
-      localStorage.setItem("game_users", JSON.stringify(users));
-    }
-
-    // CREATE NEW ACCOUNT FUNCTION
+    // CREATE NEW ACCOUNT FUNCTION (Saves to Firebase)
     async function createAccount() {
       const name = document.getElementById("regName").value.trim();
       const account = document.getElementById("regAcc").value.trim();
@@ -243,22 +232,23 @@
         const data = await res.json();
 
         if (data.status === "success") {
-          const newUser = { name, account, password, coins: 0 };
-          saveLocalUser(newUser);
-          openGame(newUser);
+          openGame({
+            name: data.user.name,
+            account: data.user.account,
+            password: password,
+            coins: data.user.coins
+          });
         } else {
           msgEl.style.color = "#f87171";
-          msgEl.innerText = data.message;
+          msgEl.innerText = data.message || "Error aala!";
         }
       } catch (err) {
-        // Fallback jar offline check karat asal tar
-        const newUser = { name, account, password, coins: 0 };
-        saveLocalUser(newUser);
-        openGame(newUser);
+        msgEl.style.color = "#f87171";
+        msgEl.innerText = "Server connect hot nahiye, punha prayatna kara!";
       }
     }
 
-    // LOGIN FUNCTION
+    // LOGIN FUNCTION (Checks Firebase)
     async function loginAccount() {
       const account = document.getElementById("loginAcc").value.trim();
       const password = document.getElementById("loginPass").value.trim();
@@ -278,9 +268,6 @@
       msgEl.style.color = "#38bdf8";
       msgEl.innerText = "Login hot ahe...";
 
-      const localUsers = getLocalUsers();
-      const localUser = localUsers[account];
-
       try {
         const res = await fetch("/api/bot", {
           method: "POST",
@@ -288,33 +275,25 @@
           body: JSON.stringify({
             action: "login",
             account: account,
-            password: password,
-            name: localUser ? localUser.name : "",
-            coins: localUser ? localUser.coins : 0
+            password: password
           })
         });
         const data = await res.json();
 
         if (data.status === "success") {
-          const loggedInUser = {
+          openGame({
             name: data.user.name,
             account: data.user.account,
             password: password,
             coins: data.user.coins
-          };
-          saveLocalUser(loggedInUser);
-          openGame(loggedInUser);
+          });
         } else {
           msgEl.style.color = "#f87171";
-          msgEl.innerText = data.message;
+          msgEl.innerText = data.message || "Login chukle!";
         }
       } catch (err) {
-        if (localUser && localUser.password === password) {
-          openGame(localUser);
-        } else {
-          msgEl.style.color = "#f87171";
-          msgEl.innerText = "Account sapadla nahi kiva password chukicha ahe!";
-        }
+        msgEl.style.color = "#f87171";
+        msgEl.innerText = "Server connect hot nahiye, punha prayatna kara!";
       }
     }
 
@@ -331,14 +310,12 @@
       document.getElementById("gameMsg").innerText = "Welcome, " + user.name + "!";
     }
 
-    // TAP COIN GAME FUNCTION
+    // TAP COIN GAME FUNCTION (Updates Firebase)
     async function tapCoin() {
       if (!currentUser) return;
       currentUser.coins += 1;
       document.getElementById("playerCoins").innerText = currentUser.coins;
-      saveLocalUser(currentUser);
 
-      // Server var coins update kara jyamule Bot la lagech navin coins distil
       try {
         await fetch("/api/bot", {
           method: "POST",
@@ -346,8 +323,6 @@
           body: JSON.stringify({
             action: "update_coins",
             account: currentUser.account,
-            password: currentUser.password,
-            name: currentUser.name,
             coins: currentUser.coins
           })
         });
