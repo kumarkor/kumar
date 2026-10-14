@@ -1,13 +1,10 @@
 {
   "name": "kumar-game-website",
   "version": "1.0.0",
-  "description": "Simple Game with Firebase, 5-digit Account, 4-digit Password and Bot API",
-  "main": "api/bot.js",
+  "description": "Simple Game with Firebase and Bot API",
   "type": "module",
+  "main": "api/bot.js",
   "scripts": {
     "start": "node api/bot.js"
-  },
-  "dependencies": {
-    "firebase": "^10.12.2"
   }
 }
