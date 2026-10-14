@@ -1,24 +1,39 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getDatabase, ref, get, set, update } from "firebase/database";
+// 🔒 TUMCHA FIREBASE DATABASE URL
+const FIREBASE_DB_URL = "https://newkumarbot-default-rtdb.firebaseio.com";
 
-// 🔒 TUMCHE FIREBASE CONFIGURATION
-const firebaseConfig = {
-  apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
-  authDomain: "newkumarbot.firebaseapp.com",
-  databaseURL: "https://newkumarbot-default-rtdb.firebaseio.com",
-  projectId: "newkumarbot",
-  storageBucket: "newkumarbot.firebasestorage.app",
-  messagingSenderId: "1006933600404",
-  appId: "1:1006933600404:web:1df122474a7598a25fec81",
-  measurementId: "G-PMQ8SCYQC9"
-};
+// Firebase madhun user data vachnyasathi helper function
+async function getUserFromFirebase(account) {
+  const response = await fetch(`${FIREBASE_DB_URL}/users/${account}.json`);
+  if (!response.ok) {
+    throw new Error("Firebase Read Error");
+  }
+  return await response.json();
+}
 
-let app, db;
-try {
-  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-  db = getDatabase(app);
-} catch (err) {
-  console.error("Firebase Connection Error:", err);
+// Firebase madhe user data save/update karnyasathi helper function
+async function saveUserToFirebase(account, userData) {
+  const response = await fetch(`${FIREBASE_DB_URL}/users/${account}.json`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData)
+  });
+  if (!response.ok) {
+    throw new Error("Firebase Write Error");
+  }
+  return await response.json();
+}
+
+// Firebase madhe fakt coins update karnyasathi helper function
+async function updateUserFields(account, fields) {
+  const response = await fetch(`${FIREBASE_DB_URL}/users/${account}.json`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fields)
+  });
+  if (!response.ok) {
+    throw new Error("Firebase Update Error");
+  }
+  return await response.json();
 }
 
 export default async function handler(req, res) {
@@ -32,13 +47,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    // GET kiva POST madhun data ghene
-    const data = req.method === "POST" ? req.body || {} : req.query || {};
-    const action = String(data.action || req.query.action || "").trim();
-    const account = String(data.account || data.userId || req.query.account || req.query.userId || "").trim();
-    const password = String(data.password || req.query.password || "").trim();
-    const name = String(data.name || req.query.name || "").trim();
-    const coins = parseInt(data.coins ?? req.query.coins ?? 0, 10);
+    // Body string asel tar JSON madhe parse kara
+    let bodyData = req.body || {};
+    if (typeof bodyData === "string") {
+      try {
+        bodyData = JSON.parse(bodyData);
+      } catch (e) {
+        bodyData = {};
+      }
+    }
+
+    const data = req.method === "POST" ? bodyData : req.query || {};
+    const action = String(data.action || req.query?.action || "").trim();
+    const account = String(data.account || data.userId || req.query?.account || req.query?.userId || "").trim();
+    const password = String(data.password || req.query?.password || "").trim();
+    const name = String(data.name || req.query?.name || "").trim();
+    const coins = parseInt(data.coins ?? req.query?.coins ?? 0, 10);
 
     // 1. CREATE NEW ACCOUNT (Name + 5 Number Account + 4 Number Password)
     if (action === "register") {
@@ -61,10 +85,8 @@ export default async function handler(req, res) {
         });
       }
 
-      const userRef = ref(db, `users/${account}`);
-      const snapshot = await get(userRef);
-
-      if (snapshot.exists()) {
+      const existingUser = await getUserFromFirebase(account);
+      if (existingUser) {
         return res.status(400).json({
           status: "error",
           message: "Ha 5 number cha Account adhich tayar ahe! Dusra number taka."
@@ -79,7 +101,7 @@ export default async function handler(req, res) {
         createdAt: Date.now()
       };
 
-      await set(userRef, newUser);
+      await saveUserToFirebase(account, newUser);
 
       return res.status(200).json({
         status: "success",
@@ -101,17 +123,14 @@ export default async function handler(req, res) {
         });
       }
 
-      const userRef = ref(db, `users/${account}`);
-      const snapshot = await get(userRef);
+      const currentUser = await getUserFromFirebase(account);
 
-      if (!snapshot.exists()) {
+      if (!currentUser) {
         return res.status(404).json({
           status: "error",
           message: "Account sapadla nahi! Pahile Create New Account kara."
         });
       }
-
-      const currentUser = snapshot.val();
 
       if (String(currentUser.password) !== password) {
         return res.status(401).json({
@@ -140,46 +159,27 @@ export default async function handler(req, res) {
         });
       }
 
-      const userRef = ref(db, `users/${account}`);
-      const snapshot = await get(userRef);
-
-      if (!snapshot.exists()) {
-        return res.status(404).json({
-          status: "error",
-          message: "Account sapadla nahi!"
-        });
-      }
-
       const updatedCoins = isNaN(coins) ? 0 : coins;
-      await update(userRef, { coins: updatedCoins });
+      await updateUserFields(account, { coins: updatedCoins });
 
-      const userData = snapshot.val();
       return res.status(200).json({
         status: "success",
         message: "Coins Firebase madhe save jhale!",
-        user: {
-          name: userData.name || "Player",
-          account: account,
-          coins: updatedCoins
-        }
+        coins: updatedCoins
       });
     }
 
     // 4. BOT REQUEST (Jevha Bot website la request takel tevha Firebase madhun uttar deil)
     if (action === "bot_get" || account) {
-      const userRef = ref(db, `users/${account}`);
-      const snapshot = await get(userRef);
+      const user = await getUserFromFirebase(account);
 
-      if (!snapshot.exists()) {
+      if (!user) {
         return res.status(200).json({
           status: "error",
           message: "Ha 5 number cha Account ajun website var banavlela nahi!"
         });
       }
 
-      const user = snapshot.val();
-
-      // Jar Bot ne password pan pathavla asel tar to check kara
       if (password && String(user.password) !== password) {
         return res.status(200).json({
           status: "error",
