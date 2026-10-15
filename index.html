@@ -3,342 +3,1154 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Game & Account</title>
+  <title>Step Earning & OX Game</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * {
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
     }
     body {
       margin: 0;
-      padding: 20px;
-      background: #0f172a;
-      color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 0;
+      background: radial-gradient(circle at top, #1e293b, #0f172a);
+      color: #f8fafc;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .box {
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 14px;
+    .topbar {
       width: 100%;
-      max-width: 360px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-      text-align: center;
+      max-width: 430px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid #334155;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-    h2 {
+    .brand {
+      font-weight: 800;
+      font-size: 18px;
+      color: #38bdf8;
+    }
+    .lang-btn {
+      background: #334155;
+      color: #fff;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      width: auto;
+      margin: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 430px;
+      padding: 16px;
+      padding-bottom: 85px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+    h2, h3 {
       margin-top: 0;
       color: #38bdf8;
     }
-    input {
+    label {
+      display: block;
+      font-size: 13px;
+      color: #94a3b8;
+      margin: 10px 0 4px;
+      text-align: left;
+    }
+    input, select, textarea {
       width: 100%;
       padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #334155;
+      border-radius: 10px;
+      border: 1px solid #475569;
       background: #0f172a;
       color: #fff;
-      font-size: 16px;
-      text-align: center;
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #38bdf8;
     }
     button {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
+      margin-top: 12px;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 10px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
+      transition: 0.2s;
     }
     .btn-primary {
-      background: #38bdf8;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
       color: #0f172a;
     }
     .btn-secondary {
-      background: #475569;
-      color: #ffffff;
+      background: #334155;
+      color: #f8fafc;
     }
-    .btn-game {
-      background: #f59e0b;
+    .btn-success {
+      background: linear-gradient(135deg, #4ade80, #16a34a);
       color: #0f172a;
+    }
+    .btn-danger {
+      background: #ef4444;
+      color: #fff;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .msg {
+      margin-top: 10px;
+      font-size: 13px;
+      text-align: center;
+      min-height: 18px;
+      font-weight: 600;
+    }
+    /* Balance Banner */
+    .balance-card {
+      background: linear-gradient(135deg, #0284c7, #1e3a8a);
+      border-radius: 16px;
+      padding: 18px;
+      color: #fff;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
+    }
+    .bal-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .bal-box {
+      background: rgba(15, 23, 42, 0.45);
+      padding: 10px 14px;
+      border-radius: 12px;
+      width: 48%;
+      text-align: center;
+    }
+    .bal-val {
       font-size: 22px;
-      padding: 25px;
-      border-radius: 50%;
-      width: 130px;
-      height: 130px;
-      margin: 20px auto;
+      font-weight: 800;
+      color: #facc15;
+    }
+    /* OX Game Grid */
+    .ox-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 260px;
+      margin: 15px auto;
+    }
+    .ox-cell {
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      height: 75px;
+      font-size: 34px;
+      font-weight: bold;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+      cursor: pointer;
       user-select: none;
     }
-    .btn-game:active {
-      transform: scale(0.93);
-    }
-    .msg {
-      margin-top: 12px;
-      font-size: 14px;
-      min-height: 20px;
-    }
-    .hidden {
-      display: none;
-    }
-    .info-card {
+    .ox-cell.x { color: #38bdf8; }
+    .ox-cell.o { color: #f43f5e; }
+    /* AI Chat */
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
       background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
       padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      text-align: left;
-      font-size: 15px;
-      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    .score-text {
-      font-size: 28px;
+    .chat-bubble {
+      max-width: 82%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    .chat-user {
+      background: #0284c7;
+      color: #fff;
+      align-self: flex-end;
+    }
+    .chat-ai {
+      background: #334155;
+      color: #f8fafc;
+      align-self: flex-start;
+    }
+    .chat-bubble img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 6px;
+    }
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 430px;
+      background: #0f172a;
+      border-top: 1px solid #334155;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 4px;
+      z-index: 50;
+    }
+    .nav-item {
+      background: transparent;
+      color: #94a3b8;
+      border: none;
+      font-size: 12px;
+      margin: 0;
+      padding: 6px 8px;
+      width: auto;
+    }
+    .nav-item.active {
+      color: #38bdf8;
       font-weight: bold;
-      color: #facc15;
-      margin: 10px 0;
+    }
+    .history-item {
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-size: 13px;
+      border-left: 4px solid #38bdf8;
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. LOGIN SCREEN (Pahile Login Disnar) -->
-  <div id="loginBox" class="box">
-    <h2>🔐 Account Login</h2>
-    <input
-      type="text"
-      id="loginAcc"
-      placeholder="5 Number Account ID (उदा. 12345)"
-      maxlength="5"
-      inputmode="numeric"
-      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-    />
-    <input
-      type="password"
-      id="loginPass"
-      placeholder="4 Number Password (उदा. 1234)"
-      maxlength="4"
-      inputmode="numeric"
-      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-    />
-    <button class="btn-primary" onclick="loginAccount()">Login Kara</button>
-    <button class="btn-secondary" onclick="showCreateScreen()">Create New Account</button>
-    <div id="loginMsg" class="msg"></div>
+  <!-- TOP BAR WITH LANGUAGE SWITCH -->
+  <div class="topbar">
+    <div class="brand">💎 Step Earning</div>
+    <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">🇮🇳 हिंदी / EN</button>
   </div>
 
-  <!-- 2. CREATE NEW ACCOUNT SCREEN -->
-  <div id="createBox" class="box hidden">
-    <h2>✨ Create New Account</h2>
-    <input
-      type="text"
-      id="regName"
-      placeholder="Tumche Nav (Name)"
-    />
-    <input
-      type="text"
-      id="regAcc"
-      placeholder="5 Number Account ID (उदा. 54321)"
-      maxlength="5"
-      inputmode="numeric"
-      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-    />
-    <input
-      type="password"
-      id="regPass"
-      placeholder="4 Number Password (उदा. 1234)"
-      maxlength="4"
-      inputmode="numeric"
-      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-    />
-    <button class="btn-primary" onclick="createAccount()">Create & Login</button>
-    <button class="btn-secondary" onclick="showLoginScreen()">Back to Login</button>
-    <div id="createMsg" class="msg"></div>
-  </div>
+  <div class="container">
 
-  <!-- 3. SIMPLE GAME SCREEN -->
-  <div id="gameBox" class="box hidden">
-    <h2>🎮 Simple Tap Game</h2>
-    <div class="info-card">
-      <div>👤 <b>Name:</b> <span id="playerName">-</span></div>
-      <div>🆔 <b>Account ID:</b> <span id="playerAcc">-</span></div>
+    <!-- ================= 1. LOGIN SCREEN ================= -->
+    <div id="loginScreen" class="card">
+      <h2 id="t_loginTitle">🔐 Account Login</h2>
+
+      <label id="t_accLabel">5-Digit Account ID:</label>
+      <input type="text" id="loginAcc" placeholder="12345 (Admin: 99999)" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+      <label id="t_passLabel">4-Digit Password:</label>
+      <input type="password" id="loginPass" placeholder="1234" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+      <button class="btn-primary" onclick="loginUser()" id="t_loginBtn">Login</button>
+      <button class="btn-secondary" onclick="showAuthBox('createScreen')" id="t_createNavBtn">Create New Account</button>
+      <button class="btn-secondary" style="background:transparent;color:#38bdf8;margin-top:4px;" onclick="showAuthBox('forgetScreen')" id="t_forgetNavBtn">Forgot Password? (Telegram OTP)</button>
+      <div id="loginMsg" class="msg"></div>
     </div>
 
-    <div class="score-text">🪙 Coins: <span id="playerCoins">0</span></div>
-    <p style="font-size: 13px; color: #94a3b8;">Coin vadhaavnyasathi khalil button var tap kara:</p>
+    <!-- ================= 2. CREATE ACCOUNT SCREEN ================= -->
+    <div id="createScreen" class="card hidden">
+      <h2 id="t_createTitle">✨ Create New Account</h2>
 
-    <button class="btn-game" onclick="tapCoin()">🪙 TAP</button>
+      <label id="t_nameLabel">Your Name:</label>
+      <input type="text" id="regName" placeholder="Enter Full Name" />
 
-    <div id="gameMsg" class="msg" style="color: #4ade80;"></div>
-    <button class="btn-secondary" onclick="logout()">Logout</button>
+      <label id="t_newAccLabel">5-Digit Account ID (Unique):</label>
+      <input type="text" id="regAcc" placeholder="e.g. 54321 (5 Digits)" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+      <label id="t_newPassLabel">4-Digit Password:</label>
+      <input type="password" id="regPass" placeholder="e.g. 1234 (4 Digits)" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+      <label id="t_tgIdLabel">Telegram User ID (For OTP):</label>
+      <input type="text" id="regTgId" placeholder="e.g. 6123456789" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+      <button class="btn-primary" onclick="registerUser()" id="t_regBtn">Create & Login</button>
+      <button class="btn-secondary" onclick="showAuthBox('loginScreen')" id="t_backLogin1">Back to Login</button>
+      <div id="createMsg" class="msg"></div>
+    </div>
+
+    <!-- ================= 3. FORGET PASSWORD (TELEGRAM OTP) ================= -->
+    <div id="forgetScreen" class="card hidden">
+      <h2 id="t_forgetTitle">🔑 Forgot Password</h2>
+
+      <label>Enter Your 5-Digit Account ID:</label>
+      <input type="text" id="fpAcc" placeholder="e.g. 12345" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+      <button class="btn-primary" onclick="sendTelegramOtp()" id="t_sendOtpBtn">Send OTP on Telegram Bot</button>
+
+      <div id="otpVerifyBox" class="hidden" style="margin-top:14px;">
+        <label>Enter 4-Digit OTP (Sent to Telegram):</label>
+        <input type="text" id="fpOtp" placeholder="4-Digit OTP" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+        <label>Enter New 4-Digit Password:</label>
+        <input type="password" id="fpNewPass" placeholder="New 4-Digit Password" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+
+        <button class="btn-success" onclick="verifyOtpAndReset()">Verify OTP & Change Password</button>
+      </div>
+
+      <button class="btn-secondary" onclick="showAuthBox('loginScreen')">Back to Login</button>
+      <div id="forgetMsg" class="msg"></div>
+    </div>
+
+    <!-- ================= 4. MAIN APP DASHBOARD ================= -->
+    <div id="appArea" class="hidden">
+
+      <!-- BALANCE CARD -->
+      <div class="balance-card">
+        <div style="display:flex;justify-content:space-between;font-size:14px;">
+          <span>👤 <b id="uName">-</b> (<span id="uAcc">-</span>)</span>
+          <span id="rateInfo">100 Coins = ₹1</span>
+        </div>
+        <div class="bal-row">
+          <div class="bal-box">
+            <div style="font-size:12px;color:#cbd5e1;" id="t_coinsLbl">Total Coins</div>
+            <div class="bal-val">🪙 <span id="uCoins">0</span></div>
+          </div>
+          <div class="bal-box">
+            <div style="font-size:12px;color:#cbd5e1;" id="t_rupeesLbl">Balance (₹)</div>
+            <div class="bal-val" style="color:#4ade80;">₹<span id="uRupees">0.00</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 1: OX GAME SECTION -->
+      <div id="tabGame" class="card">
+        <h3 id="t_gameTitle">🎮 OX Game (Win = +20 Coins)</h3>
+        <p style="font-size:13px;color:#94a3b8;margin-top:0;" id="oxStatus">Your Turn (❌)</p>
+
+        <div class="ox-board" id="oxBoard"></div>
+
+        <button class="btn-secondary" onclick="resetOxGame()" id="t_restartGame">🔄 Restart OX Game</button>
+      </div>
+
+      <!-- TAB 2: WITHDRAW SECTION -->
+      <div id="tabWithdraw" class="card hidden">
+        <h3 id="t_withdrawTitle">💸 Withdraw Earnings</h3>
+        <div style="font-size:13px;color:#facc15;margin-bottom:10px;">
+          Minimum Withdraw: ₹<span id="minWithdrawDisp">10</span>
+        </div>
+
+        <label id="t_methodLbl">Select Payment Method:</label>
+        <select id="wdMethod">
+          <option value="UPI">UPI (PhonePe / GPay / Paytm / FamPay)</option>
+          <option value="Google Play Redeem Code">Google Play Store Redeem Code</option>
+        </select>
+
+        <label id="t_detailsLbl">Enter UPI ID or Email/Number:</label>
+        <input type="text" id="wdDetails" placeholder="e.g. name@upi or email@gmail.com" />
+
+        <label id="t_amountLbl">Enter Amount (₹):</label>
+        <input type="number" id="wdAmount" placeholder="Enter Amount in ₹" />
+
+        <button class="btn-success" onclick="submitWithdraw()" id="t_wdBtn">Submit Withdraw Request</button>
+        <div id="wdMsg" class="msg"></div>
+
+        <h4 style="margin-top:20px;color:#38bdf8;" id="t_wdHistory">📜 Your Withdraw History</h4>
+        <div id="userWithdrawList"></div>
+      </div>
+
+      <!-- TAB 3: GEMINI AI SUPPORT (PHOTO + MEMORY + TRAINING) -->
+      <div id="tabSupport" class="card hidden">
+        <h3 id="t_supportTitle">🤖 AI Customer Support</h3>
+        <p style="font-size:12px;color:#94a3b8;margin-top:0;" id="t_supportSub">
+          AI remembers your conversation & supports photo upload!
+        </p>
+
+        <div class="chat-box" id="chatBox"></div>
+
+        <label style="margin-top:10px;">📷 Attach Screenshot / Photo (Optional):</label>
+        <input type="file" id="chatPhoto" accept="image/*" style="padding:8px;font-size:13px;" />
+
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <input type="text" id="chatInput" placeholder="Ask anything..." style="margin:0;" />
+          <button class="btn-primary" style="width:95px;margin:0;" onclick="sendAiMessage()">Send</button>
+        </div>
+        <div id="aiMsg" class="msg"></div>
+      </div>
+
+      <!-- TAB 4: ADMIN PANEL (ONLY FOR 99999) -->
+      <div id="tabAdmin" class="card hidden">
+        <h3>👑 Admin Control Panel (99999)</h3>
+
+        <label>🪙 Coins For ₹1 (e.g. 100 Coins = ₹1):</label>
+        <input type="number" id="admCoinRate" placeholder="100" />
+
+        <label>💸 Minimum Withdraw Amount (in ₹):</label>
+        <input type="number" id="admMinWd" placeholder="10" />
+
+        <label>🤖 Telegram Bot Token (For Forget Password OTP):</label>
+        <input type="text" id="admBotToken" placeholder="123456789:AAH..." />
+
+        <label>✨ Gemini API Key (For AI Support Chat):</label>
+        <input type="text" id="admGeminiKey" placeholder="AIzaSy..." />
+
+        <label>🧠 AI Training Information (Rules, Announcements, Info for Users):</label>
+        <textarea id="admAiTraining" rows="4" placeholder="Write rules, payment timing, offers, or instructions here. AI will tell this to users!"></textarea>
+
+        <button class="btn-primary" onclick="saveAdminSettings()">💾 Save Admin Settings</button>
+        <div id="admMsg" class="msg"></div>
+
+        <h4 style="margin-top:20px;color:#facc15;">📋 All User Withdraw Requests</h4>
+        <div id="adminWithdrawList"></div>
+      </div>
+
+    </div>
   </div>
 
-  <script>
+  <!-- BOTTOM NAVIGATION -->
+  <div id="bottomNav" class="bottom-nav hidden">
+    <button class="nav-item active" id="nav_game" onclick="openTab('tabGame', 'nav_game')">🎮 OX Game</button>
+    <button class="nav-item" id="nav_wd" onclick="openTab('tabWithdraw', 'nav_wd')">💸 Withdraw</button>
+    <button class="nav-item" id="nav_ai" onclick="openTab('tabSupport', 'nav_ai')">🤖 AI Support</button>
+    <button class="nav-item hidden" id="nav_adm" onclick="openTab('tabAdmin', 'nav_adm')">👑 Admin</button>
+    <button class="nav-item" onclick="logoutUser()">🚪 Logout</button>
+  </div>
+
+  <!-- FIREBASE & APP LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, get, set, update, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
+      authDomain: "newkumarbot.firebaseapp.com",
+      databaseURL: "https://newkumarbot-default-rtdb.firebaseio.com",
+      projectId: "newkumarbot",
+      storageBucket: "newkumarbot.firebasestorage.app",
+      messagingSenderId: "1006933600404",
+      appId: "1:1006933600404:web:1df122474a7598a25fec81",
+      measurementId: "G-PMQ8SCYQC9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
     let currentUser = null;
+    let adminSettings = {
+      coinsPerRupee: 100,
+      minWithdraw: 10,
+      botToken: "",
+      geminiKey: "",
+      aiTraining: "Welcome to Step Earning! 100 Coins = ₹1. Play OX Game to earn coins and withdraw via UPI or Google Play Redeem Code."
+    };
+    let generatedOtp = null;
+    let otpAccountTarget = null;
+    let currentLang = "en";
+    let aiMemory = []; // Keeps full conversation context for Gemini AI
 
-    function showCreateScreen() {
-      document.getElementById("loginBox").classList.add("hidden");
-      document.getElementById("createBox").classList.remove("hidden");
-      document.getElementById("loginMsg").innerText = "";
+    // Auto-fill Telegram ID if opened inside Telegram Mini App
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if (tgUser && tgUser.id) {
+      document.getElementById("regTgId").value = tgUser.id;
     }
 
-    function showLoginScreen() {
-      document.getElementById("createBox").classList.add("hidden");
-      document.getElementById("loginBox").classList.remove("hidden");
-      document.getElementById("createMsg").innerText = "";
-    }
+    // ================= LANGUAGE TRANSLATIONS (EN / HI) =================
+    const translations = {
+      en: {
+        t_loginTitle: "🔐 Account Login",
+        t_accLabel: "5-Digit Account ID:",
+        t_passLabel: "4-Digit Password:",
+        t_loginBtn: "Login",
+        t_createNavBtn: "Create New Account",
+        t_forgetNavBtn: "Forgot Password? (Telegram OTP)",
+        t_createTitle: "✨ Create New Account",
+        t_nameLabel: "Your Name:",
+        t_newAccLabel: "5-Digit Account ID (Unique):",
+        t_newPassLabel: "4-Digit Password:",
+        t_tgIdLabel: "Telegram User ID (For OTP):",
+        t_regBtn: "Create & Login",
+        t_backLogin1: "Back to Login",
+        t_forgetTitle: "🔑 Forgot Password",
+        t_sendOtpBtn: "Send OTP on Telegram Bot",
+        t_coinsLbl: "Total Coins",
+        t_rupeesLbl: "Balance (₹)",
+        t_gameTitle: "🎮 OX Game (Win = +20 Coins)",
+        t_restartGame: "🔄 Restart OX Game",
+        t_withdrawTitle: "💸 Withdraw Earnings",
+        t_methodLbl: "Select Payment Method:",
+        t_detailsLbl: "Enter UPI ID or Email/Number:",
+        t_amountLbl: "Enter Amount (₹):",
+        t_wdBtn: "Submit Withdraw Request",
+        t_wdHistory: "📜 Your Withdraw History",
+        t_supportTitle: "🤖 AI Customer Support",
+        t_supportSub: "AI remembers your chat & supports photo upload!"
+      },
+      hi: {
+        t_loginTitle: "🔐 अकाउंट लॉगिन",
+        t_accLabel: "5-अंकीय अकाउंट ID:",
+        t_passLabel: "4-अंकीय पासवर्ड:",
+        t_loginBtn: "लॉगिन करें",
+        t_createNavBtn: "नया अकाउंट बनाएं",
+        t_forgetNavBtn: "पासवर्ड भूल गए? (Telegram OTP)",
+        t_createTitle: "✨ नया अकाउंट बनाएं",
+        t_nameLabel: "आपका नाम:",
+        t_newAccLabel: "5-अंकीय अकाउंट ID (यूनिक):",
+        t_newPassLabel: "4-अंकीय पासवर्ड:",
+        t_tgIdLabel: "Telegram User ID (OTP के लिए):",
+        t_regBtn: "अकाउंट बनाएं और लॉगिन करें",
+        t_backLogin1: "वापस लॉगिन पर जाएं",
+        t_forgetTitle: "🔑 पासवर्ड रीसेट करें",
+        t_sendOtpBtn: "Telegram Bot पर OTP भेजें",
+        t_coinsLbl: "कुल कॉइन्स",
+        t_rupeesLbl: "बैलेंस (₹)",
+        t_gameTitle: "🎮 OX गेम (जीतने पर +20 कॉइन्स)",
+        t_restartGame: "🔄 गेम फिर से शुरू करें",
+        t_withdrawTitle: "💸 पैसे निकालें (Withdraw)",
+        t_methodLbl: "पेमेंट तरीका चुनें:",
+        t_detailsLbl: "UPI ID या ईमेल/नंबर डालें:",
+        t_amountLbl: "रकम डालें (₹):",
+        t_wdBtn: "विथड्रॉ रिक्वेस्ट भेजें",
+        t_wdHistory: "📜 आपकी विथड्रॉ हिस्ट्री",
+        t_supportTitle: "🤖 AI कस्टमर सपोर्ट",
+        t_supportSub: "AI आपकी पूरी बात याद रखता है और फोटो भी देख सकता है!"
+      }
+    };
 
-    // CREATE NEW ACCOUNT FUNCTION (Saves to Firebase)
-    async function createAccount() {
+    window.toggleLanguage = function () {
+      currentLang = currentLang === "en" ? "hi" : "en";
+      const dict = translations[currentLang];
+      for (const id in dict) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = dict[id];
+      }
+    };
+
+    // Load Admin Settings from Firebase
+    async function loadAdminSettings() {
+      try {
+        const snap = await get(ref(db, "adminSettings"));
+        if (snap.exists()) {
+          adminSettings = { ...adminSettings, ...snap.val() };
+        }
+        document.getElementById("rateInfo").innerText = `${adminSettings.coinsPerRupee} Coins = ₹1`;
+        document.getElementById("minWithdrawDisp").innerText = adminSettings.minWithdraw;
+
+        document.getElementById("admCoinRate").value = adminSettings.coinsPerRupee;
+        document.getElementById("admMinWd").value = adminSettings.minWithdraw;
+        document.getElementById("admBotToken").value = adminSettings.botToken || "";
+        document.getElementById("admGeminiKey").value = adminSettings.geminiKey || "";
+        document.getElementById("admAiTraining").value = adminSettings.aiTraining || "";
+      } catch (e) {}
+    }
+    loadAdminSettings();
+
+    // Switch Auth Screens
+    window.showAuthBox = function (boxId) {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("createScreen").classList.add("hidden");
+      document.getElementById("forgetScreen").classList.add("hidden");
+      document.getElementById(boxId).classList.remove("hidden");
+    };
+
+    // ================= 1. CREATE NEW ACCOUNT (NO DUPLICATE 5-DIGIT ID) =================
+    window.registerUser = async function () {
       const name = document.getElementById("regName").value.trim();
       const account = document.getElementById("regAcc").value.trim();
       const password = document.getElementById("regPass").value.trim();
-      const msgEl = document.getElementById("createMsg");
+      const telegramId = document.getElementById("regTgId").value.trim();
+      const msg = document.getElementById("createMsg");
 
       if (!name) {
-        msgEl.style.color = "#f87171";
-        msgEl.innerText = "Krupaya tumche Nav (Name) taka!";
+        msg.style.color = "#f87171";
+        msg.innerText = "Please enter your Name!";
         return;
       }
       if (!/^\d{5}$/.test(account)) {
-        msgEl.style.color = "#f87171";
-        msgEl.innerText = "Account ID barobar 5 number cha asayla hava!";
+        msg.style.color = "#f87171";
+        msg.innerText = "Account ID must be exactly 5 digits!";
         return;
       }
       if (!/^\d{4}$/.test(password)) {
-        msgEl.style.color = "#f87171";
-        msgEl.innerText = "Password barobar 4 number cha asayla hava!";
+        msg.style.color = "#f87171";
+        msg.innerText = "Password must be exactly 4 digits!";
+        return;
+      }
+      if (!telegramId) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Please enter your Telegram User ID (for OTP)!";
         return;
       }
 
-      msgEl.style.color = "#38bdf8";
-      msgEl.innerText = "Account banavle jat ahe...";
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Checking & Creating Account...";
 
       try {
-        const res = await fetch("/api/bot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "register",
-            name: name,
-            account: account,
-            password: password
-          })
-        });
-        const data = await res.json();
+        const userRef = ref(db, "users/" + account);
+        const snap = await get(userRef);
 
-        if (data.status === "success") {
-          openGame({
-            name: data.user.name,
-            account: data.user.account,
-            password: password,
-            coins: data.user.coins
-          });
-        } else {
-          msgEl.style.color = "#f87171";
-          msgEl.innerText = data.message || "Error aala!";
+        // एकदा बनवलेला नंबर पुन्हा बनवता येणार नाही
+        if (snap.exists()) {
+          msg.style.color = "#f87171";
+          msg.innerText = "❌ This 5-digit Account ID already exists! Choose another number.";
+          return;
         }
-      } catch (err) {
-        msgEl.style.color = "#f87171";
-        msgEl.innerText = "Server connect hot nahiye, punha prayatna kara!";
-      }
-    }
 
-    // LOGIN FUNCTION (Checks Firebase)
-    async function loginAccount() {
+        const newUser = {
+          name: name,
+          account: account,
+          password: password,
+          telegramId: telegramId,
+          coins: 0,
+          createdAt: Date.now()
+        };
+
+        await set(userRef, newUser);
+        enterDashboard(newUser);
+      } catch (err) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Error: " + err.message;
+      }
+    };
+
+    // ================= 2. LOGIN USER =================
+    window.loginUser = async function () {
       const account = document.getElementById("loginAcc").value.trim();
       const password = document.getElementById("loginPass").value.trim();
-      const msgEl = document.getElementById("loginMsg");
+      const msg = document.getElementById("loginMsg");
 
-      if (!/^\d{5}$/.test(account)) {
-        msgEl.style.color = "#f87171";
-        msgEl.innerText = "5 number cha Account ID taka!";
-        return;
-      }
-      if (!/^\d{4}$/.test(password)) {
-        msgEl.style.color = "#f87171";
-        msgEl.innerText = "4 number cha Password taka!";
+      if (!/^\d{5}$/.test(account) \vert{}\vert{} !/^\d{4}$/.test(password)) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Enter 5-digit Account ID & 4-digit Password!";
         return;
       }
 
-      msgEl.style.color = "#38bdf8";
-      msgEl.innerText = "Login hot ahe...";
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Logging in...";
 
       try {
-        const res = await fetch("/api/bot", {
+        const snap = await get(ref(db, "users/" + account));
+        if (!snap.exists()) {
+          msg.style.color = "#f87171";
+          msg.innerText = "Account not found! Please Create New Account first.";
+          return;
+        }
+
+        const user = snap.val();
+        if (String(user.password) !== password) {
+          msg.style.color = "#f87171";
+          msg.innerText = "❌ Wrong 4-digit Password!";
+          return;
+        }
+
+        enterDashboard(user);
+      } catch (err) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Error: " + err.message;
+      }
+    };
+
+    // ================= 3. FORGET PASSWORD (SEND OTP VIA TELEGRAM BOT) =================
+    window.sendTelegramOtp = async function () {
+      const account = document.getElementById("fpAcc").value.trim();
+      const msg = document.getElementById("forgetMsg");
+
+      if (!/^\d{5}$/.test(account)) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Enter valid 5-digit Account ID!";
+        return;
+      }
+
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Sending OTP to your Telegram...";
+
+      try {
+        await loadAdminSettings();
+        if (!adminSettings.botToken) {
+          msg.style.color = "#f87171";
+          msg.innerText = "Admin has not set Bot Token yet!";
+          return;
+        }
+
+        const snap = await get(ref(db, "users/" + account));
+        if (!snap.exists()) {
+          msg.style.color = "#f87171";
+          msg.innerText = "Account ID not found!";
+          return;
+        }
+
+        const user = snap.val();
+        if (!user.telegramId) {
+          msg.style.color = "#f87171";
+          msg.innerText = "No Telegram ID linked to this account!";
+          return;
+        }
+
+        generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
+        otpAccountTarget = account;
+
+        const textMsg = `🔐 *Password Reset OTP*\n\n👤 Name: ${user.name}\n🆔 Account ID: ${account}\n🔢 Your OTP: *${generatedOtp}*\n\nDo not share this OTP with anyone.`;
+
+        const tgRes = await fetch(`https://api.telegram.org/bot${adminSettings.botToken}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            action: "login",
-            account: account,
-            password: password
+            chat_id: user.telegramId,
+            text: textMsg,
+            parse_mode: "Markdown"
+          })
+        });
+        const tgData = await tgRes.json();
+
+        if (tgData.ok) {
+          document.getElementById("otpVerifyBox").classList.remove("hidden");
+          msg.style.color = "#4ade80";
+          msg.innerText = "✅ OTP sent to your Telegram Bot!";
+        } else {
+          msg.style.color = "#f87171";
+          msg.innerText = "Telegram Error: Please start the Bot first on Telegram!";
+        }
+      } catch (err) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Error sending OTP: " + err.message;
+      }
+    };
+
+    window.verifyOtpAndReset = async function () {
+      const otpInput = document.getElementById("fpOtp").value.trim();
+      const newPass = document.getElementById("fpNewPass").value.trim();
+      const msg = document.getElementById("forgetMsg");
+
+      if (otpInput !== generatedOtp || !otpAccountTarget) {
+        msg.style.color = "#f87171";
+        msg.innerText = "❌ Invalid OTP!";
+        return;
+      }
+      if (!/^\d{4}$/.test(newPass)) {
+        msg.style.color = "#f87171";
+        msg.innerText = "New Password must be 4 digits!";
+        return;
+      }
+
+      await update(ref(db, "users/" + otpAccountTarget), { password: newPass });
+      msg.style.color = "#4ade80";
+      msg.innerText = "✅ Password Reset Successful! Please Login.";
+      generatedOtp = null;
+      setTimeout(() => showAuthBox("loginScreen"), 1500);
+    };
+
+    // ================= 4. ENTER DASHBOARD & BALANCE DISPLAY =================
+    async function enterDashboard(user) {
+      currentUser = user;
+      await loadAdminSettings();
+
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("createScreen").classList.add("hidden");
+      document.getElementById("forgetScreen").classList.add("hidden");
+      document.getElementById("appArea").classList.remove("hidden");
+      document.getElementById("bottomNav").classList.remove("hidden");
+
+      // Show Admin Tab only if Account ID is 99999
+      if (String(user.account) === "99999") {
+        document.getElementById("nav_adm").classList.remove("hidden");
+        loadAllWithdrawsForAdmin();
+      } else {
+        document.getElementById("nav_adm").classList.add("hidden");
+      }
+
+      updateBalanceUI();
+      initOxBoard();
+      loadUserWithdrawHistory();
+      loadUserChatMemory();
+    }
+
+    function updateBalanceUI() {
+      if (!currentUser) return;
+      const coins = Number(currentUser.coins || 0);
+      const rate = Number(adminSettings.coinsPerRupee || 100);
+      const rupees = (coins / rate).toFixed(2);
+
+      document.getElementById("uName").innerText = currentUser.name;
+      document.getElementById("uAcc").innerText = currentUser.account;
+      document.getElementById("uCoins").innerText = coins;
+      document.getElementById("uRupees").innerText = rupees;
+      document.getElementById("rateInfo").innerText = `${rate} Coins = ₹1`;
+      document.getElementById("minWithdrawDisp").innerText = adminSettings.minWithdraw;
+    }
+
+    window.openTab = function (tabId, navId) {
+      ["tabGame", "tabWithdraw", "tabSupport", "tabAdmin"].forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+      ["nav_game", "nav_wd", "nav_ai", "nav_adm"].forEach(id => {
+        document.getElementById(id).classList.remove("active");
+      });
+
+      document.getElementById(tabId).classList.remove("hidden");
+      document.getElementById(navId).classList.add("active");
+    };
+
+    // ================= 5. OX GAME (TIC-TAC-TOE) =================
+    let boardState = ["", "", "", "", "", "", "", "", ""];
+    let gameActive = true;
+
+    function initOxBoard() {
+      const board = document.getElementById("oxBoard");
+      board.innerHTML = "";
+      boardState.forEach((val, idx) => {
+        const cell = document.createElement("div");
+        cell.className = "ox-cell " + (val === "X" ? "x" : val === "O" ? "o" : "");
+        cell.innerText = val;
+        cell.onclick = () => makeOxMove(idx);
+        board.appendChild(cell);
+      });
+    }
+
+    async function makeOxMove(idx) {
+      if (!gameActive || boardState[idx] !== "") return;
+      boardState[idx] = "X";
+      initOxBoard();
+
+      if (checkWinner("X")) {
+        gameActive = false;
+        document.getElementById("oxStatus").innerText = "🎉 You Won! +20 Coins Added!";
+        currentUser.coins = Number(currentUser.coins || 0) + 20;
+        updateBalanceUI();
+        await update(ref(db, "users/" + currentUser.account), { coins: currentUser.coins });
+        return;
+      }
+
+      if (!boardState.includes("")) {
+        gameActive = false;
+        document.getElementById("oxStatus").innerText = "🤝 Match Draw! Restart to play again.";
+        return;
+      }
+
+      document.getElementById("oxStatus").innerText = "Bot thinking (⭕)...";
+      setTimeout(() => {
+        const emptyIndices = boardState.map((v, i) => (v === "" ? i : null)).filter(v => v !== null);
+        if (emptyIndices.length > 0 && gameActive) {
+          const botMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+          boardState[botMove] = "O";
+          initOxBoard();
+
+          if (checkWinner("O")) {
+            gameActive = false;
+            document.getElementById("oxStatus").innerText = "❌ Bot Won! Try again.";
+          } else if (!boardState.includes("")) {
+            gameActive = false;
+            document.getElementById("oxStatus").innerText = "🤝 Match Draw!";
+          } else {
+            document.getElementById("oxStatus").innerText = "Your Turn (❌)";
+          }
+        }
+      }, 400);
+    }
+
+    function checkWinner(player) {
+      const wins = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      return wins.some(pattern => pattern.every(i => boardState[i] === player));
+    }
+
+    window.resetOxGame = function () {
+      boardState = ["", "", "", "", "", "", "", "", ""];
+      gameActive = true;
+      document.getElementById("oxStatus").innerText = "Your Turn (❌)";
+      initOxBoard();
+    };
+
+    // ================= 6. WITHDRAW (UPI & PLAY STORE REDEEM CODE) =================
+    window.submitWithdraw = async function () {
+      const method = document.getElementById("wdMethod").value;
+      const details = document.getElementById("wdDetails").value.trim();
+      const amountRs = Number(document.getElementById("wdAmount").value);
+      const msg = document.getElementById("wdMsg");
+
+      const minWd = Number(adminSettings.minWithdraw || 10);
+      const rate = Number(adminSettings.coinsPerRupee || 100);
+      const neededCoins = amountRs * rate;
+
+      if (!details) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Please enter your UPI ID or Email!";
+        return;
+      }
+      if (!amountRs || amountRs < minWd) {
+        msg.style.color = "#f87171";
+        msg.innerText = `Minimum Withdraw is ₹${minWd}!`;
+        return;
+      }
+      if (Number(currentUser.coins || 0) < neededCoins) {
+        msg.style.color = "#f87171";
+        msg.innerText = `Insufficient Balance! You need ${neededCoins} Coins for ₹${amountRs}.`;
+        return;
+      }
+
+      currentUser.coins -= neededCoins;
+      await update(ref(db, "users/" + currentUser.account), { coins: currentUser.coins });
+      updateBalanceUI();
+
+      const wdRef = push(ref(db, "withdrawals"));
+      await set(wdRef, {
+        id: wdRef.key,
+        account: currentUser.account,
+        name: currentUser.name,
+        method: method,
+        details: details,
+        amountRs: amountRs,
+        coinsUsed: neededCoins,
+        status: "Pending",
+        time: new Date().toLocaleString()
+      });
+
+      msg.style.color = "#4ade80";
+      msg.innerText = `✅ ₹${amountRs} (${method}) Withdraw Request Submitted!`;
+      document.getElementById("wdAmount").value = "";
+      loadUserWithdrawHistory();
+      if (String(currentUser.account) === "99999") loadAllWithdrawsForAdmin();
+    };
+
+    async function loadUserWithdrawHistory() {
+      const listEl = document.getElementById("userWithdrawList");
+      listEl.innerHTML = "Loading...";
+      const snap = await get(ref(db, "withdrawals"));
+      listEl.innerHTML = "";
+      if (!snap.exists()) {
+        listEl.innerHTML = "<div style='color:#94a3b8;font-size:13px;'>No withdrawals yet.</div>";
+        return;
+      }
+      const all = snap.val();
+      Object.values(all)
+        .filter(w => String(w.account) === String(currentUser.account))
+        .reverse()
+        .forEach(w => {
+          const div = document.createElement("div");
+          div.className = "history-item";
+          div.innerHTML = `<b>₹${w.amountRs} - ${w.method}</b><br/>Details: ${w.details}<br/>Status: <b style="color:#facc15">${w.status}</b>`;
+          listEl.appendChild(div);
+        });
+    }
+
+    // ================= 7. GEMINI AI SUPPORT (PHOTO + MEMORY + ADMIN TRAINING) =================
+    async function loadUserChatMemory() {
+      const box = document.getElementById("chatBox");
+      box.innerHTML = "";
+      aiMemory = [];
+
+      const snap = await get(ref(db, `chats/${currentUser.account}`));
+      if (snap.exists()) {
+        aiMemory = snap.val() || [];
+        aiMemory.forEach(m => {
+          appendBubble(m.sender, m.text, m.image);
+        });
+      } else {
+        appendBubble("ai", `Hello ${currentUser.name}! How can I help you today?`);
+      }
+    }
+
+    function appendBubble(sender, text, imgBase64) {
+      const box = document.getElementById("chatBox");
+      const div = document.createElement("div");
+      div.className = "chat-bubble " + (sender === "user" ? "chat-user" : "chat-ai");
+      div.innerText = text;
+      if (imgBase64) {
+        const img = document.createElement("img");
+        img.src = imgBase64;
+        div.appendChild(img);
+      }
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = err => reject(err);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    window.sendAiMessage = async function () {
+      const inputEl = document.getElementById("chatInput");
+      const photoEl = document.getElementById("chatPhoto");
+      const msgEl = document.getElementById("aiMsg");
+      const userText = inputEl.value.trim();
+      const file = photoEl.files[0];
+
+      if (!userText && !file) return;
+
+      await loadAdminSettings();
+      if (!adminSettings.geminiKey) {
+        msgEl.style.color = "#f87171";
+        msgEl.innerText = "Admin has not set the Gemini API Key in Admin Panel (99999)!";
+        return;
+      }
+
+      let base64DataUrl = null;
+      let rawBase64 = null;
+      let mimeType = "image/jpeg";
+
+      if (file) {
+        base64DataUrl = await fileToBase64(file);
+        mimeType = file.type || "image/jpeg";
+        rawBase64 = base64DataUrl.split(",")[1];
+      }
+
+      appendBubble("user", userText || "📷 [Sent a Photo]", base64DataUrl);
+      inputEl.value = "";
+      photoEl.value = "";
+      msgEl.style.color = "#38bdf8";
+      msgEl.innerText = "AI is typing...";
+
+      // Save user turn in memory
+      aiMemory.push({
+        sender: "user",
+        text: userText || "[User sent an image]",
+        image: base64DataUrl || null
+      });
+
+      // Build full conversation context so AI remembers everything
+      const systemPrompt = `You are the Official AI Support Assistant of "Step Earning" website.
+ADMIN TRAINING & WEBSITE RULES:
+${adminSettings.aiTraining}
+
+CURRENT LIVE USER DETAILS:
+- User Name: ${currentUser.name}
+- 5-Digit Account ID: ${currentUser.account}
+- User Coins: ${currentUser.coins} Coins
+- Conversion Rate: ${adminSettings.coinsPerRupee} Coins = ₹1
+- User Rupee Balance: ₹${(currentUser.coins / adminSettings.coinsPerRupee).toFixed(2)}
+- Minimum Withdraw set by Admin: ₹${adminSettings.minWithdraw}
+- Supported Withdraw Methods: UPI and Google Play Store Redeem Code.
+
+IMPORTANT INSTRUCTIONS:
+1. Remember the ongoing topic and previous messages from this user.
+2. Answer politely in the same language the user is speaking (Marathi, Hindi, Hinglish, or English).
+3. If the user sends an image/screenshot, inspect it carefully and help them.`;
+
+      const contents = aiMemory.slice(-12).map((item, idx, arr) => {
+        const parts = [{ text: item.text }];
+        // Attach image inlineData for current message if present
+        if (idx === arr.length - 1 && rawBase64) {
+          parts.push({
+            inline_data: {
+              mime_type: mimeType,
+              data: rawBase64
+            }
+          });
+        }
+        return {
+          role: item.sender === "user" ? "user" : "model",
+          parts: parts
+        };
+      });
+
+      try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${adminSettings.geminiKey}`;
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            system_instruction: { parts: [{ text: systemPrompt }] },
+            contents: contents
           })
         });
         const data = await res.json();
+        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I could not process that right now.";
 
-        if (data.status === "success") {
-          openGame({
-            name: data.user.name,
-            account: data.user.account,
-            password: password,
-            coins: data.user.coins
-          });
-        } else {
-          msgEl.style.color = "#f87171";
-          msgEl.innerText = data.message || "Login chukle!";
-        }
+        appendBubble("ai", reply, null);
+        aiMemory.push({ sender: "ai", text: reply });
+
+        // Save memory to Firebase so AI never forgets the conversation
+        await set(ref(db, `chats/${currentUser.account}`), aiMemory.slice(-20));
+        msgEl.innerText = "";
       } catch (err) {
         msgEl.style.color = "#f87171";
-        msgEl.innerText = "Server connect hot nahiye, punha prayatna kara!";
+        msgEl.innerText = "AI Error: " + err.message;
       }
+    };
+
+    // ================= 8. ADMIN PANEL (99999 ONLY) =================
+    window.saveAdminSettings = async function () {
+      if (String(currentUser?.account) !== "99999") return;
+
+      const rate = Number(document.getElementById("admCoinRate").value) || 100;
+      const minWd = Number(document.getElementById("admMinWd").value) || 10;
+      const botToken = document.getElementById("admBotToken").value.trim();
+      const geminiKey = document.getElementById("admGeminiKey").value.trim();
+      const aiTraining = document.getElementById("admAiTraining").value.trim();
+
+      adminSettings = {
+        coinsPerRupee: rate,
+        minWithdraw: minWd,
+        botToken: botToken,
+        geminiKey: geminiKey,
+        aiTraining: aiTraining
+      };
+
+      await set(ref(db, "adminSettings"), adminSettings);
+      updateBalanceUI();
+
+      const msg = document.getElementById("admMsg");
+      msg.style.color = "#4ade80";
+      msg.innerText = "✅ Admin Settings Saved Successfully!";
+    };
+
+    async function loadAllWithdrawsForAdmin() {
+      const box = document.getElementById("adminWithdrawList");
+      box.innerHTML = "Loading...";
+      const snap = await get(ref(db, "withdrawals"));
+      box.innerHTML = "";
+      if (!snap.exists()) {
+        box.innerHTML = "<div style='color:#94a3b8;font-size:13px;'>No withdraw requests found.</div>";
+        return;
+      }
+
+      Object.values(snap.val()).reverse().forEach(w => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+          <b>👤 ${w.name} (${w.account}) - ₹${w.amountRs}</b><br/>
+          Method: ${w.method}<br/>
+          Details: <b>${w.details}</b><br/>
+          Status: <span style="color:#facc15">${w.status}</span>
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <button class="btn-success" style="padding:6px;margin:0;font-size:12px;" onclick="updateWdStatus('${w.id}','Approved')">✅ Approve</button>
+            <button class="btn-danger" style="padding:6px;margin:0;font-size:12px;" onclick="updateWdStatus('${w.id}','Rejected')">❌ Reject</button>
+          </div>
+        `;
+        box.appendChild(div);
+      });
     }
 
-    // OPEN GAME SCREEN
-    function openGame(user) {
-      currentUser = user;
-      document.getElementById("loginBox").classList.add("hidden");
-      document.getElementById("createBox").classList.add("hidden");
-      document.getElementById("gameBox").classList.remove("hidden");
+    window.updateWdStatus = async function (id, status) {
+      await update(ref(db, "withdrawals/" + id), { status: status });
+      loadAllWithdrawsForAdmin();
+    };
 
-      document.getElementById("playerName").innerText = user.name;
-      document.getElementById("playerAcc").innerText = user.account;
-      document.getElementById("playerCoins").innerText = user.coins;
-      document.getElementById("gameMsg").innerText = "Welcome, " + user.name + "!";
-    }
-
-    // TAP COIN GAME FUNCTION (Updates Firebase)
-    async function tapCoin() {
-      if (!currentUser) return;
-      currentUser.coins += 1;
-      document.getElementById("playerCoins").innerText = currentUser.coins;
-
-      try {
-        await fetch("/api/bot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "update_coins",
-            account: currentUser.account,
-            coins: currentUser.coins
-          })
-        });
-      } catch (e) {}
-    }
-
-    // LOGOUT FUNCTION
-    function logout() {
+    window.logoutUser = function () {
       currentUser = null;
-      document.getElementById("gameBox").classList.add("hidden");
-      document.getElementById("loginBox").classList.remove("hidden");
-      document.getElementById("loginAcc").value = "";
-      document.getElementById("loginPass").value = "";
-      document.getElementById("loginMsg").innerText = "";
-    }
+      document.getElementById("appArea").classList.add("hidden");
+      document.getElementById("bottomNav").classList.add("hidden");
+      showAuthBox("loginScreen");
+    };
   </script>
-
 </body>
 </html>
