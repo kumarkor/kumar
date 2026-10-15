@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Step Earning & OX Game</title>
+  <title>Step Earning - 1v1 OX & Rewards</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * {
@@ -22,11 +22,11 @@
     }
     .topbar {
       width: 100%;
-      max-width: 430px;
+      max-width: 440px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
+      padding: 10px 14px;
       background: #0f172a;
       border-bottom: 1px solid #334155;
       position: sticky;
@@ -35,35 +35,49 @@
     }
     .brand {
       font-weight: 800;
-      font-size: 18px;
+      font-size: 17px;
       color: #38bdf8;
+    }
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ping-badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #4ade80;
     }
     .lang-btn {
       background: #334155;
       color: #fff;
       border: 1px solid #475569;
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
       width: auto;
       margin: 0;
     }
     .container {
       width: 100%;
-      max-width: 430px;
-      padding: 16px;
-      padding-bottom: 85px;
+      max-width: 440px;
+      padding: 14px;
+      padding-bottom: 90px;
     }
     .card {
       background: #1e293b;
       border: 1px solid #334155;
       border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
     }
-    h2, h3 {
+    h2, h3, h4 {
       margin-top: 0;
       color: #38bdf8;
     }
@@ -76,12 +90,12 @@
     }
     input, select, textarea {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       border-radius: 10px;
       border: 1px solid #475569;
       background: #0f172a;
       color: #fff;
-      font-size: 15px;
+      font-size: 14px;
       outline: none;
     }
     input:focus, select:focus, textarea:focus {
@@ -89,11 +103,11 @@
     }
     button {
       width: 100%;
-      padding: 12px;
-      margin-top: 12px;
+      padding: 11px;
+      margin-top: 10px;
       border: none;
       border-radius: 10px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
       transition: 0.15s;
@@ -117,6 +131,10 @@
       background: #ef4444;
       color: #fff;
     }
+    .btn-warning {
+      background: linear-gradient(135deg, #facc15, #eab308);
+      color: #0f172a;
+    }
     .hidden {
       display: none !important;
     }
@@ -130,9 +148,9 @@
     .balance-card {
       background: linear-gradient(135deg, #0284c7, #1e3a8a);
       border-radius: 16px;
-      padding: 18px;
+      padding: 16px;
       color: #fff;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
     }
     .bal-row {
@@ -143,22 +161,23 @@
     }
     .bal-box {
       background: rgba(15, 23, 42, 0.45);
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 12px;
       width: 48%;
       text-align: center;
     }
     .bal-val {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
       color: #facc15;
     }
+    /* 1v1 OX Game */
     .ox-board {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       max-width: 260px;
-      margin: 15px auto;
+      margin: 14px auto;
     }
     .ox-cell {
       background: #0f172a;
@@ -175,8 +194,31 @@
     }
     .ox-cell.x { color: #38bdf8; }
     .ox-cell.o { color: #f43f5e; }
+    .timer-badge {
+      display: inline-block;
+      background: #0f172a;
+      border: 1px solid #facc15;
+      color: #facc15;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 6px 0;
+    }
+    .public-room-item {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+    /* AI Chat */
     .chat-box {
-      height: 290px;
+      height: 280px;
       overflow-y: auto;
       background: #0f172a;
       border: 1px solid #334155;
@@ -209,11 +251,12 @@
       border-radius: 8px;
       margin-top: 6px;
     }
+    /* Bottom Nav */
     .bottom-nav {
       position: fixed;
       bottom: 0;
       width: 100%;
-      max-width: 430px;
+      max-width: 440px;
       background: #0f172a;
       border-top: 1px solid #334155;
       display: flex;
@@ -225,9 +268,9 @@
       background: transparent;
       color: #94a3b8;
       border: none;
-      font-size: 12px;
+      font-size: 11px;
       margin: 0;
-      padding: 6px 8px;
+      padding: 6px 6px;
       width: auto;
     }
     .nav-item.active {
@@ -247,10 +290,13 @@
 </head>
 <body>
 
-  <!-- TOP BAR WITH LANGUAGE SWITCH -->
+  <!-- TOP BAR WITH LIVE NETWORK PING & LANGUAGE SWITCH -->
   <div class="topbar">
     <div class="brand">💎 Step Earning</div>
-    <button type="button" class="lang-btn" onclick="toggleLanguage()" id="langBtn">🇮🇳 हिंदी / EN</button>
+    <div class="top-right">
+      <div class="ping-badge" id="pingBadge">🛜 -- ms</div>
+      <button type="button" class="lang-btn" onclick="toggleLanguage()" id="langBtn">🇮🇳 हिं / EN</button>
+    </div>
   </div>
 
   <div class="container">
@@ -336,14 +382,74 @@
         </div>
       </div>
 
-      <!-- TAB 1: OX GAME SECTION -->
-      <div id="tabGame" class="card">
-        <h3 id="t_gameTitle">🎮 OX Game (Win = +20 Coins)</h3>
-        <p style="font-size:13px;color:#94a3b8;margin-top:0;" id="oxStatus">Your Turn (❌)</p>
+      <!-- TAB 1: 1v1 OX MULTIPLAYER & GIFT CODE -->
+      <div id="tabGame">
 
-        <div class="ox-board" id="oxBoard"></div>
+        <!-- 1v1 OX LOBBY (CREATE, JOIN & PUBLIC LIST) -->
+        <div id="oxLobbyCard" class="card">
+          <h3 id="t_gameTitle">⚔️ 1v1 OX Multiplayer (+20 Coins)</h3>
 
-        <button type="button" class="btn-secondary" onclick="resetOxGame()" id="t_restartGame">🔄 Restart OX Game</button>
+          <!-- CREATE GAME -->
+          <div style="background:#0f172a;padding:12px;border-radius:12px;border:1px solid #334155;margin-bottom:12px;">
+            <h4 style="margin:0 0 8px 0;font-size:15px;" id="t_createGameHdr">➕ Create OX Room</h4>
+            <label id="t_roomTypeLbl" style="margin-top:0;">Select Room Type:</label>
+            <select id="oxRoomType">
+              <option value="public">🌍 Public Room (Visible to All)</option>
+              <option value="private">🔒 Private Room (Join by Code)</option>
+            </select>
+            <button type="button" class="btn-primary" onclick="createOxRoom()" id="t_createRoomBtn">Create Game</button>
+          </div>
+
+          <!-- JOIN PRIVATE GAME BY CODE -->
+          <div style="background:#0f172a;padding:12px;border-radius:12px;border:1px solid #334155;margin-bottom:12px;">
+            <h4 style="margin:0 0 8px 0;font-size:15px;" id="t_joinGameHdr">🔑 Join Private Room</h4>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="joinRoomCodeInput" placeholder="Enter 5-Digit Code" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="margin:0;" />
+              <button type="button" class="btn-success" style="width:120px;margin:0;" onclick="joinPrivateOxRoom()" id="t_joinRoomBtn">Join Game</button>
+            </div>
+          </div>
+
+          <!-- PUBLIC ROOMS LIST BELOW CREATE & JOIN -->
+          <div style="background:#0f172a;padding:12px;border-radius:12px;border:1px solid #334155;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <h4 style="margin:0;font-size:15px;color:#facc15;" id="t_publicListHdr">🌍 Open Public Games</h4>
+              <button type="button" class="btn-secondary" style="width:auto;padding:4px 10px;margin:0;font-size:12px;" onclick="loadPublicRooms()">🔄 Refresh</button>
+            </div>
+            <div id="publicRoomsList" style="margin-top:8px;font-size:13px;color:#94a3b8;">Loading public games...</div>
+          </div>
+
+          <div id="oxLobbyMsg" class="msg"></div>
+        </div>
+
+        <!-- 1v1 OX ACTIVE ROOM / BOARD -->
+        <div id="oxMatchCard" class="card hidden" style="text-align:center;">
+          <h3 id="matchTitle">⚔️ 1v1 OX Match</h3>
+          <div style="font-size:13px;color:#cbd5e1;margin-bottom:6px;">
+            Room Code: <b style="color:#38bdf8;font-size:16px;" id="activeRoomCode">-</b>
+            (<span id="activeRoomType">-</span>)
+          </div>
+          <div style="font-size:14px;margin-bottom:6px;">
+            ❌ <b id="hostPlayerName">-</b> vs ⭕ <b id="guestPlayerName">Waiting...</b>
+          </div>
+
+          <div class="timer-badge" id="oxTimerBadge">⏳ 60s</div>
+          <div id="oxMatchStatus" style="font-size:14px;font-weight:bold;color:#4ade80;margin-top:6px;">Waiting for opponent...</div>
+
+          <div class="ox-board" id="oxBoard"></div>
+
+          <button type="button" class="btn-danger" onclick="leaveOxRoom()" id="t_leaveRoomBtn">🚪 Leave Room</button>
+        </div>
+
+        <!-- GIFT CODE REDEEM CARD -->
+        <div class="card">
+          <h3 id="t_giftTitle">🎁 Redeem Gift Code</h3>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="giftCodeInput" placeholder="Enter Gift Code" style="margin:0;text-transform:uppercase;" />
+            <button type="button" class="btn-warning" style="width:120px;margin:0;" onclick="redeemGiftCode()" id="t_claimBtn">Redeem</button>
+          </div>
+          <div id="giftMsg" class="msg"></div>
+        </div>
+
       </div>
 
       <!-- TAB 2: WITHDRAW SECTION -->
@@ -404,7 +510,7 @@
         <label>🤖 Telegram Bot Token (For Forget Password OTP):</label>
         <input type="text" id="admBotToken" placeholder="123456789:AAH..." />
 
-        <label>✨ Gemini API Key (For AI Support Chat):</label>
+        <label>✨ Gemini API Key (gemini-3.5-flash-lite):</label>
         <input type="text" id="admGeminiKey" placeholder="AIzaSy..." />
 
         <label>🧠 AI Training Information (Rules, Announcements, Info for Users):</label>
@@ -413,7 +519,26 @@
         <button type="button" class="btn-primary" onclick="saveAdminSettings()">💾 Save Admin Settings</button>
         <div id="admMsg" class="msg"></div>
 
-        <h4 style="margin-top:20px;color:#facc15;">📋 All User Withdraw Requests</h4>
+        <hr style="border:0;border-top:1px solid #334155;margin:20px 0;" />
+
+        <!-- ADMIN CREATE GIFT CODE -->
+        <h4 style="color:#facc15;margin-bottom:8px;">🎁 Create New Gift Code</h4>
+        <label>Gift Code Name (e.g. BONUS50):</label>
+        <input type="text" id="admGiftCode" placeholder="BONUS50" style="text-transform:uppercase;" />
+
+        <label>Coins Reward Amount:</label>
+        <input type="number" id="admGiftCoins" placeholder="50" />
+
+        <label>Max Users Limit:</label>
+        <input type="number" id="admGiftMax" placeholder="100" />
+
+        <button type="button" class="btn-warning" onclick="createAdminGiftCode()">➕ Create Gift Code</button>
+        <div id="admGiftMsg" class="msg"></div>
+
+        <hr style="border:0;border-top:1px solid #334155;margin:20px 0;" />
+
+        <h4 style="color:#38bdf8;">📋 All User Withdraw Requests</h4>
+        <p style="font-size:12px;color:#94a3b8;margin-top:0;">Rejecting a request automatically refunds the deducted coins to the user.</p>
         <div id="adminWithdrawList"></div>
       </div>
 
@@ -422,16 +547,16 @@
 
   <!-- BOTTOM NAVIGATION -->
   <div id="bottomNav" class="bottom-nav hidden">
-    <button type="button" class="nav-item active" id="nav_game" onclick="openTab('tabGame', 'nav_game')">🎮 OX Game</button>
+    <button type="button" class="nav-item active" id="nav_game" onclick="openTab('tabGame', 'nav_game')">⚔️ 1v1 OX</button>
     <button type="button" class="nav-item" id="nav_wd" onclick="openTab('tabWithdraw', 'nav_wd')">💸 Withdraw</button>
-    <button type="button" class="nav-item" id="nav_ai" onclick="openTab('tabSupport', 'nav_ai')">🤖 AI Support</button>
+    <button type="button" class="nav-item" id="nav_ai" onclick="openTab('tabSupport', 'nav_ai')">🤖 AI Chat</button>
     <button type="button" class="nav-item hidden" id="nav_adm" onclick="openTab('tabAdmin', 'nav_adm')">👑 Admin</button>
     <button type="button" class="nav-item" onclick="logoutUser()">🚪 Logout</button>
   </div>
 
-  <!-- DIRECT SCRIPT (NO MODULE BLOCKING - 100% INSTANT BUTTON WORK) -->
   <script>
     const DB_URL = "https://newkumarbot-default-rtdb.firebaseio.com";
+    const SESSION_KEY = "step_earning_logged_user";
 
     let currentUser = null;
     let adminSettings = {
@@ -439,14 +564,21 @@
       minWithdraw: 10,
       botToken: "",
       geminiKey: "",
-      aiTraining: "Welcome to Step Earning! 100 Coins = ₹1. Play OX Game to earn coins and withdraw via UPI or Google Play Store Redeem Code."
+      aiTraining: "Welcome to Step Earning! 100 Coins = ₹1. Play 1v1 OX Game to earn coins and withdraw via UPI or Google Play Store Redeem Code."
     };
     let generatedOtp = null;
     let otpAccountTarget = null;
     let currentLang = "en";
     let aiMemory = [];
 
-    // Auto-fill Telegram ID if inside Telegram
+    // 1v1 OX Variables
+    let activeRoomCode = null;
+    let activeRoomPoll = null;
+    let publicLobbyPoll = null;
+    let rewardedRooms = {};
+    let autoMoveLock = false;
+
+    // Auto-fill Telegram ID if inside Telegram Mini App
     try {
       const tgUser = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user;
       if (tgUser && tgUser.id) {
@@ -454,9 +586,28 @@
       }
     } catch (e) {}
 
+    // ================= LIVE NETWORK PING (🛜) =================
+    async function measureNetworkPing() {
+      const badge = document.getElementById("pingBadge");
+      const start = performance.now();
+      try {
+        await fetch(DB_URL + "/adminSettings/coinsPerRupee.json?t=" + Date.now());
+        const ms = Math.max(1, Math.round(performance.now() - start));
+        badge.innerText = "🛜 " + ms + " ms";
+        if (ms < 150) badge.style.color = "#4ade80";
+        else if (ms < 350) badge.style.color = "#facc15";
+        else badge.style.color = "#f87171";
+      } catch (e) {
+        badge.innerText = "🛜 Offline";
+        badge.style.color = "#f87171";
+      }
+    }
+    setInterval(measureNetworkPing, 4000);
+    measureNetworkPing();
+
     // ================= FIREBASE REST HELPERS =================
     async function fbGet(path) {
-      const res = await fetch(DB_URL + "/" + path + ".json");
+      const res = await fetch(DB_URL + "/" + path + ".json?t=" + Date.now());
       if (!res.ok) throw new Error("Database connection error");
       return await res.json();
     }
@@ -481,17 +632,11 @@
       return await res.json();
     }
 
-    async function fbPush(path, data) {
-      const res = await fetch(DB_URL + "/" + path + ".json", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      if (!res.ok) throw new Error("Database push error");
-      return await res.json();
+    async function fbDelete(path) {
+      await fetch(DB_URL + "/" + path + ".json", { method: "DELETE" });
     }
 
-    // ================= SCREEN NAVIGATION (INSTANT) =================
+    // ================= SCREEN NAVIGATION =================
     function showAuthBox(boxId) {
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("createScreen").classList.add("hidden");
@@ -503,7 +648,7 @@
       document.getElementById("forgetMsg").innerText = "";
     }
 
-    // ================= LANGUAGE TRANSLATIONS (EN / HI) =================
+    // ================= LANGUAGE TRANSLATIONS (ENGLISH / HINDI ONLY) =================
     const translations = {
       en: {
         t_loginTitle: "🔐 Account Login",
@@ -523,8 +668,16 @@
         t_sendOtpBtn: "Send OTP on Telegram Bot",
         t_coinsLbl: "Total Coins",
         t_rupeesLbl: "Balance (₹)",
-        t_gameTitle: "🎮 OX Game (Win = +20 Coins)",
-        t_restartGame: "🔄 Restart OX Game",
+        t_gameTitle: "⚔️ 1v1 OX Multiplayer (+20 Coins)",
+        t_createGameHdr: "➕ Create OX Room",
+        t_roomTypeLbl: "Select Room Type:",
+        t_createRoomBtn: "Create Game",
+        t_joinGameHdr: "🔑 Join Private Room",
+        t_joinRoomBtn: "Join Game",
+        t_publicListHdr: "🌍 Open Public Games",
+        t_leaveRoomBtn: "🚪 Leave Room",
+        t_giftTitle: "🎁 Redeem Gift Code",
+        t_claimBtn: "Redeem",
         t_withdrawTitle: "💸 Withdraw Earnings",
         t_methodLbl: "Select Payment Method:",
         t_detailsLbl: "Enter UPI ID or Email/Number:",
@@ -552,8 +705,16 @@
         t_sendOtpBtn: "Telegram Bot पर OTP भेजें",
         t_coinsLbl: "कुल कॉइन्स",
         t_rupeesLbl: "बैलेंस (₹)",
-        t_gameTitle: "🎮 OX गेम (जीतने पर +20 कॉइन्स)",
-        t_restartGame: "🔄 गेम फिर से शुरू करें",
+        t_gameTitle: "⚔️ 1v1 OX मल्टीप्लेयर (+20 कॉइन्स)",
+        t_createGameHdr: "➕ नया OX रूम बनाएं",
+        t_roomTypeLbl: "रूम का प्रकार चुनें:",
+        t_createRoomBtn: "गेम बनाएं (Create)",
+        t_joinGameHdr: "🔑 प्राइवेट रूम जॉइन करें",
+        t_joinRoomBtn: "जॉइन करें",
+        t_publicListHdr: "🌍 पब्लिक गेम्स लिस्ट",
+        t_leaveRoomBtn: "🚪 रूम छोड़ें",
+        t_giftTitle: "🎁 गिफ्ट कोड रिडीम करें",
+        t_claimBtn: "रिडीम करें",
         t_withdrawTitle: "💸 पैसे निकालें (Withdraw)",
         t_methodLbl: "पेमेंट तरीका चुनें:",
         t_detailsLbl: "UPI ID या ईमेल/नंबर डालें:",
@@ -590,7 +751,23 @@
         document.getElementById("admAiTraining").value = adminSettings.aiTraining || "";
       } catch (e) {}
     }
-    loadAdminSettings();
+
+    // ================= AUTO-LOGIN CHECK ON STARTUP =================
+    async function checkSavedSession() {
+      await loadAdminSettings();
+      const savedAccount = localStorage.getItem(SESSION_KEY);
+      if (savedAccount && /^\d{5}$/.test(savedAccount)) {
+        try {
+          const user = await fbGet("users/" + savedAccount);
+          if (user && user.account) {
+            enterDashboard(user);
+          } else {
+            localStorage.removeItem(SESSION_KEY);
+          }
+        } catch (e) {}
+      }
+    }
+    checkSavedSession();
 
     // ================= 1. CREATE NEW ACCOUNT =================
     async function registerUser() {
@@ -602,33 +779,33 @@
 
       if (!name) {
         msg.style.color = "#f87171";
-        msg.innerText = "Krupaya tumche Nav (Name) taka!";
+        msg.innerText = "Please enter your Name!";
         return;
       }
       if (!/^\d{5}$/.test(account)) {
         msg.style.color = "#f87171";
-        msg.innerText = "Account ID barobar 5 number cha asayla hava!";
+        msg.innerText = "Account ID must be exactly 5 digits!";
         return;
       }
       if (!/^\d{4}$/.test(password)) {
         msg.style.color = "#f87171";
-        msg.innerText = "Password barobar 4 number cha asayla hava!";
+        msg.innerText = "Password must be exactly 4 digits!";
         return;
       }
       if (!telegramId) {
         msg.style.color = "#f87171";
-        msg.innerText = "Telegram User ID taka (OTP sathi garjecha ahe)!";
+        msg.innerText = "Please enter your Telegram User ID (for OTP)!";
         return;
       }
 
       msg.style.color = "#38bdf8";
-      msg.innerText = "Account banavle jat ahe...";
+      msg.innerText = "Creating account...";
 
       try {
         const existing = await fbGet("users/" + account);
         if (existing) {
           msg.style.color = "#f87171";
-          msg.innerText = "❌ Ha 5 number cha Account adhich tayar ahe! Dusra number nivda.";
+          msg.innerText = "❌ This 5-digit Account ID already exists! Choose another number.";
           return;
         }
 
@@ -642,6 +819,7 @@
         };
 
         await fbSet("users/" + account, newUser);
+        localStorage.setItem(SESSION_KEY, account);
         enterDashboard(newUser);
       } catch (err) {
         msg.style.color = "#f87171";
@@ -657,27 +835,28 @@
 
       if (!/^\d{5}$/.test(account) || !/^\d{4}$/.test(password)) {
         msg.style.color = "#f87171";
-        msg.innerText = "5-digit Account ID aani 4-digit Password taka!";
+        msg.innerText = "Enter 5-digit Account ID and 4-digit Password!";
         return;
       }
 
       msg.style.color = "#38bdf8";
-      msg.innerText = "Login hot ahe...";
+      msg.innerText = "Logging in...";
 
       try {
         const user = await fbGet("users/" + account);
         if (!user) {
           msg.style.color = "#f87171";
-          msg.innerText = "Account sapadla nahi! Pahile Create New Account kara.";
+          msg.innerText = "Account not found! Please Create New Account first.";
           return;
         }
 
         if (String(user.password) !== password) {
           msg.style.color = "#f87171";
-          msg.innerText = "❌ Chukicha 4-digit Password!";
+          msg.innerText = "❌ Incorrect 4-digit Password!";
           return;
         }
 
+        localStorage.setItem(SESSION_KEY, account);
         enterDashboard(user);
       } catch (err) {
         msg.style.color = "#f87171";
@@ -692,38 +871,38 @@
 
       if (!/^\d{5}$/.test(account)) {
         msg.style.color = "#f87171";
-        msg.innerText = "tumcha 5-digit Account ID taka!";
+        msg.innerText = "Please enter your 5-digit Account ID!";
         return;
       }
 
       msg.style.color = "#38bdf8";
-      msg.innerText = "Telegram Bot var OTP pathavla jat ahe...";
+      msg.innerText = "Sending OTP to your Telegram Bot...";
 
       try {
         await loadAdminSettings();
         if (!adminSettings.botToken) {
           msg.style.color = "#f87171";
-          msg.innerText = "Admin ne ajun Admin Panel madhe Bot Token set kelela nahi!";
+          msg.innerText = "Admin has not configured the Bot Token yet!";
           return;
         }
 
         const user = await fbGet("users/" + account);
         if (!user) {
           msg.style.color = "#f87171";
-          msg.innerText = "Ha Account ID sapadla nahi!";
+          msg.innerText = "Account ID not found!";
           return;
         }
 
         if (!user.telegramId) {
           msg.style.color = "#f87171";
-          msg.innerText = "Ya Account la Telegram ID jodlela nahi!";
+          msg.innerText = "No Telegram ID is linked to this account!";
           return;
         }
 
         generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
         otpAccountTarget = account;
 
-        const textMsg = "🔐 *Password Reset OTP*\n\n👤 Name: " + user.name + "\n🆔 Account ID: " + account + "\n🔢 Your OTP: *" + generatedOtp + "*\n\nHa OTP konasobat hi share karu naka.";
+        const textMsg = "🔐 *Password Reset OTP*\n\n👤 Name: " + user.name + "\n🆔 Account ID: " + account + "\n🔢 Your OTP: *" + generatedOtp + "*\n\nDo not share this OTP with anyone.";
 
         const tgRes = await fetch("https://api.telegram.org/bot" + adminSettings.botToken + "/sendMessage", {
           method: "POST",
@@ -739,10 +918,10 @@
         if (tgData.ok) {
           document.getElementById("otpVerifyBox").classList.remove("hidden");
           msg.style.color = "#4ade80";
-          msg.innerText = "✅ Tumchya Telegram Bot var OTP pathavla ahe!";
+          msg.innerText = "✅ OTP sent to your Telegram Bot!";
         } else {
           msg.style.color = "#f87171";
-          msg.innerText = "Telegram Error: Krupaya pahile Telegram var Bot la /start kara!";
+          msg.innerText = "Telegram Error: Please send /start to the Bot on Telegram first!";
         }
       } catch (err) {
         msg.style.color = "#f87171";
@@ -757,18 +936,18 @@
 
       if (otpInput !== generatedOtp || !otpAccountTarget) {
         msg.style.color = "#f87171";
-        msg.innerText = "❌ Chukicha OTP!";
+        msg.innerText = "❌ Invalid OTP!";
         return;
       }
       if (!/^\d{4}$/.test(newPass)) {
         msg.style.color = "#f87171";
-        msg.innerText = "Navin Password 4 number cha asayla hava!";
+        msg.innerText = "New Password must be exactly 4 digits!";
         return;
       }
 
       await fbUpdate("users/" + otpAccountTarget, { password: newPass });
       msg.style.color = "#4ade80";
-      msg.innerText = "✅ Password Reset Jhala! Ata Login kara.";
+      msg.innerText = "✅ Password changed successfully! Redirecting to login...";
       generatedOtp = null;
       setTimeout(function () {
         showAuthBox("loginScreen");
@@ -794,9 +973,23 @@
       }
 
       updateBalanceUI();
-      initOxBoard();
+      loadPublicRooms();
+      if (publicLobbyPoll) clearInterval(publicLobbyPoll);
+      publicLobbyPoll = setInterval(loadPublicRooms, 4000);
+
       loadUserWithdrawHistory();
       loadUserChatMemory();
+    }
+
+    async function refreshUserBalanceFromServer() {
+      if (!currentUser) return;
+      try {
+        const fresh = await fbGet("users/" + currentUser.account);
+        if (fresh) {
+          currentUser.coins = Number(fresh.coins || 0);
+          updateBalanceUI();
+        }
+      } catch (e) {}
     }
 
     function updateBalanceUI() {
@@ -823,118 +1016,420 @@
 
       document.getElementById(tabId).classList.remove("hidden");
       document.getElementById(navId).classList.add("active");
+      refreshUserBalanceFromServer();
     }
 
-    // ================= 5. OX GAME (TIC-TAC-TOE) =================
-    let boardState = ["", "", "", "", "", "", "", "", ""];
-    let gameActive = true;
+    // ================= 5. 1v1 OX MULTIPLAYER (PUBLIC/PRIVATE + 60s WAIT + 15s AUTO MOVE) =================
+    async function createOxRoom() {
+      const roomType = document.getElementById("oxRoomType").value;
+      const msg = document.getElementById("oxLobbyMsg");
+      const code = String(Math.floor(10000 + Math.random() * 90000));
 
-    function initOxBoard() {
-      const board = document.getElementById("oxBoard");
-      board.innerHTML = "";
-      boardState.forEach(function (val, idx) {
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Creating room...";
+
+      const roomData = {
+        code: code,
+        type: roomType,
+        hostAccount: currentUser.account,
+        hostName: currentUser.name,
+        guestAccount: "",
+        guestName: "",
+        status: "waiting",
+        board: ["", "", "", "", "", "", "", "", ""],
+        turn: "X",
+        createdAt: Date.now(),
+        turnDeadline: 0,
+        winner: ""
+      };
+
+      try {
+        await fbSet("oxRooms/" + code, roomData);
+        msg.innerText = "";
+        enterOxRoomView(code);
+      } catch (e) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Failed to create room!";
+      }
+    }
+
+    async function joinPrivateOxRoom() {
+      const code = document.getElementById("joinRoomCodeInput").value.trim();
+      const msg = document.getElementById("oxLobbyMsg");
+
+      if (!/^\d{5}$/.test(code)) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Please enter a valid 5-digit Room Code!";
+        return;
+      }
+      await joinOxRoomByCode(code);
+    }
+
+    async function joinOxRoomByCode(code) {
+      const msg = document.getElementById("oxLobbyMsg");
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Joining room " + code + "...";
+
+      try {
+        const room = await fbGet("oxRooms/" + code);
+        if (!room || room.status !== "waiting") {
+          msg.style.color = "#f87171";
+          msg.innerText = "❌ Room not found, already full, or closed!";
+          return;
+        }
+
+        if (Date.now() - room.createdAt >= 60000) {
+          await fbUpdate("oxRooms/" + code, { status: "closed" });
+          msg.style.color = "#f87171";
+          msg.innerText = "❌ Room expired (1 minute timeout)!";
+          loadPublicRooms();
+          return;
+        }
+
+        if (String(room.hostAccount) === String(currentUser.account)) {
+          enterOxRoomView(code);
+          return;
+        }
+
+        await fbUpdate("oxRooms/" + code, {
+          guestAccount: currentUser.account,
+          guestName: currentUser.name,
+          status: "playing",
+          turn: "X",
+          turnDeadline: Date.now() + 15000
+        });
+
+        msg.innerText = "";
+        enterOxRoomView(code);
+      } catch (e) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Error joining room!";
+      }
+    }
+
+    async function loadPublicRooms() {
+      if (!currentUser || activeRoomCode) return;
+      const listEl = document.getElementById("publicRoomsList");
+      try {
+        const allRooms = await fbGet("oxRooms");
+        if (!allRooms) {
+          listEl.innerHTML = "No open public games right now. Create one above!";
+          return;
+        }
+
+        const now = Date.now();
+        const openPublic = Object.values(allRooms).filter(function (r) {
+          return r && r.type === "public" && r.status === "waiting" && (now - r.createdAt < 60000);
+        });
+
+        if (openPublic.length === 0) {
+          listEl.innerHTML = "No open public games right now. Create one above!";
+          return;
+        }
+
+        listEl.innerHTML = "";
+        openPublic.reverse().forEach(function (r) {
+          const leftSec = Math.max(1, Math.ceil((60000 - (now - r.createdAt)) / 1000));
+          const div = document.createElement("div");
+          div.className = "public-room-item";
+          div.innerHTML =
+            "<div><b>👤 " + r.hostName + "</b><br/><span style='color:#94a3b8;font-size:11px;'>Code: " + r.code + " • Closes in " + leftSec + "s</span></div>" +
+            "<button type='button' class='btn-success' style='width:auto;padding:6px 14px;margin:0;font-size:12px;' onclick=\"joinOxRoomByCode('" + r.code + "')\">Join 1v1</button>";
+          listEl.appendChild(div);
+        });
+      } catch (e) {}
+    }
+
+    function enterOxRoomView(code) {
+      activeRoomCode = code;
+      document.getElementById("oxLobbyCard").classList.add("hidden");
+      document.getElementById("oxMatchCard").classList.remove("hidden");
+
+      if (activeRoomPoll) clearInterval(activeRoomPoll);
+      syncActiveOxRoom();
+      activeRoomPoll = setInterval(syncActiveOxRoom, 1000);
+    }
+
+    async function syncActiveOxRoom() {
+      if (!activeRoomCode) return;
+      try {
+        const room = await fbGet("oxRooms/" + activeRoomCode);
+        if (!room || room.status === "closed") {
+          alert("Room closed because no one joined within 1 minute or player left.");
+          leaveOxRoom(true);
+          return;
+        }
+
+        document.getElementById("activeRoomCode").innerText = room.code;
+        document.getElementById("activeRoomType").innerText = room.type.toUpperCase();
+        document.getElementById("hostPlayerName").innerText = room.hostName || "Host";
+        document.getElementById("guestPlayerName").innerText = room.guestName || "Waiting...";
+
+        const now = Date.now();
+
+        // 1 MINUTE WAITING TIMEOUT CHECK
+        if (room.status === "waiting") {
+          const waitRemaining = Math.ceil((60000 - (now - room.createdAt)) / 1000);
+          if (waitRemaining <= 0) {
+            await fbUpdate("oxRooms/" + activeRoomCode, { status: "closed" });
+            alert("1 Minute expired! No player joined, room closed.");
+            leaveOxRoom(true);
+            return;
+          }
+          document.getElementById("oxTimerBadge").innerText = "⏳ Waiting: " + waitRemaining + "s";
+          document.getElementById("oxMatchStatus").innerText = "Waiting for opponent to join (Room closes in " + waitRemaining + "s)...";
+          renderOxBoard(room);
+          return;
+        }
+
+        // ACTIVE 1v1 PLAYING STATE & 15-SECOND AUTO-MOVE TIMER
+        if (room.status === "playing") {
+          const mySymbol = String(room.hostAccount) === String(currentUser.account) ? "X" : "O";
+          const isMyTurn = room.turn === mySymbol;
+          const turnRemaining = Math.max(0, Math.ceil((room.turnDeadline - now) / 1000));
+
+          document.getElementById("oxTimerBadge").innerText = "⏱️ Turn Timer: " + turnRemaining + "s";
+          document.getElementById("oxMatchStatus").style.color = isMyTurn ? "#4ade80" : "#facc15";
+          document.getElementById("oxMatchStatus").innerText = isMyTurn
+            ? "Your Turn (" + mySymbol + ") - Tap a box within " + turnRemaining + "s!"
+            : "Opponent's Turn (" + room.turn + ") - " + turnRemaining + "s left";
+
+          renderOxBoard(room);
+
+          // If 15 seconds expired without pressing, website automatically places X or O in a random empty spot!
+          if (now >= room.turnDeadline && !autoMoveLock) {
+            if (isMyTurn || (now - room.turnDeadline > 2500)) {
+              autoMoveLock = true;
+              const emptyCells = [];
+              room.board.forEach(function (cell, idx) {
+                if (cell === "") emptyCells.push(idx);
+              });
+              if (emptyCells.length > 0) {
+                const randomIdx = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                await executeOxMove(room, randomIdx, room.turn);
+              }
+              autoMoveLock = false;
+            }
+          }
+          return;
+        }
+
+        // FINISHED STATE
+        if (room.status === "finished") {
+          renderOxBoard(room);
+          const mySymbol = String(room.hostAccount) === String(currentUser.account) ? "X" : "O";
+          document.getElementById("oxTimerBadge").innerText = "🏁 Match Finished";
+
+          if (room.winner === "DRAW") {
+            document.getElementById("oxMatchStatus").style.color = "#facc15";
+            document.getElementById("oxMatchStatus").innerText = "🤝 Match Draw!";
+          } else if (room.winner === mySymbol) {
+            document.getElementById("oxMatchStatus").style.color = "#4ade80";
+            document.getElementById("oxMatchStatus").innerText = "🎉 You Won the 1v1 Match! +20 Coins Added!";
+            if (!rewardedRooms[room.code]) {
+              rewardedRooms[room.code] = true;
+              currentUser.coins = Number(currentUser.coins || 0) + 20;
+              updateBalanceUI();
+              await fbUpdate("users/" + currentUser.account, { coins: currentUser.coins });
+            }
+          } else {
+            document.getElementById("oxMatchStatus").style.color = "#f87171";
+            document.getElementById("oxMatchStatus").innerText = "❌ Opponent Won this match!";
+          }
+        }
+      } catch (e) {}
+    }
+
+    function renderOxBoard(room) {
+      const boardEl = document.getElementById("oxBoard");
+      boardEl.innerHTML = "";
+      const mySymbol = String(room.hostAccount) === String(currentUser.account) ? "X" : "O";
+
+      room.board.forEach(function (val, idx) {
         const cell = document.createElement("div");
         cell.className = "ox-cell " + (val === "X" ? "x" : val === "O" ? "o" : "");
-        cell.innerText = val;
+        cell.innerText = val === "X" ? "❌" : val === "O" ? "⭕" : "";
         cell.onclick = function () {
-          makeOxMove(idx);
+          if (room.status === "playing" && room.turn === mySymbol && room.board[idx] === "") {
+            executeOxMove(room, idx, mySymbol);
+          }
         };
-        board.appendChild(cell);
+        boardEl.appendChild(cell);
       });
     }
 
-    async function makeOxMove(idx) {
-      if (!gameActive || boardState[idx] !== "") return;
-      boardState[idx] = "X";
-      initOxBoard();
+    async function executeOxMove(room, idx, symbol) {
+      if (room.board[idx] !== "" || room.status !== "playing") return;
+      const newBoard = room.board.slice();
+      newBoard[idx] = symbol;
 
-      if (checkWinner("X")) {
-        gameActive = false;
-        document.getElementById("oxStatus").innerText = "🎉 You Won! +20 Coins Added!";
-        currentUser.coins = Number(currentUser.coins || 0) + 20;
-        updateBalanceUI();
-        await fbUpdate("users/" + currentUser.account, { coins: currentUser.coins });
-        return;
-      }
+      const isWin = checkBoardWin(newBoard, symbol);
+      const isDraw = !isWin && !newBoard.includes("");
 
-      if (!boardState.includes("")) {
-        gameActive = false;
-        document.getElementById("oxStatus").innerText = "🤝 Match Draw! Restart to play again.";
-        return;
-      }
-
-      document.getElementById("oxStatus").innerText = "Bot thinking (⭕)...";
-      setTimeout(function () {
-        const emptyIndices = [];
-        boardState.forEach(function (v, i) {
-          if (v === "") emptyIndices.push(i);
+      if (isWin) {
+        await fbUpdate("oxRooms/" + room.code, {
+          board: newBoard,
+          status: "finished",
+          winner: symbol
         });
-        if (emptyIndices.length > 0 && gameActive) {
-          const botMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-          boardState[botMove] = "O";
-          initOxBoard();
-
-          if (checkWinner("O")) {
-            gameActive = false;
-            document.getElementById("oxStatus").innerText = "❌ Bot Won! Try again.";
-          } else if (!boardState.includes("")) {
-            gameActive = false;
-            document.getElementById("oxStatus").innerText = "🤝 Match Draw!";
-          } else {
-            document.getElementById("oxStatus").innerText = "Your Turn (❌)";
-          }
-        }
-      }, 400);
+      } else if (isDraw) {
+        await fbUpdate("oxRooms/" + room.code, {
+          board: newBoard,
+          status: "finished",
+          winner: "DRAW"
+        });
+      } else {
+        const nextTurn = symbol === "X" ? "O" : "X";
+        await fbUpdate("oxRooms/" + room.code, {
+          board: newBoard,
+          turn: nextTurn,
+          turnDeadline: Date.now() + 15000
+        });
+      }
+      syncActiveOxRoom();
     }
 
-    function checkWinner(player) {
+    function checkBoardWin(b, sym) {
       const wins = [
         [0,1,2],[3,4,5],[6,7,8],
         [0,3,6],[1,4,7],[2,5,8],
         [0,4,8],[2,4,6]
       ];
-      return wins.some(function (pattern) {
-        return pattern.every(function (i) {
-          return boardState[i] === player;
-        });
+      return wins.some(function (p) {
+        return p.every(function (i) { return b[i] === sym; });
       });
     }
 
-    function resetOxGame() {
-      boardState = ["", "", "", "", "", "", "", "", ""];
-      gameActive = true;
-      document.getElementById("oxStatus").innerText = "Your Turn (❌)";
-      initOxBoard();
+    async function leaveOxRoom(skipCloseUpdate) {
+      if (activeRoomPoll) clearInterval(activeRoomPoll);
+      if (activeRoomCode && !skipCloseUpdate) {
+        try {
+          const room = await fbGet("oxRooms/" + activeRoomCode);
+          if (room && room.status === "waiting") {
+            await fbUpdate("oxRooms/" + activeRoomCode, { status: "closed" });
+          }
+        } catch (e) {}
+      }
+      activeRoomCode = null;
+      document.getElementById("oxMatchCard").classList.add("hidden");
+      document.getElementById("oxLobbyCard").classList.remove("hidden");
+      loadPublicRooms();
     }
 
-    // ================= 6. WITHDRAW (UPI & PLAY STORE) =================
+    // ================= 6. GIFT CODE SYSTEM =================
+    async function createAdminGiftCode() {
+      if (String(currentUser && currentUser.account) !== "99999") return;
+      const code = document.getElementById("admGiftCode").value.trim().toUpperCase();
+      const coins = Number(document.getElementById("admGiftCoins").value);
+      const maxUses = Number(document.getElementById("admGiftMax").value);
+      const msg = document.getElementById("admGiftMsg");
+
+      if (!code || !coins || !maxUses) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Please fill Code, Coins, and Max Uses!";
+        return;
+      }
+
+      await fbSet("giftCodes/" + code, {
+        code: code,
+        coins: coins,
+        maxUses: maxUses,
+        usedCount: 0,
+        claimedBy: {}
+      });
+
+      msg.style.color = "#4ade80";
+      msg.innerText = "✅ Gift Code '" + code + "' (" + coins + " Coins) Created!";
+      document.getElementById("admGiftCode").value = "";
+      document.getElementById("admGiftCoins").value = "";
+      document.getElementById("admGiftMax").value = "";
+    }
+
+    async function redeemGiftCode() {
+      const code = document.getElementById("giftCodeInput").value.trim().toUpperCase();
+      const msg = document.getElementById("giftMsg");
+
+      if (!code) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Please enter a Gift Code!";
+        return;
+      }
+
+      msg.style.color = "#38bdf8";
+      msg.innerText = "Checking Gift Code...";
+
+      try {
+        const gift = await fbGet("giftCodes/" + code);
+        if (!gift) {
+          msg.style.color = "#f87171";
+          msg.innerText = "❌ Invalid Gift Code!";
+          return;
+        }
+
+        const claimedBy = gift.claimedBy || {};
+        if (claimedBy[currentUser.account]) {
+          msg.style.color = "#f87171";
+          msg.innerText = "❌ You have already redeemed this Gift Code!";
+          return;
+        }
+
+        if (Number(gift.usedCount || 0) >= Number(gift.maxUses || 1)) {
+          msg.style.color = "#f87171";
+          msg.innerText = "❌ This Gift Code has reached its maximum limit!";
+          return;
+        }
+
+        claimedBy[currentUser.account] = true;
+        await fbUpdate("giftCodes/" + code, {
+          usedCount: Number(gift.usedCount || 0) + 1,
+          claimedBy: claimedBy
+        });
+
+        await refreshUserBalanceFromServer();
+        currentUser.coins = Number(currentUser.coins || 0) + Number(gift.coins || 0);
+        await fbUpdate("users/" + currentUser.account, { coins: currentUser.coins });
+        updateBalanceUI();
+
+        msg.style.color = "#4ade80";
+        msg.innerText = "🎉 Success! +" + gift.coins + " Coins added to your balance!";
+        document.getElementById("giftCodeInput").value = "";
+      } catch (e) {
+        msg.style.color = "#f87171";
+        msg.innerText = "Error redeeming Gift Code!";
+      }
+    }
+
+    // ================= 7. WITHDRAW (INSTANT CUT + REFUND ON REJECT) =================
     async function submitWithdraw() {
       const method = document.getElementById("wdMethod").value;
       const details = document.getElementById("wdDetails").value.trim();
       const amountRs = Number(document.getElementById("wdAmount").value);
       const msg = document.getElementById("wdMsg");
 
+      await refreshUserBalanceFromServer();
+
       const minWd = Number(adminSettings.minWithdraw || 10);
       const rate = Number(adminSettings.coinsPerRupee || 100);
-      const neededCoins = amountRs * rate;
+      const neededCoins = Math.round(amountRs * rate);
 
       if (!details) {
         msg.style.color = "#f87171";
-        msg.innerText = "Krupaya UPI ID kiva Email taka!";
+        msg.innerText = "Please enter your UPI ID or Email!";
         return;
       }
       if (!amountRs || amountRs < minWd) {
         msg.style.color = "#f87171";
-        msg.innerText = "Minimum Withdraw ₹" + minWd + " ahe!";
+        msg.innerText = "Minimum Withdraw is ₹" + minWd + "!";
         return;
       }
       if (Number(currentUser.coins || 0) < neededCoins) {
         msg.style.color = "#f87171";
-        msg.innerText = "Balance kami ahe! ₹" + amountRs + " sathi " + neededCoins + " Coins lagtil.";
+        msg.innerText = "Insufficient Balance! You need " + neededCoins + " Coins for ₹" + amountRs + ".";
         return;
       }
 
-      currentUser.coins -= neededCoins;
+      // Deduct coins immediately
+      currentUser.coins = Number(currentUser.coins) - neededCoins;
       await fbUpdate("users/" + currentUser.account, { coins: currentUser.coins });
       updateBalanceUI();
 
@@ -952,7 +1447,7 @@
       });
 
       msg.style.color = "#4ade80";
-      msg.innerText = "✅ ₹" + amountRs + " (" + method + ") Withdraw Request Pathavli!";
+      msg.innerText = "✅ ₹" + amountRs + " (" + method + ") Withdraw Request Submitted! (" + neededCoins + " Coins Deducted)";
       document.getElementById("wdAmount").value = "";
       loadUserWithdrawHistory();
       if (String(currentUser.account) === "99999") loadAllWithdrawsForAdmin();
@@ -972,9 +1467,14 @@
           .filter(function (w) { return String(w.account) === String(currentUser.account); })
           .reverse()
           .forEach(function (w) {
+            const statusColor = w.status === "Approved" ? "#4ade80" : w.status === "Rejected" ? "#f87171" : "#facc15";
+            const refundNote = w.status === "Rejected" ? " (Coins Refunded)" : "";
             const div = document.createElement("div");
             div.className = "history-item";
-            div.innerHTML = "<b>₹" + w.amountRs + " - " + w.method + "</b><br/>Details: " + w.details + "<br/>Status: <b style='color:#facc15'>" + w.status + "</b>";
+            div.innerHTML =
+              "<b>₹" + w.amountRs + " (" + w.coinsUsed + " Coins) - " + w.method + "</b><br/>" +
+              "Details: " + w.details + "<br/>" +
+              "Status: <b style='color:" + statusColor + "'>" + w.status + refundNote + "</b>";
             listEl.appendChild(div);
           });
       } catch (e) {
@@ -982,7 +1482,7 @@
       }
     }
 
-    // ================= 7. GEMINI AI SUPPORT (PHOTO + MEMORY + TRAINING) =================
+    // ================= 8. GEMINI AI SUPPORT (gemini-3.5-flash-lite + PHOTO + MEMORY) =================
     async function loadUserChatMemory() {
       const box = document.getElementById("chatBox");
       box.innerHTML = "";
@@ -996,10 +1496,10 @@
             appendBubble(m.sender, m.text, m.image);
           });
         } else {
-          appendBubble("ai", "Hello " + currentUser.name + "! Mi tumchi kay madat karu shakto?");
+          appendBubble("ai", "Hello " + currentUser.name + "! How can I help you today?");
         }
       } catch (e) {
-        appendBubble("ai", "Hello " + currentUser.name + "! Mi tumchi kay madat karu shakto?");
+        appendBubble("ai", "Hello " + currentUser.name + "! How can I help you today?");
       }
     }
 
@@ -1038,7 +1538,7 @@
       await loadAdminSettings();
       if (!adminSettings.geminiKey) {
         msgEl.style.color = "#f87171";
-        msgEl.innerText = "Admin ne ajun Admin Panel (99999) madhe Gemini API Key takleli nahi!";
+        msgEl.innerText = "Admin has not set the Gemini API Key in Admin Panel (99999) yet!";
         return;
       }
 
@@ -1056,7 +1556,7 @@
       inputEl.value = "";
       photoEl.value = "";
       msgEl.style.color = "#38bdf8";
-      msgEl.innerText = "AI uttar lihit ahe...";
+      msgEl.innerText = "AI is thinking...";
 
       aiMemory.push({
         sender: "user",
@@ -1064,16 +1564,16 @@
         image: base64DataUrl || null
       });
 
-      const systemPrompt = "You are the Official AI Support of Step Earning Website.\n" +
-        "ADMIN TRAINING INFO:\n" + adminSettings.aiTraining + "\n\n" +
+      const systemPrompt = "You are the Official AI Support Assistant of Step Earning Website.\n" +
+        "ADMIN TRAINING & RULES:\n" + adminSettings.aiTraining + "\n\n" +
         "USER LIVE DATA:\n" +
         "- Name: " + currentUser.name + "\n" +
         "- Account ID: " + currentUser.account + "\n" +
         "- Coins: " + currentUser.coins + "\n" +
-        "- Rate: " + adminSettings.coinsPerRupee + " Coins = ₹1\n" +
+        "- Conversion Rate: " + adminSettings.coinsPerRupee + " Coins = ₹1\n" +
         "- Rupee Balance: ₹" + (currentUser.coins / adminSettings.coinsPerRupee).toFixed(2) + "\n" +
         "- Minimum Withdraw: ₹" + adminSettings.minWithdraw + "\n" +
-        "Always remember the ongoing topic and previous chat messages. Reply in the same language as the user.";
+        "Remember the ongoing conversation topic and previous messages. Do not use Marathi. Reply in English or Hindi.";
 
       const recentMemory = aiMemory.slice(-12);
       const contents = recentMemory.map(function (item, idx) {
@@ -1093,7 +1593,7 @@
       });
 
       try {
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + adminSettings.geminiKey;
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=" + adminSettings.geminiKey;
         const res = await fetch(apiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1105,7 +1605,7 @@
         const data = await res.json();
         const reply = (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text)
           ? data.candidates[0].content.parts[0].text
-          : "Kripaya Gemini API Key barobar ahe ka te check kara.";
+          : "Please check if your Gemini API Key is valid.";
 
         appendBubble("ai", reply, null);
         aiMemory.push({ sender: "ai", text: reply });
@@ -1118,7 +1618,7 @@
       }
     }
 
-    // ================= 8. ADMIN PANEL (99999) =================
+    // ================= 9. ADMIN PANEL (99999) & AUTO REFUND ON REJECT =================
     async function saveAdminSettings() {
       if (String(currentUser && currentUser.account) !== "99999") return;
 
@@ -1141,7 +1641,7 @@
 
       const msg = document.getElementById("admMsg");
       msg.style.color = "#4ade80";
-      msg.innerText = "✅ Admin Settings Save Jhalya!";
+      msg.innerText = "✅ Admin Settings Saved Successfully!";
     }
 
     async function loadAllWithdrawsForAdmin() {
@@ -1156,17 +1656,22 @@
         }
 
         Object.values(all).reverse().forEach(function (w) {
+          const isPending = w.status === "Pending";
+          const actionBtns = isPending
+            ? "<div style='display:flex;gap:6px;margin-top:6px;'>" +
+                "<button type='button' class='btn-success' style='padding:6px;margin:0;font-size:12px;' onclick=\"updateWdStatus('" + w.id + "','Approved')\">✅ Approve</button>" +
+                "<button type='button' class='btn-danger' style='padding:6px;margin:0;font-size:12px;' onclick=\"updateWdStatus('" + w.id + "','Rejected')\">❌ Reject & Refund</button>" +
+              "</div>"
+            : "<div style='margin-top:6px;font-size:12px;color:#94a3b8;'>Processed (" + w.status + ")</div>";
+
           const div = document.createElement("div");
           div.className = "history-item";
           div.innerHTML =
-            "<b>👤 " + w.name + " (" + w.account + ") - ₹" + w.amountRs + "</b><br/>" +
+            "<b>👤 " + w.name + " (" + w.account + ") - ₹" + w.amountRs + " (" + w.coinsUsed + " Coins)</b><br/>" +
             "Method: " + w.method + "<br/>" +
             "Details: <b>" + w.details + "</b><br/>" +
             "Status: <span style='color:#facc15'>" + w.status + "</span>" +
-            "<div style='display:flex;gap:6px;margin-top:6px;'>" +
-              "<button type='button' class='btn-success' style='padding:6px;margin:0;font-size:12px;' onclick=\"updateWdStatus('" + w.id + "','Approved')\">✅ Approve</button>" +
-              "<button type='button' class='btn-danger' style='padding:6px;margin:0;font-size:12px;' onclick=\"updateWdStatus('" + w.id + "','Rejected')\">❌ Reject</button>" +
-            "</div>";
+            actionBtns;
           box.appendChild(div);
         });
       } catch (e) {
@@ -1174,12 +1679,42 @@
       }
     }
 
-    async function updateWdStatus(id, status) {
-      await fbUpdate("withdrawals/" + id, { status: status });
-      loadAllWithdrawsForAdmin();
+    async function updateWdStatus(id, newStatus) {
+      try {
+        const wd = await fbGet("withdrawals/" + id);
+        if (!wd || wd.status !== "Pending") {
+          alert("This withdrawal request has already been processed!");
+          loadAllWithdrawsForAdmin();
+          return;
+        }
+
+        // If Rejected, refund the exact deducted coins back to the user's account
+        if (newStatus === "Rejected") {
+          const targetUser = await fbGet("users/" + wd.account);
+          if (targetUser) {
+            const refundedCoins = Number(targetUser.coins || 0) + Number(wd.coinsUsed || 0);
+            await fbUpdate("users/" + wd.account, { coins: refundedCoins });
+
+            if (String(currentUser.account) === String(wd.account)) {
+              currentUser.coins = refundedCoins;
+              updateBalanceUI();
+            }
+          }
+        }
+
+        await fbUpdate("withdrawals/" + id, { status: newStatus });
+        loadAllWithdrawsForAdmin();
+        loadUserWithdrawHistory();
+      } catch (e) {
+        alert("Error updating withdrawal status!");
+      }
     }
 
+    // ================= 10. LOGOUT (CLEARS SAVED SESSION) =================
     function logoutUser() {
+      leaveOxRoom();
+      if (publicLobbyPoll) clearInterval(publicLobbyPoll);
+      localStorage.removeItem(SESSION_KEY);
       currentUser = null;
       document.getElementById("appArea").classList.add("hidden");
       document.getElementById("bottomNav").classList.add("hidden");
