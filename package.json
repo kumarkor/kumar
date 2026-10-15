@@ -1,7 +1,7 @@
 {
-  "name": "kumar-game-website",
-  "version": "1.0.0",
-  "description": "Simple Game with Firebase and Bot API",
+  "name": "kumar-earning-platform",
+  "version": "2.0.0",
+  "description": "Earning Website with OX Game, Telegram OTP, Gemini AI Support & Admin Panel",
   "type": "module",
   "main": "api/bot.js",
   "scripts": {
