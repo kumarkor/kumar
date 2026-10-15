@@ -27,7 +27,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 12px 16px;
-      background: rgba(15, 23, 42, 0.9);
+      background: #0f172a;
       border-bottom: 1px solid #334155;
       position: sticky;
       top: 0;
@@ -96,7 +96,10 @@
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.2s;
+      transition: 0.15s;
+    }
+    button:active {
+      transform: scale(0.97);
     }
     .btn-primary {
       background: linear-gradient(135deg, #38bdf8, #0284c7);
@@ -124,7 +127,6 @@
       min-height: 18px;
       font-weight: 600;
     }
-    /* Balance Banner */
     .balance-card {
       background: linear-gradient(135deg, #0284c7, #1e3a8a);
       border-radius: 16px;
@@ -151,7 +153,6 @@
       font-weight: 800;
       color: #facc15;
     }
-    /* OX Game Grid */
     .ox-board {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -174,9 +175,8 @@
     }
     .ox-cell.x { color: #38bdf8; }
     .ox-cell.o { color: #f43f5e; }
-    /* AI Chat */
     .chat-box {
-      height: 300px;
+      height: 290px;
       overflow-y: auto;
       background: #0f172a;
       border: 1px solid #334155;
@@ -209,7 +209,6 @@
       border-radius: 8px;
       margin-top: 6px;
     }
-    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -242,6 +241,7 @@
       margin-top: 8px;
       font-size: 13px;
       border-left: 4px solid #38bdf8;
+      text-align: left;
     }
   </style>
 </head>
@@ -250,7 +250,7 @@
   <!-- TOP BAR WITH LANGUAGE SWITCH -->
   <div class="topbar">
     <div class="brand">💎 Step Earning</div>
-    <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">🇮🇳 हिंदी / EN</button>
+    <button type="button" class="lang-btn" onclick="toggleLanguage()" id="langBtn">🇮🇳 हिंदी / EN</button>
   </div>
 
   <div class="container">
@@ -265,9 +265,9 @@
       <label id="t_passLabel">4-Digit Password:</label>
       <input type="password" id="loginPass" placeholder="1234" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
 
-      <button class="btn-primary" onclick="loginUser()" id="t_loginBtn">Login</button>
-      <button class="btn-secondary" onclick="showAuthBox('createScreen')" id="t_createNavBtn">Create New Account</button>
-      <button class="btn-secondary" style="background:transparent;color:#38bdf8;margin-top:4px;" onclick="showAuthBox('forgetScreen')" id="t_forgetNavBtn">Forgot Password? (Telegram OTP)</button>
+      <button type="button" class="btn-primary" onclick="loginUser()" id="t_loginBtn">Login</button>
+      <button type="button" class="btn-secondary" onclick="showAuthBox('createScreen')" id="t_createNavBtn">Create New Account</button>
+      <button type="button" class="btn-secondary" style="background:transparent;color:#38bdf8;margin-top:4px;" onclick="showAuthBox('forgetScreen')" id="t_forgetNavBtn">Forgot Password? (Telegram OTP)</button>
       <div id="loginMsg" class="msg"></div>
     </div>
 
@@ -279,7 +279,7 @@
       <input type="text" id="regName" placeholder="Enter Full Name" />
 
       <label id="t_newAccLabel">5-Digit Account ID (Unique):</label>
-      <input type="text" id="regAcc" placeholder="e.g. 54321 (5 Digits)" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+      <input type="text" id="regAcc" placeholder="e.g. 54321 (Admin: 99999)" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
 
       <label id="t_newPassLabel">4-Digit Password:</label>
       <input type="password" id="regPass" placeholder="e.g. 1234 (4 Digits)" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
@@ -287,8 +287,8 @@
       <label id="t_tgIdLabel">Telegram User ID (For OTP):</label>
       <input type="text" id="regTgId" placeholder="e.g. 6123456789" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
 
-      <button class="btn-primary" onclick="registerUser()" id="t_regBtn">Create & Login</button>
-      <button class="btn-secondary" onclick="showAuthBox('loginScreen')" id="t_backLogin1">Back to Login</button>
+      <button type="button" class="btn-primary" onclick="registerUser()" id="t_regBtn">Create & Login</button>
+      <button type="button" class="btn-secondary" onclick="showAuthBox('loginScreen')" id="t_backLogin1">Back to Login</button>
       <div id="createMsg" class="msg"></div>
     </div>
 
@@ -299,7 +299,7 @@
       <label>Enter Your 5-Digit Account ID:</label>
       <input type="text" id="fpAcc" placeholder="e.g. 12345" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
 
-      <button class="btn-primary" onclick="sendTelegramOtp()" id="t_sendOtpBtn">Send OTP on Telegram Bot</button>
+      <button type="button" class="btn-primary" onclick="sendTelegramOtp()" id="t_sendOtpBtn">Send OTP on Telegram Bot</button>
 
       <div id="otpVerifyBox" class="hidden" style="margin-top:14px;">
         <label>Enter 4-Digit OTP (Sent to Telegram):</label>
@@ -308,10 +308,10 @@
         <label>Enter New 4-Digit Password:</label>
         <input type="password" id="fpNewPass" placeholder="New 4-Digit Password" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
 
-        <button class="btn-success" onclick="verifyOtpAndReset()">Verify OTP & Change Password</button>
+        <button type="button" class="btn-success" onclick="verifyOtpAndReset()">Verify OTP & Change Password</button>
       </div>
 
-      <button class="btn-secondary" onclick="showAuthBox('loginScreen')">Back to Login</button>
+      <button type="button" class="btn-secondary" onclick="showAuthBox('loginScreen')">Back to Login</button>
       <div id="forgetMsg" class="msg"></div>
     </div>
 
@@ -343,7 +343,7 @@
 
         <div class="ox-board" id="oxBoard"></div>
 
-        <button class="btn-secondary" onclick="resetOxGame()" id="t_restartGame">🔄 Restart OX Game</button>
+        <button type="button" class="btn-secondary" onclick="resetOxGame()" id="t_restartGame">🔄 Restart OX Game</button>
       </div>
 
       <!-- TAB 2: WITHDRAW SECTION -->
@@ -365,7 +365,7 @@
         <label id="t_amountLbl">Enter Amount (₹):</label>
         <input type="number" id="wdAmount" placeholder="Enter Amount in ₹" />
 
-        <button class="btn-success" onclick="submitWithdraw()" id="t_wdBtn">Submit Withdraw Request</button>
+        <button type="button" class="btn-success" onclick="submitWithdraw()" id="t_wdBtn">Submit Withdraw Request</button>
         <div id="wdMsg" class="msg"></div>
 
         <h4 style="margin-top:20px;color:#38bdf8;" id="t_wdHistory">📜 Your Withdraw History</h4>
@@ -386,7 +386,7 @@
 
         <div style="display:flex;gap:8px;margin-top:8px;">
           <input type="text" id="chatInput" placeholder="Ask anything..." style="margin:0;" />
-          <button class="btn-primary" style="width:95px;margin:0;" onclick="sendAiMessage()">Send</button>
+          <button type="button" class="btn-primary" style="width:95px;margin:0;" onclick="sendAiMessage()">Send</button>
         </div>
         <div id="aiMsg" class="msg"></div>
       </div>
@@ -410,7 +410,7 @@
         <label>🧠 AI Training Information (Rules, Announcements, Info for Users):</label>
         <textarea id="admAiTraining" rows="4" placeholder="Write rules, payment timing, offers, or instructions here. AI will tell this to users!"></textarea>
 
-        <button class="btn-primary" onclick="saveAdminSettings()">💾 Save Admin Settings</button>
+        <button type="button" class="btn-primary" onclick="saveAdminSettings()">💾 Save Admin Settings</button>
         <div id="admMsg" class="msg"></div>
 
         <h4 style="margin-top:20px;color:#facc15;">📋 All User Withdraw Requests</h4>
@@ -422,31 +422,16 @@
 
   <!-- BOTTOM NAVIGATION -->
   <div id="bottomNav" class="bottom-nav hidden">
-    <button class="nav-item active" id="nav_game" onclick="openTab('tabGame', 'nav_game')">🎮 OX Game</button>
-    <button class="nav-item" id="nav_wd" onclick="openTab('tabWithdraw', 'nav_wd')">💸 Withdraw</button>
-    <button class="nav-item" id="nav_ai" onclick="openTab('tabSupport', 'nav_ai')">🤖 AI Support</button>
-    <button class="nav-item hidden" id="nav_adm" onclick="openTab('tabAdmin', 'nav_adm')">👑 Admin</button>
-    <button class="nav-item" onclick="logoutUser()">🚪 Logout</button>
+    <button type="button" class="nav-item active" id="nav_game" onclick="openTab('tabGame', 'nav_game')">🎮 OX Game</button>
+    <button type="button" class="nav-item" id="nav_wd" onclick="openTab('tabWithdraw', 'nav_wd')">💸 Withdraw</button>
+    <button type="button" class="nav-item" id="nav_ai" onclick="openTab('tabSupport', 'nav_ai')">🤖 AI Support</button>
+    <button type="button" class="nav-item hidden" id="nav_adm" onclick="openTab('tabAdmin', 'nav_adm')">👑 Admin</button>
+    <button type="button" class="nav-item" onclick="logoutUser()">🚪 Logout</button>
   </div>
 
-  <!-- FIREBASE & APP LOGIC -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, get, set, update, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDkmoIzcYsYTBYwIk2A_8hUXWW5znyeTaY",
-      authDomain: "newkumarbot.firebaseapp.com",
-      databaseURL: "https://newkumarbot-default-rtdb.firebaseio.com",
-      projectId: "newkumarbot",
-      storageBucket: "newkumarbot.firebasestorage.app",
-      messagingSenderId: "1006933600404",
-      appId: "1:1006933600404:web:1df122474a7598a25fec81",
-      measurementId: "G-PMQ8SCYQC9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  <!-- DIRECT SCRIPT (NO MODULE BLOCKING - 100% INSTANT BUTTON WORK) -->
+  <script>
+    const DB_URL = "https://newkumarbot-default-rtdb.firebaseio.com";
 
     let currentUser = null;
     let adminSettings = {
@@ -454,17 +439,68 @@
       minWithdraw: 10,
       botToken: "",
       geminiKey: "",
-      aiTraining: "Welcome to Step Earning! 100 Coins = ₹1. Play OX Game to earn coins and withdraw via UPI or Google Play Redeem Code."
+      aiTraining: "Welcome to Step Earning! 100 Coins = ₹1. Play OX Game to earn coins and withdraw via UPI or Google Play Store Redeem Code."
     };
     let generatedOtp = null;
     let otpAccountTarget = null;
     let currentLang = "en";
-    let aiMemory = []; // Keeps full conversation context for Gemini AI
+    let aiMemory = [];
 
-    // Auto-fill Telegram ID if opened inside Telegram Mini App
-    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    if (tgUser && tgUser.id) {
-      document.getElementById("regTgId").value = tgUser.id;
+    // Auto-fill Telegram ID if inside Telegram
+    try {
+      const tgUser = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user;
+      if (tgUser && tgUser.id) {
+        document.getElementById("regTgId").value = tgUser.id;
+      }
+    } catch (e) {}
+
+    // ================= FIREBASE REST HELPERS =================
+    async function fbGet(path) {
+      const res = await fetch(DB_URL + "/" + path + ".json");
+      if (!res.ok) throw new Error("Database connection error");
+      return await res.json();
+    }
+
+    async function fbSet(path, data) {
+      const res = await fetch(DB_URL + "/" + path + ".json", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error("Database write error");
+      return await res.json();
+    }
+
+    async function fbUpdate(path, data) {
+      const res = await fetch(DB_URL + "/" + path + ".json", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error("Database update error");
+      return await res.json();
+    }
+
+    async function fbPush(path, data) {
+      const res = await fetch(DB_URL + "/" + path + ".json", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error("Database push error");
+      return await res.json();
+    }
+
+    // ================= SCREEN NAVIGATION (INSTANT) =================
+    function showAuthBox(boxId) {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("createScreen").classList.add("hidden");
+      document.getElementById("forgetScreen").classList.add("hidden");
+      document.getElementById(boxId).classList.remove("hidden");
+
+      document.getElementById("loginMsg").innerText = "";
+      document.getElementById("createMsg").innerText = "";
+      document.getElementById("forgetMsg").innerText = "";
     }
 
     // ================= LANGUAGE TRANSLATIONS (EN / HI) =================
@@ -529,23 +565,22 @@
       }
     };
 
-    window.toggleLanguage = function () {
+    function toggleLanguage() {
       currentLang = currentLang === "en" ? "hi" : "en";
       const dict = translations[currentLang];
       for (const id in dict) {
         const el = document.getElementById(id);
         if (el) el.innerText = dict[id];
       }
-    };
+    }
 
-    // Load Admin Settings from Firebase
     async function loadAdminSettings() {
       try {
-        const snap = await get(ref(db, "adminSettings"));
-        if (snap.exists()) {
-          adminSettings = { ...adminSettings, ...snap.val() };
+        const data = await fbGet("adminSettings");
+        if (data) {
+          adminSettings = Object.assign({}, adminSettings, data);
         }
-        document.getElementById("rateInfo").innerText = `${adminSettings.coinsPerRupee} Coins = ₹1`;
+        document.getElementById("rateInfo").innerText = adminSettings.coinsPerRupee + " Coins = ₹1";
         document.getElementById("minWithdrawDisp").innerText = adminSettings.minWithdraw;
 
         document.getElementById("admCoinRate").value = adminSettings.coinsPerRupee;
@@ -557,16 +592,8 @@
     }
     loadAdminSettings();
 
-    // Switch Auth Screens
-    window.showAuthBox = function (boxId) {
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("createScreen").classList.add("hidden");
-      document.getElementById("forgetScreen").classList.add("hidden");
-      document.getElementById(boxId).classList.remove("hidden");
-    };
-
-    // ================= 1. CREATE NEW ACCOUNT (NO DUPLICATE 5-DIGIT ID) =================
-    window.registerUser = async function () {
+    // ================= 1. CREATE NEW ACCOUNT =================
+    async function registerUser() {
       const name = document.getElementById("regName").value.trim();
       const account = document.getElementById("regAcc").value.trim();
       const password = document.getElementById("regPass").value.trim();
@@ -575,36 +602,33 @@
 
       if (!name) {
         msg.style.color = "#f87171";
-        msg.innerText = "Please enter your Name!";
+        msg.innerText = "Krupaya tumche Nav (Name) taka!";
         return;
       }
       if (!/^\d{5}$/.test(account)) {
         msg.style.color = "#f87171";
-        msg.innerText = "Account ID must be exactly 5 digits!";
+        msg.innerText = "Account ID barobar 5 number cha asayla hava!";
         return;
       }
       if (!/^\d{4}$/.test(password)) {
         msg.style.color = "#f87171";
-        msg.innerText = "Password must be exactly 4 digits!";
+        msg.innerText = "Password barobar 4 number cha asayla hava!";
         return;
       }
       if (!telegramId) {
         msg.style.color = "#f87171";
-        msg.innerText = "Please enter your Telegram User ID (for OTP)!";
+        msg.innerText = "Telegram User ID taka (OTP sathi garjecha ahe)!";
         return;
       }
 
       msg.style.color = "#38bdf8";
-      msg.innerText = "Checking & Creating Account...";
+      msg.innerText = "Account banavle jat ahe...";
 
       try {
-        const userRef = ref(db, "users/" + account);
-        const snap = await get(userRef);
-
-        // एकदा बनवलेला नंबर पुन्हा बनवता येणार नाही
-        if (snap.exists()) {
+        const existing = await fbGet("users/" + account);
+        if (existing) {
           msg.style.color = "#f87171";
-          msg.innerText = "❌ This 5-digit Account ID already exists! Choose another number.";
+          msg.innerText = "❌ Ha 5 number cha Account adhich tayar ahe! Dusra number nivda.";
           return;
         }
 
@@ -617,41 +641,40 @@
           createdAt: Date.now()
         };
 
-        await set(userRef, newUser);
+        await fbSet("users/" + account, newUser);
         enterDashboard(newUser);
       } catch (err) {
         msg.style.color = "#f87171";
         msg.innerText = "Error: " + err.message;
       }
-    };
+    }
 
     // ================= 2. LOGIN USER =================
-    window.loginUser = async function () {
+    async function loginUser() {
       const account = document.getElementById("loginAcc").value.trim();
       const password = document.getElementById("loginPass").value.trim();
       const msg = document.getElementById("loginMsg");
 
-      if (!/^\d{5}$/.test(account) \vert{}\vert{} !/^\d{4}$/.test(password)) {
+      if (!/^\d{5}$/.test(account) || !/^\d{4}$/.test(password)) {
         msg.style.color = "#f87171";
-        msg.innerText = "Enter 5-digit Account ID & 4-digit Password!";
+        msg.innerText = "5-digit Account ID aani 4-digit Password taka!";
         return;
       }
 
       msg.style.color = "#38bdf8";
-      msg.innerText = "Logging in...";
+      msg.innerText = "Login hot ahe...";
 
       try {
-        const snap = await get(ref(db, "users/" + account));
-        if (!snap.exists()) {
+        const user = await fbGet("users/" + account);
+        if (!user) {
           msg.style.color = "#f87171";
-          msg.innerText = "Account not found! Please Create New Account first.";
+          msg.innerText = "Account sapadla nahi! Pahile Create New Account kara.";
           return;
         }
 
-        const user = snap.val();
         if (String(user.password) !== password) {
           msg.style.color = "#f87171";
-          msg.innerText = "❌ Wrong 4-digit Password!";
+          msg.innerText = "❌ Chukicha 4-digit Password!";
           return;
         }
 
@@ -660,50 +683,49 @@
         msg.style.color = "#f87171";
         msg.innerText = "Error: " + err.message;
       }
-    };
+    }
 
-    // ================= 3. FORGET PASSWORD (SEND OTP VIA TELEGRAM BOT) =================
-    window.sendTelegramOtp = async function () {
+    // ================= 3. FORGET PASSWORD (TELEGRAM OTP) =================
+    async function sendTelegramOtp() {
       const account = document.getElementById("fpAcc").value.trim();
       const msg = document.getElementById("forgetMsg");
 
       if (!/^\d{5}$/.test(account)) {
         msg.style.color = "#f87171";
-        msg.innerText = "Enter valid 5-digit Account ID!";
+        msg.innerText = "tumcha 5-digit Account ID taka!";
         return;
       }
 
       msg.style.color = "#38bdf8";
-      msg.innerText = "Sending OTP to your Telegram...";
+      msg.innerText = "Telegram Bot var OTP pathavla jat ahe...";
 
       try {
         await loadAdminSettings();
         if (!adminSettings.botToken) {
           msg.style.color = "#f87171";
-          msg.innerText = "Admin has not set Bot Token yet!";
+          msg.innerText = "Admin ne ajun Admin Panel madhe Bot Token set kelela nahi!";
           return;
         }
 
-        const snap = await get(ref(db, "users/" + account));
-        if (!snap.exists()) {
+        const user = await fbGet("users/" + account);
+        if (!user) {
           msg.style.color = "#f87171";
-          msg.innerText = "Account ID not found!";
+          msg.innerText = "Ha Account ID sapadla nahi!";
           return;
         }
 
-        const user = snap.val();
         if (!user.telegramId) {
           msg.style.color = "#f87171";
-          msg.innerText = "No Telegram ID linked to this account!";
+          msg.innerText = "Ya Account la Telegram ID jodlela nahi!";
           return;
         }
 
         generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
         otpAccountTarget = account;
 
-        const textMsg = `🔐 *Password Reset OTP*\n\n👤 Name: ${user.name}\n🆔 Account ID: ${account}\n🔢 Your OTP: *${generatedOtp}*\n\nDo not share this OTP with anyone.`;
+        const textMsg = "🔐 *Password Reset OTP*\n\n👤 Name: " + user.name + "\n🆔 Account ID: " + account + "\n🔢 Your OTP: *" + generatedOtp + "*\n\nHa OTP konasobat hi share karu naka.";
 
-        const tgRes = await fetch(`https://api.telegram.org/bot${adminSettings.botToken}/sendMessage`, {
+        const tgRes = await fetch("https://api.telegram.org/bot" + adminSettings.botToken + "/sendMessage", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -717,41 +739,43 @@
         if (tgData.ok) {
           document.getElementById("otpVerifyBox").classList.remove("hidden");
           msg.style.color = "#4ade80";
-          msg.innerText = "✅ OTP sent to your Telegram Bot!";
+          msg.innerText = "✅ Tumchya Telegram Bot var OTP pathavla ahe!";
         } else {
           msg.style.color = "#f87171";
-          msg.innerText = "Telegram Error: Please start the Bot first on Telegram!";
+          msg.innerText = "Telegram Error: Krupaya pahile Telegram var Bot la /start kara!";
         }
       } catch (err) {
         msg.style.color = "#f87171";
-        msg.innerText = "Error sending OTP: " + err.message;
+        msg.innerText = "OTP Error: " + err.message;
       }
-    };
+    }
 
-    window.verifyOtpAndReset = async function () {
+    async function verifyOtpAndReset() {
       const otpInput = document.getElementById("fpOtp").value.trim();
       const newPass = document.getElementById("fpNewPass").value.trim();
       const msg = document.getElementById("forgetMsg");
 
       if (otpInput !== generatedOtp || !otpAccountTarget) {
         msg.style.color = "#f87171";
-        msg.innerText = "❌ Invalid OTP!";
+        msg.innerText = "❌ Chukicha OTP!";
         return;
       }
       if (!/^\d{4}$/.test(newPass)) {
         msg.style.color = "#f87171";
-        msg.innerText = "New Password must be 4 digits!";
+        msg.innerText = "Navin Password 4 number cha asayla hava!";
         return;
       }
 
-      await update(ref(db, "users/" + otpAccountTarget), { password: newPass });
+      await fbUpdate("users/" + otpAccountTarget, { password: newPass });
       msg.style.color = "#4ade80";
-      msg.innerText = "✅ Password Reset Successful! Please Login.";
+      msg.innerText = "✅ Password Reset Jhala! Ata Login kara.";
       generatedOtp = null;
-      setTimeout(() => showAuthBox("loginScreen"), 1500);
-    };
+      setTimeout(function () {
+        showAuthBox("loginScreen");
+      }, 1500);
+    }
 
-    // ================= 4. ENTER DASHBOARD & BALANCE DISPLAY =================
+    // ================= 4. DASHBOARD & BALANCE =================
     async function enterDashboard(user) {
       currentUser = user;
       await loadAdminSettings();
@@ -762,7 +786,6 @@
       document.getElementById("appArea").classList.remove("hidden");
       document.getElementById("bottomNav").classList.remove("hidden");
 
-      // Show Admin Tab only if Account ID is 99999
       if (String(user.account) === "99999") {
         document.getElementById("nav_adm").classList.remove("hidden");
         loadAllWithdrawsForAdmin();
@@ -786,21 +809,21 @@
       document.getElementById("uAcc").innerText = currentUser.account;
       document.getElementById("uCoins").innerText = coins;
       document.getElementById("uRupees").innerText = rupees;
-      document.getElementById("rateInfo").innerText = `${rate} Coins = ₹1`;
+      document.getElementById("rateInfo").innerText = rate + " Coins = ₹1";
       document.getElementById("minWithdrawDisp").innerText = adminSettings.minWithdraw;
     }
 
-    window.openTab = function (tabId, navId) {
-      ["tabGame", "tabWithdraw", "tabSupport", "tabAdmin"].forEach(id => {
+    function openTab(tabId, navId) {
+      ["tabGame", "tabWithdraw", "tabSupport", "tabAdmin"].forEach(function (id) {
         document.getElementById(id).classList.add("hidden");
       });
-      ["nav_game", "nav_wd", "nav_ai", "nav_adm"].forEach(id => {
+      ["nav_game", "nav_wd", "nav_ai", "nav_adm"].forEach(function (id) {
         document.getElementById(id).classList.remove("active");
       });
 
       document.getElementById(tabId).classList.remove("hidden");
       document.getElementById(navId).classList.add("active");
-    };
+    }
 
     // ================= 5. OX GAME (TIC-TAC-TOE) =================
     let boardState = ["", "", "", "", "", "", "", "", ""];
@@ -809,11 +832,13 @@
     function initOxBoard() {
       const board = document.getElementById("oxBoard");
       board.innerHTML = "";
-      boardState.forEach((val, idx) => {
+      boardState.forEach(function (val, idx) {
         const cell = document.createElement("div");
         cell.className = "ox-cell " + (val === "X" ? "x" : val === "O" ? "o" : "");
         cell.innerText = val;
-        cell.onclick = () => makeOxMove(idx);
+        cell.onclick = function () {
+          makeOxMove(idx);
+        };
         board.appendChild(cell);
       });
     }
@@ -828,7 +853,7 @@
         document.getElementById("oxStatus").innerText = "🎉 You Won! +20 Coins Added!";
         currentUser.coins = Number(currentUser.coins || 0) + 20;
         updateBalanceUI();
-        await update(ref(db, "users/" + currentUser.account), { coins: currentUser.coins });
+        await fbUpdate("users/" + currentUser.account, { coins: currentUser.coins });
         return;
       }
 
@@ -839,8 +864,11 @@
       }
 
       document.getElementById("oxStatus").innerText = "Bot thinking (⭕)...";
-      setTimeout(() => {
-        const emptyIndices = boardState.map((v, i) => (v === "" ? i : null)).filter(v => v !== null);
+      setTimeout(function () {
+        const emptyIndices = [];
+        boardState.forEach(function (v, i) {
+          if (v === "") emptyIndices.push(i);
+        });
         if (emptyIndices.length > 0 && gameActive) {
           const botMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
           boardState[botMove] = "O";
@@ -865,18 +893,22 @@
         [0,3,6],[1,4,7],[2,5,8],
         [0,4,8],[2,4,6]
       ];
-      return wins.some(pattern => pattern.every(i => boardState[i] === player));
+      return wins.some(function (pattern) {
+        return pattern.every(function (i) {
+          return boardState[i] === player;
+        });
+      });
     }
 
-    window.resetOxGame = function () {
+    function resetOxGame() {
       boardState = ["", "", "", "", "", "", "", "", ""];
       gameActive = true;
       document.getElementById("oxStatus").innerText = "Your Turn (❌)";
       initOxBoard();
-    };
+    }
 
-    // ================= 6. WITHDRAW (UPI & PLAY STORE REDEEM CODE) =================
-    window.submitWithdraw = async function () {
+    // ================= 6. WITHDRAW (UPI & PLAY STORE) =================
+    async function submitWithdraw() {
       const method = document.getElementById("wdMethod").value;
       const details = document.getElementById("wdDetails").value.trim();
       const amountRs = Number(document.getElementById("wdAmount").value);
@@ -888,27 +920,27 @@
 
       if (!details) {
         msg.style.color = "#f87171";
-        msg.innerText = "Please enter your UPI ID or Email!";
+        msg.innerText = "Krupaya UPI ID kiva Email taka!";
         return;
       }
       if (!amountRs || amountRs < minWd) {
         msg.style.color = "#f87171";
-        msg.innerText = `Minimum Withdraw is ₹${minWd}!`;
+        msg.innerText = "Minimum Withdraw ₹" + minWd + " ahe!";
         return;
       }
       if (Number(currentUser.coins || 0) < neededCoins) {
         msg.style.color = "#f87171";
-        msg.innerText = `Insufficient Balance! You need ${neededCoins} Coins for ₹${amountRs}.`;
+        msg.innerText = "Balance kami ahe! ₹" + amountRs + " sathi " + neededCoins + " Coins lagtil.";
         return;
       }
 
       currentUser.coins -= neededCoins;
-      await update(ref(db, "users/" + currentUser.account), { coins: currentUser.coins });
+      await fbUpdate("users/" + currentUser.account, { coins: currentUser.coins });
       updateBalanceUI();
 
-      const wdRef = push(ref(db, "withdrawals"));
-      await set(wdRef, {
-        id: wdRef.key,
+      const wdId = "wd_" + Date.now();
+      await fbSet("withdrawals/" + wdId, {
+        id: wdId,
         account: currentUser.account,
         name: currentUser.name,
         method: method,
@@ -920,47 +952,54 @@
       });
 
       msg.style.color = "#4ade80";
-      msg.innerText = `✅ ₹${amountRs} (${method}) Withdraw Request Submitted!`;
+      msg.innerText = "✅ ₹" + amountRs + " (" + method + ") Withdraw Request Pathavli!";
       document.getElementById("wdAmount").value = "";
       loadUserWithdrawHistory();
       if (String(currentUser.account) === "99999") loadAllWithdrawsForAdmin();
-    };
+    }
 
     async function loadUserWithdrawHistory() {
       const listEl = document.getElementById("userWithdrawList");
       listEl.innerHTML = "Loading...";
-      const snap = await get(ref(db, "withdrawals"));
-      listEl.innerHTML = "";
-      if (!snap.exists()) {
-        listEl.innerHTML = "<div style='color:#94a3b8;font-size:13px;'>No withdrawals yet.</div>";
-        return;
+      try {
+        const all = await fbGet("withdrawals");
+        listEl.innerHTML = "";
+        if (!all) {
+          listEl.innerHTML = "<div style='color:#94a3b8;font-size:13px;'>No withdrawals yet.</div>";
+          return;
+        }
+        Object.values(all)
+          .filter(function (w) { return String(w.account) === String(currentUser.account); })
+          .reverse()
+          .forEach(function (w) {
+            const div = document.createElement("div");
+            div.className = "history-item";
+            div.innerHTML = "<b>₹" + w.amountRs + " - " + w.method + "</b><br/>Details: " + w.details + "<br/>Status: <b style='color:#facc15'>" + w.status + "</b>";
+            listEl.appendChild(div);
+          });
+      } catch (e) {
+        listEl.innerHTML = "";
       }
-      const all = snap.val();
-      Object.values(all)
-        .filter(w => String(w.account) === String(currentUser.account))
-        .reverse()
-        .forEach(w => {
-          const div = document.createElement("div");
-          div.className = "history-item";
-          div.innerHTML = `<b>₹${w.amountRs} - ${w.method}</b><br/>Details: ${w.details}<br/>Status: <b style="color:#facc15">${w.status}</b>`;
-          listEl.appendChild(div);
-        });
     }
 
-    // ================= 7. GEMINI AI SUPPORT (PHOTO + MEMORY + ADMIN TRAINING) =================
+    // ================= 7. GEMINI AI SUPPORT (PHOTO + MEMORY + TRAINING) =================
     async function loadUserChatMemory() {
       const box = document.getElementById("chatBox");
       box.innerHTML = "";
       aiMemory = [];
 
-      const snap = await get(ref(db, `chats/${currentUser.account}`));
-      if (snap.exists()) {
-        aiMemory = snap.val() || [];
-        aiMemory.forEach(m => {
-          appendBubble(m.sender, m.text, m.image);
-        });
-      } else {
-        appendBubble("ai", `Hello ${currentUser.name}! How can I help you today?`);
+      try {
+        const saved = await fbGet("chats/" + currentUser.account);
+        if (saved && Array.isArray(saved)) {
+          aiMemory = saved;
+          aiMemory.forEach(function (m) {
+            appendBubble(m.sender, m.text, m.image);
+          });
+        } else {
+          appendBubble("ai", "Hello " + currentUser.name + "! Mi tumchi kay madat karu shakto?");
+        }
+      } catch (e) {
+        appendBubble("ai", "Hello " + currentUser.name + "! Mi tumchi kay madat karu shakto?");
       }
     }
 
@@ -979,15 +1018,15 @@
     }
 
     function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
+      return new Promise(function (resolve, reject) {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = err => reject(err);
+        reader.onload = function () { resolve(reader.result); };
+        reader.onerror = function (err) { reject(err); };
         reader.readAsDataURL(file);
       });
     }
 
-    window.sendAiMessage = async function () {
+    async function sendAiMessage() {
       const inputEl = document.getElementById("chatInput");
       const photoEl = document.getElementById("chatPhoto");
       const msgEl = document.getElementById("aiMsg");
@@ -999,7 +1038,7 @@
       await loadAdminSettings();
       if (!adminSettings.geminiKey) {
         msgEl.style.color = "#f87171";
-        msgEl.innerText = "Admin has not set the Gemini API Key in Admin Panel (99999)!";
+        msgEl.innerText = "Admin ne ajun Admin Panel (99999) madhe Gemini API Key takleli nahi!";
         return;
       }
 
@@ -1013,42 +1052,33 @@
         rawBase64 = base64DataUrl.split(",")[1];
       }
 
-      appendBubble("user", userText || "📷 [Sent a Photo]", base64DataUrl);
+      appendBubble("user", userText || "📷 [Photo Sent]", base64DataUrl);
       inputEl.value = "";
       photoEl.value = "";
       msgEl.style.color = "#38bdf8";
-      msgEl.innerText = "AI is typing...";
+      msgEl.innerText = "AI uttar lihit ahe...";
 
-      // Save user turn in memory
       aiMemory.push({
         sender: "user",
-        text: userText || "[User sent an image]",
+        text: userText || "[User sent a photo]",
         image: base64DataUrl || null
       });
 
-      // Build full conversation context so AI remembers everything
-      const systemPrompt = `You are the Official AI Support Assistant of "Step Earning" website.
-ADMIN TRAINING & WEBSITE RULES:
-${adminSettings.aiTraining}
+      const systemPrompt = "You are the Official AI Support of Step Earning Website.\n" +
+        "ADMIN TRAINING INFO:\n" + adminSettings.aiTraining + "\n\n" +
+        "USER LIVE DATA:\n" +
+        "- Name: " + currentUser.name + "\n" +
+        "- Account ID: " + currentUser.account + "\n" +
+        "- Coins: " + currentUser.coins + "\n" +
+        "- Rate: " + adminSettings.coinsPerRupee + " Coins = ₹1\n" +
+        "- Rupee Balance: ₹" + (currentUser.coins / adminSettings.coinsPerRupee).toFixed(2) + "\n" +
+        "- Minimum Withdraw: ₹" + adminSettings.minWithdraw + "\n" +
+        "Always remember the ongoing topic and previous chat messages. Reply in the same language as the user.";
 
-CURRENT LIVE USER DETAILS:
-- User Name: ${currentUser.name}
-- 5-Digit Account ID: ${currentUser.account}
-- User Coins: ${currentUser.coins} Coins
-- Conversion Rate: ${adminSettings.coinsPerRupee} Coins = ₹1
-- User Rupee Balance: ₹${(currentUser.coins / adminSettings.coinsPerRupee).toFixed(2)}
-- Minimum Withdraw set by Admin: ₹${adminSettings.minWithdraw}
-- Supported Withdraw Methods: UPI and Google Play Store Redeem Code.
-
-IMPORTANT INSTRUCTIONS:
-1. Remember the ongoing topic and previous messages from this user.
-2. Answer politely in the same language the user is speaking (Marathi, Hindi, Hinglish, or English).
-3. If the user sends an image/screenshot, inspect it carefully and help them.`;
-
-      const contents = aiMemory.slice(-12).map((item, idx, arr) => {
+      const recentMemory = aiMemory.slice(-12);
+      const contents = recentMemory.map(function (item, idx) {
         const parts = [{ text: item.text }];
-        // Attach image inlineData for current message if present
-        if (idx === arr.length - 1 && rawBase64) {
+        if (idx === recentMemory.length - 1 && rawBase64) {
           parts.push({
             inline_data: {
               mime_type: mimeType,
@@ -1063,7 +1093,7 @@ IMPORTANT INSTRUCTIONS:
       });
 
       try {
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${adminSettings.geminiKey}`;
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + adminSettings.geminiKey;
         const res = await fetch(apiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1073,23 +1103,24 @@ IMPORTANT INSTRUCTIONS:
           })
         });
         const data = await res.json();
-        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I could not process that right now.";
+        const reply = (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text)
+          ? data.candidates[0].content.parts[0].text
+          : "Kripaya Gemini API Key barobar ahe ka te check kara.";
 
         appendBubble("ai", reply, null);
         aiMemory.push({ sender: "ai", text: reply });
 
-        // Save memory to Firebase so AI never forgets the conversation
-        await set(ref(db, `chats/${currentUser.account}`), aiMemory.slice(-20));
+        await fbSet("chats/" + currentUser.account, aiMemory.slice(-20));
         msgEl.innerText = "";
       } catch (err) {
         msgEl.style.color = "#f87171";
         msgEl.innerText = "AI Error: " + err.message;
       }
-    };
+    }
 
-    // ================= 8. ADMIN PANEL (99999 ONLY) =================
-    window.saveAdminSettings = async function () {
-      if (String(currentUser?.account) !== "99999") return;
+    // ================= 8. ADMIN PANEL (99999) =================
+    async function saveAdminSettings() {
+      if (String(currentUser && currentUser.account) !== "99999") return;
 
       const rate = Number(document.getElementById("admCoinRate").value) || 100;
       const minWd = Number(document.getElementById("admMinWd").value) || 10;
@@ -1105,52 +1136,55 @@ IMPORTANT INSTRUCTIONS:
         aiTraining: aiTraining
       };
 
-      await set(ref(db, "adminSettings"), adminSettings);
+      await fbSet("adminSettings", adminSettings);
       updateBalanceUI();
 
       const msg = document.getElementById("admMsg");
       msg.style.color = "#4ade80";
-      msg.innerText = "✅ Admin Settings Saved Successfully!";
-    };
+      msg.innerText = "✅ Admin Settings Save Jhalya!";
+    }
 
     async function loadAllWithdrawsForAdmin() {
       const box = document.getElementById("adminWithdrawList");
       box.innerHTML = "Loading...";
-      const snap = await get(ref(db, "withdrawals"));
-      box.innerHTML = "";
-      if (!snap.exists()) {
-        box.innerHTML = "<div style='color:#94a3b8;font-size:13px;'>No withdraw requests found.</div>";
-        return;
-      }
+      try {
+        const all = await fbGet("withdrawals");
+        box.innerHTML = "";
+        if (!all) {
+          box.innerHTML = "<div style='color:#94a3b8;font-size:13px;'>No withdraw requests found.</div>";
+          return;
+        }
 
-      Object.values(snap.val()).reverse().forEach(w => {
-        const div = document.createElement("div");
-        div.className = "history-item";
-        div.innerHTML = `
-          <b>👤 ${w.name} (${w.account}) - ₹${w.amountRs}</b><br/>
-          Method: ${w.method}<br/>
-          Details: <b>${w.details}</b><br/>
-          Status: <span style="color:#facc15">${w.status}</span>
-          <div style="display:flex;gap:6px;margin-top:6px;">
-            <button class="btn-success" style="padding:6px;margin:0;font-size:12px;" onclick="updateWdStatus('${w.id}','Approved')">✅ Approve</button>
-            <button class="btn-danger" style="padding:6px;margin:0;font-size:12px;" onclick="updateWdStatus('${w.id}','Rejected')">❌ Reject</button>
-          </div>
-        `;
-        box.appendChild(div);
-      });
+        Object.values(all).reverse().forEach(function (w) {
+          const div = document.createElement("div");
+          div.className = "history-item";
+          div.innerHTML =
+            "<b>👤 " + w.name + " (" + w.account + ") - ₹" + w.amountRs + "</b><br/>" +
+            "Method: " + w.method + "<br/>" +
+            "Details: <b>" + w.details + "</b><br/>" +
+            "Status: <span style='color:#facc15'>" + w.status + "</span>" +
+            "<div style='display:flex;gap:6px;margin-top:6px;'>" +
+              "<button type='button' class='btn-success' style='padding:6px;margin:0;font-size:12px;' onclick=\"updateWdStatus('" + w.id + "','Approved')\">✅ Approve</button>" +
+              "<button type='button' class='btn-danger' style='padding:6px;margin:0;font-size:12px;' onclick=\"updateWdStatus('" + w.id + "','Rejected')\">❌ Reject</button>" +
+            "</div>";
+          box.appendChild(div);
+        });
+      } catch (e) {
+        box.innerHTML = "";
+      }
     }
 
-    window.updateWdStatus = async function (id, status) {
-      await update(ref(db, "withdrawals/" + id), { status: status });
+    async function updateWdStatus(id, status) {
+      await fbUpdate("withdrawals/" + id, { status: status });
       loadAllWithdrawsForAdmin();
-    };
+    }
 
-    window.logoutUser = function () {
+    function logoutUser() {
       currentUser = null;
       document.getElementById("appArea").classList.add("hidden");
       document.getElementById("bottomNav").classList.add("hidden");
       showAuthBox("loginScreen");
-    };
+    }
   </script>
 </body>
 </html>
